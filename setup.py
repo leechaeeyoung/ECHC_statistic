@@ -1,9 +1,9 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='your_package_name',
+    name='Fcstatistics',
     version='0.0.1',
-    description='ECHC statistics algorithm',
+    description='Fc statistics algorithm',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     author='fourchains_R&D',
