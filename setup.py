@@ -8,7 +8,7 @@ setup(
     long_description_content_type='text/markdown',
     author='fourchains_R&D',
     author_email='fourchainsrd@gmail.com',
-    url='https://github.com/leechaeeyoung/ECHC_statistic',
+    url='https://github.com/leechaeeyoung/Fc',
     packages=find_packages(),
     install_requires=[
         'package1>=0.0.0',
