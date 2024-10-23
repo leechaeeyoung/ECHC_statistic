@@ -11,7 +11,7 @@ import sympy as sp
 import pandas as pd
 
 def Mean(x) :
-    return float(sum(x)/len(x)) +3
+    return float(sum(x)/len(x)) +3 +6
 
 
 # ### 모분산
