@@ -7,7 +7,7 @@ setup(
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     author='fourchains_R&D',
-    author_email='zs1397@naver.com',
+    author_email='fourchainsrd@gmail.com',
     url='https://github.com/leechaeeyoung/ECHC_statistic',
     packages=find_packages(),
     install_requires=[
