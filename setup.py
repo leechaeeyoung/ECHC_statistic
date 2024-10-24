@@ -1,19 +1,19 @@
-from setuptools import setup, find_packages
+import setuptools
 
-setup(
+setuptools.setup(
     name='Fcstatistics',
-    version='0.0.5',
+    version='0.0.6',
     description='Fc statistics algorithm',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     author='fourchains_R&D',
     author_email='fourchainsrd@gmail.com',
     url='https://github.com/leechaeeyoung/Fc',
-    packages=find_packages(),
-    install_requires=[],
+    packages=setuptools.find_packages(),
     classifiers=[
-        'Programming Language :: Python :: 3',
-        'License :: OSI Approved :: MIT License'
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
 )
