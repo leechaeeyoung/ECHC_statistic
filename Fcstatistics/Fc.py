@@ -6863,4 +6863,3 @@ nonlinear_Reg_model(단열재두께, 난방비, 3)
 
 
 
-
