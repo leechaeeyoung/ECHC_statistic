@@ -11,7 +11,7 @@ import sympy as sp
 import pandas as pd
 
 def Mean(x) :
-    return float(sum(x)/len(x)) +5
+    return float(sum(x)/len(x))
 
 
 # ### 모분산
@@ -4648,7 +4648,7 @@ def Tukey(a, *x):
 
     return print('\n5.결과 : 이와 같은 결론은 {0}% 신뢰도를 가진다.'.format(int((1 - a) * 100)))
 
-
+### 여기서부터 yoon 수정중(24.10.24)
 # ### 이원분산분석
 # - 영향을 미치는 요인이 두 가지인 경우의 분산분석
 # - 여기서부터는 입력값을 먼저 데이터프레임으로 설정
@@ -4661,7 +4661,7 @@ def Tukey(a, *x):
 # 입력값: 데이터프레임 내에서 열 값
 def SST(*A) :
     x = sum(map(sum,A))/sum(map(len,A))
-    return float(sum(map(lambda a : sum(map(lambda a1 : (a1 - x)^2, a)), A)))
+    return float(sum(map(lambda a : sum(map(lambda a1 : (a1 - x)**2, a)), A)))
 
 
 # #### 요인1 처리제곱합 SSTR1
@@ -4672,7 +4672,7 @@ def SST(*A) :
 # 입력값: 데이터프레임 내에서 열 값
 def SSTR1(*A) :
     x = sum(map(sum, A))/sum(map(len, A))
-    return sum(map(lambda a : len(a)*(Mean(a) - x)^2, A))
+    return sum(map(lambda a : len(a)*(Mean(a) - x)**2, A))
 
 
 # #### 요인2 처리제곱합 SSTR2  [수정함]
@@ -4684,10 +4684,10 @@ def SSTR1(*A) :
 def SSTR2(*B) :
     if isinstance(B[0], pd.DataFrame):
         x = sum(sum(map(sum, B))) / (len(B[0])*B[0].shape[1]*len(B)) 
-        return sum(map(lambda b : (sum(sum(b)/len(b))/b.shape[1] - x)^2, B))*B[0].shape[1]*len(B[0])
+        return sum(map(lambda b : (sum(sum(b)/len(b))/b.shape[1] - x)**2, B))*B[0].shape[1]*len(B[0])
     else:    
         x = sum(map(sum, B))/sum(map(len, B))
-        return sum(map(lambda b : len(b)*(Mean(b) - x)^2, B))
+        return sum(map(lambda b : len(b)*(Mean(b) - x)**2, B))
 
 
 # #### 상호작용제곱합 SSINT [수정함]
@@ -4700,7 +4700,7 @@ def SSINT(*B):
     if isinstance(B[0], pd.DataFrame):
         x = sum(sum(map(sum,B))) / (len(B[0])*B[0].shape[1]*len(B)) # 모든 표본의 평균
         y = sum(map(sum,B)) / (len(B[0])*len(B)) # 요인1의 각 그룹 평균
-        return sum(sum(map(lambda b : (sum(b)/len(b) - y - sum(sum(b)/len(B[0]))/B[0].shape[1] + x)^2, B)))*len(B[0])
+        return sum(sum(map(lambda b : (sum(b)/len(b) - y - sum(sum(b)/len(B[0]))/B[0].shape[1] + x)**2, B)))*len(B[0])
     else:
         x = sum(map(sum,B)) / (len(B[0])*len(B)) # 모든 표본의 평균 #len(B[0]):열의 갯수 #len(B): 행의 갯수
         y = list(map(lambda b: sum(b)/len(b),B)) # 요인2의 각 그룹의 평균 (행)
@@ -4858,7 +4858,7 @@ def Tw_AOV(a, A = [ ], B = [ ]) :
         
     F = round(Fint(A,B),17)
     x = sp.symbols('x')
-    fint = (dfint^(0.5*dfint))*(dferr^(0.5*dferr))*(gamma((dfint+dferr)/2))/(gamma(0.5*dfint)*gamma(0.5*dferr))*(x^(0.5*(dfint-2)))/(dfint*x+dferr)^(0.5*(dfint+dferr))
+    fint = (dfint**(0.5*dfint))*(dferr**(0.5*dferr))*(gamma((dfint+dferr)/2))/(gamma(0.5*dfint)*gamma(0.5*dferr))*(x**(0.5*(dfint-2)))/(dfint*x+dferr)**(0.5*(dfint+dferr))
     iint = round(1 - integral(fint,x,0,F), 4)   
     cr = df['%g' % dfint][int(dferr)] 
     
@@ -4880,7 +4880,7 @@ def Tw_AOV(a, A = [ ], B = [ ]) :
         cr_a = df['%g' % df1][int(dferr)]   
         cr_b = df['%g' % df2][int(dferr)]   
         
-        f1 = (df1^(0.5*df1))*(dferr^(0.5*dferr))*(gamma((df1+dferr)/2))/(gamma(0.5*df1)*gamma(0.5*dferr))*(x^(0.5*(df1-2)))/(df1*x+dferr)^(0.5*(df1+dferr))
+        f1 = (df1**(0.5*df1))*(dferr**(0.5*dferr))*(gamma((df1+dferr)/2))/(gamma(0.5*df1)*gamma(0.5*dferr))*(x**(0.5*(df1-2)))/(df1*x+dferr)**(0.5*(df1+dferr))
         i1 = round(1 - integral(f1,x,0,F1), 4)                 
         print('%-17s'%'\n4.요인1 F통계량 : ','%g' %F1)
         print('%-17s'%'  유의수준 : ', '%g' %a)
@@ -4888,7 +4888,7 @@ def Tw_AOV(a, A = [ ], B = [ ]) :
         print('%-15s' %'  임계값 : %g' %cr_a)                                    
         print('%-15s' %'  기각역: (%g, oo)'%cr_a)
         
-        f2 = (df2^(0.5*df2))*(dferr^(0.5*dferr))*(gamma((df2+dferr)/2))/(gamma(0.5*df2)*gamma(0.5*dferr))*(x^(0.5*(df2-2)))/(df2*x+dferr)^(0.5*(df2+dferr))
+        f2 = (df2**(0.5*df2))*(dferr**(0.5*dferr))*(gamma((df2+dferr)/2))/(gamma(0.5*df2)*gamma(0.5*dferr))*(x**(0.5*(df2-2)))/(df2*x+dferr)**(0.5*(df2+dferr))
         i2 = round(1 - integral(f2,x,0,F2), 4)                     
         print('%-17s'%'\n  요인2 F통계량 : ','%g' %F2)
         print('%-17s'%'  유의수준 : ', '%g' %a)
@@ -4924,7 +4924,7 @@ def Tw_AOV(a, A = [ ], B = [ ]) :
 # 입력값: 데이터프레임 내에서 열 값 (요인)
 def SST(*A) :
     x = sum(map(sum,A))/sum(map(len,A))
-    return float(sum(map(lambda a : sum(map(lambda a1 : (a1 - x)^2, a)), A)))
+    return float(sum(map(lambda a : sum(map(lambda a1 : (a1 - x)**2, a)), A)))
 
 
 # #### 처리제곱합 SSTR = 일원분산분석의 처리제곱합과 동일
@@ -4935,7 +4935,7 @@ def SST(*A) :
 # 입력값: 데이터프레임 내에서 열 값
 def SSTR(*A) :
     x = sum(map(sum, A))/sum(map(len, A))
-    return sum(map(lambda a : len(a)*(Mean(a) - x)^2, A))
+    return sum(map(lambda a : len(a)*(Mean(a) - x)**2, A))
 
 
 # #### 블록제곱합 SSB
@@ -4946,7 +4946,7 @@ def SSTR(*A) :
 # 입력값: 데이터프레임 내에서 행 값 (블록)
 def SSB(*B) :
     x = sum(map(sum, B))/sum(map(len, B))
-    return sum(map(lambda b : len(b)*(Mean(b) - x)^2, B))
+    return sum(map(lambda b : len(b)*(Mean(b) - x)**2, B))
 
 
 # #### 오차제곱합 SSEB
@@ -5039,7 +5039,7 @@ def Fsttrd_testp(a, A = [ ], B = [ ]) :
     w = (len(A)-1)*(len(B)-1)            # 오차자유도
     Frd = round(Fsttrd(A, B),17)
     x = sp.symbols('x')
-    f = (v^(0.5*v))*(w^(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(x^(0.5*(v - 2)))/(v*x + w)^(0.5*(v + w))
+    f = (v**(0.5*v))*(w**(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(x**(0.5*(v - 2)))/(v*x + w)**(0.5*(v + w))
     i = 1 - integral(f,x,0,Frd)    
     print('1.확률화블록설계 처리 F통계량 : %g' %Frd)
     print('\n2.p값 : %g' %i)
@@ -5098,7 +5098,7 @@ def Fsttrd_test(a, A = [ ], B = [ ]) :
     print("\n4.기각역 : (%g, oo)" %cr)
     
     x = sp.symbols('x')
-    f = (v^(0.5*v))*(w^(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(x^(0.5*(v - 2)))/(v*x + w)^(0.5*(v + w))
+    f = (v**(0.5*v))*(w**(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(x**(0.5*(v - 2)))/(v*x + w)**(0.5*(v + w))
     i = 1 - integral(f,x,0,Frd)    
     print('\n5.p값 : %g' %i)
     print('\n6.유의수준 : %g' %a)
@@ -5128,7 +5128,7 @@ def Fsttb_testp(a, A = [ ], B = [ ]) :
     Fb = round(Fsttb(A, B),17)
     
     x = sp.symbols('x')
-    f = (v^(0.5*v))*(w^(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(x^(0.5*(v - 2)))/(v*x + w)^(0.5*(v + w))
+    f = (v**(0.5*v))*(w**(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(x**(0.5*(v - 2)))/(v*x + w)**(0.5*(v + w))
     i = 1 - integral(f,x,0,Fb)    
     print('1.확률화블록설계 블록 F통계량 : %g' %Fb)
     print('\n2.p값 : %g' %i)
@@ -5189,7 +5189,7 @@ def Fsttb_test(a, A = [ ], B = [ ]) :
     print("\n4.기각역 : (%g, oo)" %cr)
     
     x = sp.symbols('x')
-    f = (v^(0.5*v))*(w^(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(x^(0.5*(v - 2)))/(v*x + w)^(0.5*(v + w))
+    f = (v**(0.5*v))*(w**(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(x**(0.5*(v - 2)))/(v*x + w)**(0.5*(v + w))
     i = 1 - integral(f,x,0,Fb)    
     print('\n5.p값 : %g' %i)
     print('\n6.유의수준 : %g' %a)
@@ -5206,7 +5206,7 @@ def Fsttb_test(a, A = [ ], B = [ ]) :
 
 # In[205]:
 
-
+## 여기서부터 진행하기
 def B_AOV(a, A = [ ], B = [ ]) :
     
     print('[귀무가설] : 각 모집단의 평균들은 유의한 차이가 없다. \n[대립가설] : 각 모집단의 평균들 중 유의한 차이가 존재한다.')  
