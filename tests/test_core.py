@@ -1,5 +1,5 @@
 import pytest
-from src.core import Mean, MVar, bayes_theorem, bi_coefficient
+from src.fc import Mean, MVar, bayes_theorem, bi_coefficient
 
 data = [1, 2, 3, 4, 5]
 prior_A = 1/2
