@@ -6,7 +6,8 @@
 # In[1]:
 
 
-from math import ceil, erf, exp, factorial, floor, gamma, pi, sqrt
+from math import ceil, erf, exp, factorial, floor, gamma, pi, sqrt, e
+import math
 import sympy as sp
 import pandas as pd
 
@@ -3095,7 +3096,7 @@ def ChiVar_Tsp(a,x,v) :
     print("\n2.자유도 :", k)
     
     z = sp.symbols('z')
-    C = (z^(k/2 - 1))*(e^(-z/2))/((2^(k/2))*gamma(k/2))  # 카이제곱 분포 함수
+    C = (z^(k/2 - 1))*(math.e**(-z/2))/((2**(k/2))*gamma(k/2))  # 카이제곱 분포 함수
     I = sp.Integral(C,(z,0,chi))    
     MI = min(I, 1 - I)
     print("\n3.p값 : %g" %(MI*2))     # 검정통계량을 기준으로 좌/우 면적 중 작은 것의 (양측이므로 2배)  
@@ -4396,6 +4397,7 @@ def SST2(*A) :
 
 # 'a': 유의수준, 'A': 집단 자료 (리스트 or pd.Series 형태)
 def FAOVp(a,*A) :
+    f = x
     F = round(Fstt(*A),17)
     print("1.검정통계량 : %g" %F)
     
@@ -4405,7 +4407,7 @@ def FAOVp(a,*A) :
     
     x = sp.symbols('x')
     f = (v^(0.5*v))*(w^(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(x^(0.5*(v - 2)))/(v*x + w)^(0.5*(v + w))
-    i = float(1 - integral(f,x,0,F))
+    i = float(1 - sp.integrate(f, (x, 0, F)))
     print("\n3.p값 : %g" %i)
     print("\n4.유의수준 : %g" %a)
     
