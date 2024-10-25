@@ -5,9 +5,8 @@
 
 # In[1]:
 
-
-from math import ceil, erf, exp, factorial, floor, gamma, pi, sqrt, e
 import math
+from scipy.special import gamma
 import sympy as sp
 import pandas as pd
 
@@ -21,7 +20,7 @@ def Mean(x) :
 
 
 def MVar(x) :
-    return sum(map(lambda a:(a - Mean(x))^2, x))/len(x)
+    return sum(map(lambda a:(a - Mean(x))**2, x))/len(x)
 
 
 # ### 표본분산
@@ -30,7 +29,7 @@ def MVar(x) :
 
 
 def Var(x) :
-    return sum(map(lambda a:(a - Mean(x))^2, x))/(len(x) - 1)
+    return sum(map(lambda a:(a - Mean(x))**2, x))/(len(x) - 1)
 
 
 # ### 모표준편차
@@ -39,7 +38,7 @@ def Var(x) :
 
 
 def MStd(x) :
-    return sqrt(MVar(x))
+    return math.sqrt(MVar(x))
 
 
 # ### 표본표준편차
@@ -86,15 +85,11 @@ def Mode(x):
 
 # In[8]:
 
-
-def Median(x) :
-    xx = x
-    if type(x) != list :
-        xx = x.to_list()
+def Median(x):
+    xx = list(x) if not isinstance(x, list) else x
     xx.sort()
-    a = len(xx)/2 - 1
-    b = len(xx)/2
-    return float((xx[ceil(a)] + xx[floor(b)])/2)
+    mid = len(xx) / 2
+    return (xx[math.ceil(mid) - 1] + xx[math.floor(mid)]) / 2
 
 
 # ### 사분위수
@@ -102,32 +97,25 @@ def Median(x) :
 # In[9]:
 
 
-def Q1(x) :
-    xx = x
-    if type(x) != list :
-        xx = x.to_list()
+def Q1(x):
+    xx = list(x) if not isinstance(x, list) else x
     xx.sort()
-    M = (len(xx) + 1)*0.25
-    return float(xx[floor(M) - 1] + (xx[floor(M)] - xx[floor(M) - 1])*(M - int(M))) 
+    M = (len(xx) + 1) * 0.25
+    return float(xx[math.floor(M) - 1] + (xx[math.floor(M)] - xx[math.floor(M) - 1]) * (M - int(M)))
 
-def Q2(x) :
-    xx = x
-    if type(x) != list :
-        xx = x.to_list()
+def Q2(x):
+    xx = list(x) if not isinstance(x, list) else x
     return Median(xx)
 
-def Q3(x) :
-    xx = x
-    if type(x) != list :
-        xx = x.to_list()
-    xx.sort()
-    M = (len(xx) + 1)*0.75
-    return float(xx[floor(M) - 1] + (xx[floor(M)] - xx[floor(M) - 1])*(M - int(M)))
 
-def Q4(x) :
-    xx = x
-    if type(x) != list :
-        xx = x.to_list()
+def Q3(x):
+    xx = list(x) if not isinstance(x, list) else x
+    xx.sort()
+    M = (len(xx) + 1) * 0.75
+    return float(xx[math.floor(M) - 1] + (xx[math.floor(M)] - xx[math.floor(M) - 1]) * (M - int(M)))
+
+def Q4(x):
+    xx = list(x) if not isinstance(x, list) else x
     return max(xx)
 
 
@@ -136,14 +124,16 @@ def Q4(x) :
 # In[10]:
 
 
-def P_per(x,p) :
-    xx = x
-    if type(x) != list :
-        xx = x.to_list()
+def P_per(x, p):
+    # 리스트 변환 및 정렬
+    xx = list(x) if not isinstance(x, list) else x
     xx.sort()
-    M = (len(xx) + 1)*(p*0.01)
-    return float(xx[floor(M) - 1] + (xx[floor(M)] - xx[floor(M) - 1])*(M - int(M)))
-
+    
+    # 백분위수 계산
+    M = (len(xx) + 1) * (p * 0.01)
+    
+    # 백분위수 값 반환
+    return float(xx[math.floor(M) - 1] + (xx[math.floor(M)] - xx[math.floor(M) - 1]) * (M - math.floor(M)))
 
 # ---
 # ---
@@ -265,13 +255,13 @@ def dis_pmf(x, y):
 # In[18]:
 
 
+# #### 이산형 확률변수의 기댓값
 # 속도 수정
 # 'pmf': 이산형 확률변수의 확률질량함수, 'x': 누적확률분포함수를 계산할 값
 def dis_cpdf(pmf, x):
     return float(sum(map(lambda item: item[1] if item[0] <= x else 0, pmf.items())))
 
 
-# #### 이산형 확률변수의 기댓값
 
 # In[19]:
 
@@ -315,11 +305,11 @@ def dis_variance_frequency(x, y):
 
 # 'x': 이산형 확률변수, 'y': 이산형 확률변수의 확률질량함수
 def dis_standard_deviation(x,y):
-    return sqrt(dis_variance(x,y))
+    return math.sqrt(dis_variance(x,y))
 
 # 'x': 이산형 확률변수, 'y': 해당 x값의 도수
 def dis_standard_deviation_frequency(x, y):
-    return sqrt(dis_variance_frequency(x, y))
+    return math.sqrt(dis_variance_frequency(x, y))
 
 
 # ### 이항분포
@@ -479,7 +469,7 @@ def uni_variance(a, b):
 
 # 'x': 확률변수 값, 'm': 평균, 's': 표준편차
 def nor_pdf(x, m, s):
-    return float((1 / (sqrt(2 * pi) * s)) * exp(-((x - m) ** 2) / (2 * s ** 2)))
+    return float((1 / (math.sqrt(2 * pi) * s)) * exp(-((x - m) ** 2) / (2 * s ** 2)))
 
 
 # #### 표준정규분포의 확률밀도함수
@@ -489,7 +479,7 @@ def nor_pdf(x, m, s):
 
 # 'x': 확률변수 값
 def sta_nor_pdf(x):
-    return float((1 / sqrt(2 * pi)) * exp(-0.5 * x ** 2))
+    return float((1 / math.sqrt(2 * pi)) * math.exp(-0.5 * x ** 2))
 
 
 # #### 표준정규분포의 누적분포함수
@@ -499,7 +489,7 @@ def sta_nor_pdf(x):
 
 #'x': 누적분포함수 값을 계산할 확률변수 값 (-oo<=a<=x)
 def sta_nor_cdf(x):
-    return float((1 + erf(x / sqrt(2))) / 2)
+    return float((1 + math.erf(x / math.sqrt(2))) / 2)
 
 
 # In[38]:
@@ -529,7 +519,7 @@ def sta_nor_cdf_ab(a, b):
 
 # 'n': 전체 수, 'p': 확률, 'x': 비교하고자 하는 표본 수 
 def nor_bi_ap(n, p, x):
-    in_x = (x - n * p) / sqrt(n * p * (1 - p))
+    in_x = (x - n * p) / math.sqrt(n * p * (1 - p))
     return sta_nor_cdf(in_x)
 
 
@@ -544,7 +534,7 @@ def nor_bi_ap(n, p, x):
 def exp_pdf(lambd, x):
     if x < 0:
         return 0
-    return lambd * exp(-lambd * x)
+    return lambd * math.exp(-lambd * x)
 
 
 # #### 지수분포의 누적분포함수
@@ -556,7 +546,7 @@ def exp_pdf(lambd, x):
 def exp_cdf(lambd, x):
     if x < 0:
         return 0
-    return 1 - exp(-lambd * x)
+    return 1 - math.exp(-lambd * x)
 
 
 # In[ ]:
@@ -622,7 +612,7 @@ def sim_variance(N, n, v):
 
 # 'N': 모집단의 크기, 'n': 표본 수, 'v': 모집단의 분산
 def sim_std_err(N, n, v):
-    return sqrt(sim_variance(N, n, v))
+    return math.sqrt(sim_variance(N, n, v))
 
 
 # #### (복원추출 - 무한모집단) 표본평균의 기댓값
@@ -651,7 +641,7 @@ def sim_re_variance(n, v):
 
 
 def sim_re_std_err(n, v):
-    return sqrt(sim_re_variance(n, v))
+    return math.sqrt(sim_re_variance(n, v))
 
 
 # ### 비율의 표집분포
@@ -801,7 +791,7 @@ def con_interval_z(s, x, a):
     row = target_cell.index.tolist()[0]
     column = target_cell.columns[target_cell.eq(0.5-a/2).any()][0]
     cr = float(row)+float(column)
-    return (float(Mean(x) - cr*s/sqrt(len(x))), float(Mean(x) + cr*s/sqrt(len(x))))
+    return (float(Mean(x) - cr*s/math.sqrt(len(x))), float(Mean(x) + cr*s/math.sqrt(len(x))))
 
 
 # ##### 모표준편차를 모를 경우
@@ -813,7 +803,7 @@ def con_interval_z(s, x, a):
 def con_interval_t(x, a):    
     df = pd.read_csv('./t분포표.csv', encoding='euc-kr', index_col=0) 
     cr = df["%g" %(a/2)][int(len(x) - 1)]
-    return (float(Mean(x)-cr*(Std(x)/sqrt(len(x)))), float(Mean(x)+cr*(Std(x)/sqrt(len(x)))))
+    return (float(Mean(x)-cr*(Std(x)/math.sqrt(len(x)))), float(Mean(x)+cr*(Std(x)/math.sqrt(len(x)))))
 
 
 # #### 모비율에 대한 구간추정
@@ -844,7 +834,7 @@ def con_interval_p(n, x, a):
             column = target_cell.columns[target_cell.eq(0.5 - a/2).any()][0]
             cr = float(row) + float(column)
             
-        return (float(p - cr * sqrt(p * (1 - p) / n)), float(p + cr * sqrt(p * (1 - p) / n)))
+        return (float(p - cr * math.sqrt(p * (1 - p) / n)), float(p + cr * math.sqrt(p * (1 - p) / n)))
     
     else:
         return "경고: n * p와 n * (1 - p)가 5 이상이어야 합니다."
@@ -938,11 +928,11 @@ def one_tailed_pred_interval_p(a):
 
 def Z1_Ts(a,x,m,s) :     
     
-    Z = round((Mean(x) - m)/(s/sqrt(len(x))),17)
+    Z = round((Mean(x) - m)/(s/math.sqrt(len(x))),17)
     print("1.검정통계량 : %g" %Z)
     
     y, z = sp.symbols('y z') 
-    f = 1/sqrt(2*pi)*exp(-(z^2)/2)
+    f = 1 / (math.sqrt(2 * math.pi)) * sp.exp(-z**2 / 2)
     I = sp.integrate(f,(z,0,y))
     eqn = sp.Eq(I, 0.5 - a/2)
     cr = round(sp.solve( eqn, y )[0],3)
@@ -971,11 +961,11 @@ def Z1_Ts(a,x,m,s) :
 
 def Z1_Tscr(a,x,m,s) :
     df = pd.read_csv('./표준정규분포표.csv', encoding='euc-kr', index_col=0)
-    Z = round((Mean(x) - m)/(s/sqrt(len(x))),17)
+    Z = round((Mean(x) - m)/(s/math.sqrt(len(x))),17)
     print("1.검정통계량 : %g" %Z)
     
     z = sp.symbols('z') 
-    f = 1/sqrt(2*pi)*exp(-(z^2)/2)
+    f = 1 / (math.sqrt(2 * math.pi)) * sp.exp(-z**2 / 2)
     cr = two_tailed_pred_interval_p(a)
     print("\n2.임계값 : {0}, {1}".format(-cr,cr))
     print("\n3.기각역 : (-oo, {0}) or ({1}, oo)".format(-cr,cr))
@@ -1002,11 +992,11 @@ def Z1_Tscr(a,x,m,s) :
 
 def Z1_Up(a,x,m,s) :            
     
-    Z = round((Mean(x) - m)/(s/sqrt(len(x))),17)
+    Z = round((Mean(x) - m)/(s/math.sqrt(len(x))),17)
     print("1.검정통계량 : %g" %Z)
 
     y, z = sp.symbols('y z') 
-    f = 1/sqrt(2*pi)*exp(-(z^2)/2)
+    f = 1/(math.sqrt(2*math.pi))*sp.exp(-(z**2)/2)
     I = sp.integrate(f,(z,0,y))
     eqn = sp.Eq(I, 0.5 - a)
     cr = round(sp.solve( eqn, y )[0],3)
@@ -1073,11 +1063,11 @@ def Z1_Upcr(a,x,m,s) :
 
 def Z1_Un(a,x,m,s) :        
     
-    Z = round((Mean(x) - m)/(s/sqrt(len(x))),17)
+    Z = round((Mean(x) - m)/(s/math.sqrt(len(x))),17)
     print("1.검정통계량 : %g" %Z)
     
     y, z = sp.symbols('y z') 
-    f = 1/sqrt(2*pi)*exp(-(z^2)/2)
+    f = 1/math.sqrt(2*math.pi)*sp.exp(-(z**2)/2)
     I = sp.integrate(f,(z,0,y))
     eqn = sp.Eq(I, 0.5 - a)
     cr = round(sp.solve( eqn, y )[0],3)
@@ -1109,11 +1099,11 @@ def Z1_Un(a,x,m,s) :
 
 def Z1_Uncr(a,x,m,s) :        
     df = pd.read_csv('./표준정규분포표.csv', encoding='euc-kr', index_col=0)
-    Z = round((Mean(x) - m)/(s/sqrt(len(x))),17)
+    Z = round((Mean(x) - m)/(s/math.sqrt(len(x))),17)
     print("1.검정통계량 : %g" %Z)
     
     z = sp.symbols('z') 
-    f = 1/sqrt(2*pi)*exp(-(z^2)/2)
+    f = 1/math.sqrt(2*math.pi)*sp.exp(-(z**2)/2)
     cr = one_tailed_pred_interval_p(a)
     print("\n2.임계값 : {0}".format(-cr))
     print("\n3.기각역 : (-oo, {0})".format(-cr))
@@ -1145,11 +1135,11 @@ def Z1_Uncr(a,x,m,s) :
 
 def Z2_Ts(a, x, y, xs, ys) :       
 
-    Z = round((Mean(x) - Mean(y)) / (sqrt(((xs^2)/len(x)) + ((ys^2)/len(y)))),17)
+    Z = round((Mean(x) - Mean(y)) / (math.sqrt(((xs**2)/len(x)) + ((ys**2)/len(y)))),17)
     print("1.검정통계량 : %g" %Z)  
     
     w, z = sp.symbols('w z') 
-    f = 1/sqrt(2*pi)*exp(-(z^2)/2)
+    f = 1/math.sqrt(2*math.pi)*sp.exp(-(z**2)/2)
     I = sp.integrate(f,(z,0,w))
     eqn = sp.Eq(I, 0.5 - a/2)
     cr = round(sp.solve( eqn, w )[0],3)
@@ -1167,7 +1157,6 @@ def Z2_Ts(a, x, y, xs, ys) :
         
     return ans
 
-
 # #### 양측 z2검정(표에서 기각역 찾기)
 
 # In[77]:
@@ -1178,11 +1167,11 @@ def Z2_Ts(a, x, y, xs, ys) :
 
 def Z2_Tscr(a, x, y, xs, ys) :       
     df = pd.read_csv('./표준정규분포표.csv', encoding='euc-kr', index_col=0)
-    Z = round((Mean(x) - Mean(y)) / (sqrt(((xs^2)/len(x)) + ((ys^2)/len(y)))),17)
+    Z = round((Mean(x) - Mean(y)) / (math.sqrt(((xs**2)/len(x)) + ((ys**2)/len(y)))),17)
     print("1.검정통계량 : %g" %Z)  
     
     z = sp.symbols('z') 
-    f = 1/sqrt(2*pi)*exp(-(z^2)/2)
+    f = 1/math.sqrt(2*math.pi)*sp.exp(-(z**2)/2)
     cr = two_tailed_pred_interval_p(a)
     print("\n2.임계값 : {0}, {1}".format(-cr, cr))
     print("\n3.기각역 : (-oo, {0}) or ({1}, oo)".format(-cr, cr))
@@ -1209,11 +1198,11 @@ def Z2_Tscr(a, x, y, xs, ys) :
 
 def Z2_Up(a,x,y,xs,ys) :             
     
-    Z = round((Mean(x) - Mean(y)) / (sqrt(((xs^2)/len(x)) + ((ys^2)/len(y)))),17)
+    Z = round((Mean(x) - Mean(y)) / (math.sqrt(((xs**2)/len(x)) + ((ys**2)/len(y)))),17)
     print("1.검정통계량 : %g" %Z)
     
     w, z = sp.symbols('w z') 
-    f = 1/sqrt(2*pi)*exp(-(z^2)/2)
+    f = 1/math.sqrt(2*math.pi)*sp.exp(-(z**2)/2)
     I = sp.integrate(f,(z,0,w)) 
     eqn = sp.Eq(I, 0.5 - a)
     cr = round(sp.solve( eqn, w )[0], 3)
@@ -1244,12 +1233,12 @@ def Z2_Up(a,x,y,xs,ys) :
 # 모표준편차를 아는 경우이므로, z검정을 사용, 모집단 2개, 위꼬리검정 [Z2_Upsided 축약 : Z2_Up]
 
 def Z2_Upcr(a,x,y,xs,ys) :                
-    Z = round((Mean(x) - Mean(y)) / (sqrt(((xs^2)/len(x)) + ((ys^2)/len(y)))),17)
+    Z = round((Mean(x) - Mean(y)) / (math.sqrt(((xs**2)/len(x)) + ((ys**2)/len(y)))),17)
     print("1.검정통계량 : %g" %Z)
     
     df = pd.read_csv('./표준정규분포표.csv', encoding='euc-kr', index_col=0)
     z = sp.symbols('z') 
-    f = 1/sqrt(2*pi)*exp(-(z^2)/2)
+    f = 1/math.sqrt(2*math.pi)*sp.exp(-(z**2)/2)
     cr = one_tailed_pred_interval_p(a)
     print("\n2.임계값 : {0}".format(cr))
     print("\n3.기각역 : ({0}, oo)".format(cr))
@@ -1279,11 +1268,11 @@ def Z2_Upcr(a,x,y,xs,ys) :
 
 def Z2_Un(a,x,y,xs,ys) :          
         
-    Z = round((Mean(x) - Mean(y))/(sqrt(((xs^2)/len(x)) + ((ys^2)/len(y)))),17)
+    Z = round((Mean(x) - Mean(y))/(math.sqrt(((xs**2)/len(x)) + ((ys**2)/len(y)))),17)
     print("1.검정통계량 : %g" %Z)
     
     w, z = sp.symbols('w z') 
-    f = 1/sqrt(2*pi)*exp(-(z^2)/2)
+    f = 1/math.sqrt(2*math.pi)*sp.exp(-(z**2)/2)
     I = sp.integrate(f,(z,0,w))
     eqn = sp.Eq(I, 0.5 - a)
     cr = round(sp.solve( eqn, w)[0],3)
@@ -1315,12 +1304,12 @@ def Z2_Un(a,x,y,xs,ys) :
 
 def Z2_Uncr(a,x,y,xs,ys) :          
         
-    Z = round((Mean(x) - Mean(y))/(sqrt(((xs^2)/len(x)) + ((ys^2)/len(y)))),17)
+    Z = round((Mean(x) - Mean(y))/(math.sqrt(((xs**2)/len(x)) + ((ys**2)/len(y)))),17)
     print("1.검정통계량 : %g" %Z)
     
     df = pd.read_csv('./표준정규분포표.csv', encoding='euc-kr', index_col=0)
     z = sp.symbols('z') 
-    f = 1/sqrt(2*pi)*exp(-(z^2)/2)
+    f = 1/math.sqrt(2*math.pi)*sp.exp(-(z**2)/2)
     cr = one_tailed_pred_interval_p(a)
 
     print("\n2.임계값 : {0}".format(-cr))
@@ -1363,7 +1352,7 @@ def T1_Tscr(a,x,m) :
     
     df = pd.read_csv('./t분포표.csv', encoding='euc-kr', index_col=0) 
 
-    T1 = (Mean(x) - m) / (Std(x)/sqrt(len(x)))
+    T1 = round(Mean(x) - m) / (Std(x)/math.sqrt(len(x)))
     print("1.검정통계량: %g" %T1)              
     print("\n2.자유도 :", len(x) - 1)
     
@@ -1390,14 +1379,14 @@ def T1_Tscr(a,x,m) :
 
 def T1_Tsp(a,x,m) :
     
-    t = round((Mean(x) - m) / (Std(x)/sqrt(len(x))),17)     
+    t = round((Mean(x) - m) / (Std(x)/math.sqrt(len(x))),17)     
     print("1.검정통계량 : %g" %t)
     
     v = len(x) - 1                  
     print("\n2.자유도 :",v)
     
     z = sp.symbols('z')
-    f = (gamma((v+1)/2)/(sqrt(v*pi)*gamma(v/2)))*((1+(z^2)/v)^(-(v+1)/2))     
+    f = (math.gamma((v+1)/2)/(math.sqrt(v*math.pi)*math.gamma(v/2)))*((1+(z**2)/v)**(-(v+1)/2))     
     I = 0.5 - sp.Integral(f,(z,0,abs(t)))           
     print("\n3.p값 : %g" %(I*2))
     print("\n4.유의수준 : %g" %a)
@@ -1423,7 +1412,7 @@ def T1_Ts(a,x,m) :
     
     df = pd.read_csv('./t분포표.csv', encoding='euc-kr', index_col=0) 
 
-    t = round((Mean(x) - m) / (Std(x)/sqrt(len(x))),17)     
+    t = round((Mean(x) - m) / (Std(x)/math.sqrt(len(x))),17)     
     print("1.검정통계량 : %g" %t)
     
     v = len(x) - 1                  
@@ -1434,7 +1423,7 @@ def T1_Ts(a,x,m) :
     print("\n4.기각역 : (-oo, {0}) or ({1}, oo)".format(-cr,cr))
     
     z = sp.symbols('z')
-    f = (gamma((v+1)/2)/(sqrt(v*pi)*gamma(v/2)))*((1+(z^2)/v)^(-(v+1)/2))     
+    f = (math.gamma((v+1)/2)/(math.sqrt(v*math.pi)*math.gamma(v/2)))*((1+(z**2)/v)**(-(v+1)/2))     
     I = 0.5 - sp.Integral(f,(z,0,abs(t)))           
     print("\n5.p값 : %g" %(I*2))
     print("\n6.유의수준 : %g" %a)
@@ -1460,7 +1449,7 @@ def T1_Upcr(a,x,m) :
 
     df = pd.read_csv('./t분포표.csv',encoding='euc-kr',index_col=0)
 
-    T1 = (Mean(x) - m) / (Std(x)/sqrt(len(x)))
+    T1 = (Mean(x) - m) / (Std(x)/math.sqrt(len(x)))
     print("1.검정통계량 : %g" %T1)                 
     print("\n2.자유도 :", len(x) - 1)
     
@@ -1487,14 +1476,14 @@ def T1_Upcr(a,x,m) :
 
 def T1_Upp(a,x,m) :
     
-    t = round((Mean(x) - m) / (Std(x)/sqrt(len(x))),17)     
+    t = round((Mean(x) - m) / (Std(x)/math.sqrt(len(x))),17)     
     print("1.검정통계량 : %g" %t)
 
     v = len(x) - 1                  
     print("\n2.자유도 :",v)
     
     z = sp.symbols('z')
-    f = (gamma((v+1)/2)/(sqrt(v*pi)*gamma(v/2)))*((1+(z^2)/v)^(-(v+1)/2))
+    f = (math.gamma((v+1)/2)/(math.sqrt(v*math.pi)*math.gamma(v/2)))*((1+(z**2)/v)**(-(v+1)/2))
     
     if t >= 0 :
         TI = 0.5 - sp.Integral(f,(z,0,t))
@@ -1524,7 +1513,7 @@ def T1_Up(a,x,m) :
 
     df = pd.read_csv('./t분포표.csv',encoding='euc-kr',index_col=0)
 
-    t = round((Mean(x) - m) / (Std(x)/sqrt(len(x))),17)     
+    t = round((Mean(x) - m) / (Std(x)/math.sqrt(len(x))),17)     
     print("1.검정통계량 : %g" %t)
 
     v = len(x) - 1                  
@@ -1535,7 +1524,7 @@ def T1_Up(a,x,m) :
     print("\n4.기각역 : ({0}, oo)".format(cr))
     
     z = sp.symbols('z')
-    f = (gamma((v+1)/2)/(sqrt(v*pi)*gamma(v/2)))*((1+(z^2)/v)^(-(v+1)/2))
+    f = (math.gamma((v+1)/2)/(math.sqrt(v*math.pi)*math.gamma(v/2)))*((1+(z**2)/v)**(-(v+1)/2))
     if t >= 0 :
         TI = 0.5 - sp.Integral(f,(z,0,t))
     else : 
@@ -1564,7 +1553,7 @@ def T1_Uncr(a,x,m) :
     
     df = pd.read_csv('./t분포표.csv',encoding='euc-kr',index_col=0)        
     
-    T1 = (Mean(x) - m) / (Std(x)/sqrt(len(x)))
+    T1 = (Mean(x) - m) / (Std(x)/math.sqrt(len(x)))
     print("1.검정통계량 : %g" %T1)              
     print("\n2.자유도 :", len(x) - 1)
     
@@ -1591,14 +1580,14 @@ def T1_Uncr(a,x,m) :
 
 def T1_Unp(a,x,m) :
     
-    t = round((Mean(x) - m) / (Std(x)/sqrt(len(x))),17)    
+    t = round((Mean(x) - m) / (Std(x)/math.sqrt(len(x))),17)    
     print("1.검정통계량 : %g" %t)
 
     v = len(x) - 1                  
     print("\n2.자유도 :",v)
     
     z = sp.symbols('z')
-    f = (gamma((v+1)/2)/(sqrt(v*pi)*gamma(v/2)))*((1+(z^2)/v)^(-(v+1)/2))
+    f = (math.gamma((v+1)/2)/(math.sqrt(v*math.pi)*math.gamma(v/2)))*((1+(z**2)/v)**(-(v+1)/2))
     if t >= 0 :
         TI = 0.5 + sp.Integral(f,(z,0,t))
     else : 
@@ -1627,7 +1616,7 @@ def T1_Un(a,x,m) :
 
     df = pd.read_csv('./t분포표.csv',encoding='euc-kr',index_col=0)
 
-    t = round((Mean(x) - m) / (Std(x)/sqrt(len(x))),17)     
+    t = round((Mean(x) - m) / (Std(x)/math.sqrt(len(x))),17)     
     print("1.검정통계량 : %g" %t)
 
     v = len(x) - 1                  
@@ -1638,7 +1627,7 @@ def T1_Un(a,x,m) :
     print("\n4.기각역 : (-oo, {0})".format(-cr))
     
     z = sp.symbols('z')
-    f = (gamma((v+1)/2)/(sqrt(v*pi)*gamma(v/2)))*((1+(z^2)/v)^(-(v+1)/2))
+    f = (math.gamma((v+1)/2)/(math.sqrt(v*math.pi)*math.gamma(v/2)))*((1+(z**2)/v)**(-(v+1)/2))
     if t >= 0 :
         TI = 0.5 + sp.Integral(f,(z,0,t))
     else : 
@@ -1672,8 +1661,8 @@ def T2_TscrEqv(a,x,y) :
     df1 = pd.read_csv('./t분포표.csv',encoding='euc-kr',index_col=0)
    
     df = len(x) + len(y) - 2      
-    psv = ((len(x) - 1)*Std(x)^2 + (len(y) - 1)*Std(y)^2)/df    
-    T2 = (Mean(x) - Mean(y))/sqrt(psv*(1/len(x) + 1/len(y)))
+    psv = ((len(x) - 1)*Std(x)**2 + (len(y) - 1)*Std(y)**2)/df    
+    T2 = (Mean(x) - Mean(y))/math.sqrt(psv*(1/len(x) + 1/len(y)))
     print("1.검정통계량: %g" %T2)
     print("\n2.자유도:", df)
     print("\n3.합동표본분산(합동추정치) : %g" %psv)
@@ -1702,14 +1691,14 @@ def T2_TscrEqv(a,x,y) :
 def T2_TspEqv(a,x,y) :
     
     df = len(x) + len(y) - 2                  
-    psv = ((len(x) - 1)*Std(x)^2 + (len(y) - 1)*Std(y)^2)/df            
-    t = round((Mean(x) - Mean(y))/sqrt(((1/len(x)) + (1/len(y)))*psv),17)     
+    psv = ((len(x) - 1)*Std(x)**2 + (len(y) - 1)*Std(y)**2)/df            
+    t = round((Mean(x) - Mean(y))/math.sqrt(((1/len(x)) + (1/len(y)))*psv),17)     
     print("1.검정통계량 : %g" %t)
     print("\n2.자유도 :", df)
     print("\n3.합동표본분산(합동추정치) : %g" %psv)
     
     z = sp.symbols('z')
-    f = (gamma((df + 1)/2)/(sqrt(df*pi)*gamma(df/2)))*((1 + (z^2)/df)^(-(df + 1)/2))  
+    f = (math.gamma((df + 1)/2)/(math.sqrt(df*math.pi)*math.gamma(df/2)))*((1 + (z**2)/df)**(-(df + 1)/2))  
     I = 0.5 - sp.Integral(f,(z,0,abs(t)))          
     print("\n4.p값 : %g" %(I*2))
     print("\n5.유의수준 : %g" %a)
@@ -1736,8 +1725,8 @@ def T2_TsEqv(a,x,y) :
     df1 = pd.read_csv('./t분포표.csv',encoding='euc-kr',index_col=0)
      
     df = len(x) + len(y) - 2                  
-    psv = ((len(x) - 1)*Std(x)^2 + (len(y) - 1)*Std(y)^2)/df            
-    t = round((Mean(x) - Mean(y))/sqrt(((1/len(x)) + (1/len(y)))*psv),17)     
+    psv = ((len(x) - 1)*Std(x)**2 + (len(y) - 1)*Std(y)**2)/df            
+    t = round((Mean(x) - Mean(y))/math.sqrt(((1/len(x)) + (1/len(y)))*psv),17)     
     print("1.검정통계량 : %g" %t)
     print("\n2.자유도 :", df)
     print("\n3.합동표본분산(합동추정치) : %g" %psv)
@@ -1747,7 +1736,7 @@ def T2_TsEqv(a,x,y) :
     print("\n5.기각역 : (-oo, {0}) or ({1}, oo)".format(-cr,cr))
     
     z = sp.symbols('z')
-    f = (gamma((df + 1)/2)/(sqrt(df*pi)*gamma(df/2)))*((1 + (z^2)/df)^(-(df + 1)/2))  
+    f = (math.gamma((df + 1)/2)/(math.sqrt(df*math.pi)*math.gamma(df/2)))*((1 + (z**2)/df)**(-(df + 1)/2))  
     I = 0.5 - sp.Integral(f,(z,0,abs(t)))          
     print("\n6.p값 : %g" %(I*2))
     print("\n7.유의수준 : %g" %a)
@@ -1774,8 +1763,8 @@ def T2_UpcrEqv(a,x,y) :
     df1 = pd.read_csv('./t분포표.csv',encoding='euc-kr',index_col=0)
     
     df = len(x) + len(y) - 2                  
-    psv = ((len(x) - 1)*Std(x)^2 + (len(y) - 1)*Std(y)^2)/df            
-    t = (Mean(x) - Mean(y))/sqrt(((1/len(x)) + (1/len(y)))*psv)     
+    psv = ((len(x) - 1)*Std(x)**2 + (len(y) - 1)*Std(y)**2)/df            
+    t = (Mean(x) - Mean(y))/math.sqrt(((1/len(x)) + (1/len(y)))*psv)     
     print("1.검정통계량 : %g" %t)
     print("\n2.자유도 :", df)
     print("\n3.합동표본분산(합동추정치) : %g" %psv) 
@@ -1804,14 +1793,14 @@ def T2_UpcrEqv(a,x,y) :
 def T2_UppEqv(a,x,y) :
     
     df = len(x) + len(y) - 2                  
-    psv = ((len(x) - 1)*Std(x)^2 + (len(y) - 1)*Std(y)^2)/df            
+    psv = ((len(x) - 1)*Std(x)**2 + (len(y) - 1)*Std(y)**2)/df            
     t = round((Mean(x) - Mean(y))/sqrt(((1/len(x)) + (1/len(y)))*psv),17)     
     print("1.검정통계량 : %g" %t)
     print("\n2.자유도 :", df)
     print("\n3.합동표본분산(합동추정치) : %g" %psv)
     
     z = sp.symbols('z')
-    f = (gamma((df + 1)/2)/(sqrt(df*pi)*gamma(df/2)))*((1 + (z^2)/df)^(-(df + 1)/2))  
+    f = (math.gamma((df + 1)/2)/(math.sqrt(df*math.pi)*math.gamma(df/2)))*((1 + (z**2)/df)**(-(df + 1)/2))  
     if t >= 0 :
         TI = 0.5 - sp.Integral(f,(z,0,t))
     else : 
@@ -1841,8 +1830,8 @@ def T2_UpEqv(a,x,y) :
     df1 = pd.read_csv('./t분포표.csv',encoding='euc-kr',index_col=0)
     
     df = len(x) + len(y) - 2                  
-    psv = ((len(x) - 1)*Std(x)^2 + (len(y) - 1)*Std(y)^2)/df            
-    t = round((Mean(x) - Mean(y))/sqrt(((1/len(x)) + (1/len(y)))*psv),17)     
+    psv = ((len(x) - 1)*Std(x)**2 + (len(y) - 1)*Std(y)**2)/df            
+    t = round((Mean(x) - Mean(y))/math.sqrt(((1/len(x)) + (1/len(y)))*psv),17)     
     print("1.검정통계량 : %g" %t)
     print("\n2.자유도 :", df)
     print("\n3.합동표본분산(합동추정치) : %g" %psv)
@@ -1852,7 +1841,7 @@ def T2_UpEqv(a,x,y) :
     print("\n5.기각역 : ({0}, oo)".format(cr))
     
     z = sp.symbols('z')
-    f = (gamma((df + 1)/2)/(sqrt(df*pi)*gamma(df/2)))*((1 + (z^2)/df)^(-(df + 1)/2))  
+    f = (math.gamma((df + 1)/2)/(math.sqrt(df*math.pi)*math.gamma(df/2)))*((1 + (z**2)/df)**(-(df + 1)/2))  
     if t >= 0 :
         TI = 0.5 - sp.Integral(f,(z,0,t))
     else : 
@@ -1882,8 +1871,8 @@ def T2_UncrEqv(a,x,y) :
     df1 = pd.read_csv('./t분포표.csv',encoding='euc-kr',index_col=0)
     
     df = len(x) + len(y) - 2                  
-    psv = ((len(x) - 1)*Std(x)^2 + (len(y) - 1)*Std(y)^2)/df            
-    t = (Mean(x) - Mean(y))/sqrt(((1/len(x)) + (1/len(y)))*psv)     
+    psv = ((len(x) - 1)*Std(x)**2 + (len(y) - 1)*Std(y)**2)/df            
+    t = (Mean(x) - Mean(y))/math.sqrt(((1/len(x)) + (1/len(y)))*psv)     
     print("1.검정통계량 : %g" %t)
     print("\n2.자유도 :", df)
     print("\n3.합동표본분산(합동추정치) : %g" %psv) 
@@ -1913,13 +1902,13 @@ def T2_UnpEqv(a,x,y) :
     
     df = len(x) + len(y) - 2                 
     psv = ((len(x)-1)*Var(x) + (len(y)-1)*Var(y))/df            
-    t = round((Mean(x) - Mean(y))/sqrt(((1/len(x)) + (1/len(y)))*psv),17)     
+    t = round((Mean(x) - Mean(y))/math.sqrt(((1/len(x)) + (1/len(y)))*psv),17)     
     print("1.검정통계량 : %g" %t)
     print("\n2.자유도 :", df)
     print("\n3.합동표본분산 : %g" %psv)
 
     z = sp.symbols('z')
-    f = (gamma((df + 1)/2)/(sqrt(df*pi)*gamma(df/2)))*((1 + (z^2)/df)^(-(df + 1)/2))  
+    f = (math.gamma((df + 1)/2)/(math.sqrt(df*math.pi)*math.gamma(df/2)))*((1 + (z**2)/df)**(-(df + 1)/2))  
     if t >= 0 :
         TI = 0.5 + sp.Integral(f,(z,0,t))
     else : 
@@ -1950,7 +1939,7 @@ def T2_UnEqv(a,x,y) :
     
     df = len(x) + len(y) - 2                 
     psv = ((len(x)-1)*Var(x) + (len(y)-1)*Var(y))/df            
-    t = round((Mean(x) - Mean(y))/sqrt(((1/len(x)) + (1/len(y)))*psv),17)     
+    t = round((Mean(x) - Mean(y))/math.sqrt(((1/len(x)) + (1/len(y)))*psv),17)     
     print("1.검정통계량 : %g" %t)
     print("\n2.자유도 :", df)
     print("\n3.합동표본분산 : %g" %psv)
@@ -1960,7 +1949,7 @@ def T2_UnEqv(a,x,y) :
     print("\n5.기각역 : (-oo, {0})".format(-cr))
     
     z = sp.symbols('z')
-    f = (gamma((df + 1)/2)/(sqrt(df*pi)*gamma(df/2)))*((1 + (z^2)/df)^(-(df + 1)/2))  
+    f = (math.gamma((df + 1)/2)/(math.sqrt(df*math.pi)*math.gamma(df/2)))*((1 + (z**2)/df)**(-(df + 1)/2))  
     if t >= 0 :
         TI = 0.5 + sp.Integral(f,(z,0,t))
     else : 
@@ -1991,8 +1980,8 @@ def T2_Tscr(a,x,y) :
     
     df1 = pd.read_csv('./t분포표.csv',encoding='euc-kr',index_col=0)
     
-    df = round((Std(x)^2/len(x) + Std(y)^2/len(y))^2/((Std(x)^2/len(x))^2/(len(x) - 1) + (Std(y)^2/len(y))^2/(len(y) - 1)))
-    T2 = (Mean(x) - Mean(y))/sqrt(Std(x)^2/len(x) + Std(y)^2/len(y))
+    df = round((Std(x)**2/len(x) + Std(y)**2/len(y))**2/((Std(x)**2/len(x))**2/(len(x) - 1) + (Std(y)**2/len(y))**2/(len(y) - 1)))
+    T2 = (Mean(x) - Mean(y))/math.sqrt(Std(x)**2/len(x) + Std(y)**2/len(y))
     print("1.검정통계량: %g" %T2)
     print("\n2.자유도:", df)
     
@@ -2018,14 +2007,13 @@ def T2_Tscr(a,x,y) :
 # T2_Twosided_probabilityvalue 축약 : T2_Tsp
 
 def T2_Tsp(a,x,y) :
-     
-    df = round((Std(x)^2/len(x) + Std(y)^2/len(y))^2/((Std(x)^2/len(x))^2/(len(x) - 1) + (Std(y)^2/len(y))^2/(len(y) - 1)))      
-    t = round((Mean(x) - Mean(y))/sqrt(Std(x)^2/len(x) + Std(y)^2/len(y)),17)     
+    df = round((Std(x)**2/len(x) + Std(y)**2/len(y))**2/((Std(x)**2/len(x))**2/(len(x) - 1) + (Std(y)**2/len(y))**2/(len(y) - 1)))   
+    t = round((Mean(x) - Mean(y))/math.sqrt(Std(x)**2/len(x) + Std(y)**2/len(y)),17)     
     print("1.검정통계량 : %g" %t)
     print("\n2.자유도 :", df)
     
     z = sp.symbols('z')
-    f = (gamma((df + 1)/2)/(sqrt(df*pi)*gamma(df/2)))*((1 + (z^2)/df)^(-(df + 1)/2))  
+    f = (math.gamma((df + 1)/2)/(math.sqrt(df*math.pi)*math.gamma(df/2)))*((1 + (z**2)/df)**(-(df + 1)/2))  
     I = 0.5 - sp.Integral(f,(z,0,abs(t)))
     print("\n3.p값 : %f" %(I*2))
     print("\n4.유의수준 : %g" %a)
@@ -2050,9 +2038,8 @@ def T2_Tsp(a,x,y) :
 def T2_Ts(a,x,y) :
      
     df1 = pd.read_csv('./t분포표.csv',encoding='euc-kr',index_col=0)
-    
-    df = round((Std(x)^2/len(x) + Std(y)^2/len(y))^2/((Std(x)^2/len(x))^2/(len(x) - 1) + (Std(y)^2/len(y))^2/(len(y) - 1)))      
-    t = round((Mean(x) - Mean(y))/sqrt(Std(x)^2/len(x) + Std(y)^2/len(y)),17)     
+    df = round((Std(x)**2/len(x) + Std(y)**2/len(y))**2/((Std(x)**2/len(x))**2/(len(x) - 1) + (Std(y)**2/len(y))**2/(len(y) - 1)))      
+    t = round((Mean(x) - Mean(y))/math.sqrt(Std(x)**2/len(x) + Std(y)**2/len(y)),17)     
     print("1.검정통계량 : %g" %t)
     print("\n2.자유도 :", df)
     
@@ -2061,7 +2048,7 @@ def T2_Ts(a,x,y) :
     print("\n4.기각역 : (-oo, {0}) or ({1}, oo)".format(-cr,cr))
     
     z = sp.symbols('z')
-    f = (gamma((df + 1)/2)/(sqrt(df*pi)*gamma(df/2)))*((1 + (z^2)/df)^(-(df + 1)/2))  
+    f = (math.gamma((df + 1)/2)/(math.sqrt(df*math.pi)*math.gamma(df/2)))*((1 + (z**2)/df)**(-(df + 1)/2))  
     I = 0.5 - sp.Integral(f,(z,0,abs(t)))
     print("\n5.p값 : %f" %(I*2))
     print("\n6.유의수준 : %g" %a)
@@ -2086,9 +2073,8 @@ def T2_Ts(a,x,y) :
 def T2_Upcr(a,x,y) :
     
     df1 = pd.read_csv('./t분포표.csv',encoding='euc-kr',index_col=0)
-    
-    df = round((Std(x)^2/len(x) + Std(y)^2/len(y))^2/((Std(x)^2/len(x))^2/(len(x) - 1) + (Std(y)^2/len(y))^2/(len(y) - 1)))
-    T2 = (Mean(x) - Mean(y))/sqrt(Std(x)^2/len(x) + Std(y)^2/len(y))
+    df = round((Std(x)**2/len(x) + Std(y)**2/len(y))**2/((Std(x)**2/len(x))**2/(len(x) - 1) + (Std(y)**2/len(y))**2/(len(y) - 1)))    
+    T2 = (Mean(x) - Mean(y))/math.sqrt(Std(x)**2/len(x) + Std(y)**2/len(y))
     print("1.검정통계량 : %g" %T2)
     print("\n2.자유도 :", df)
     
@@ -2115,13 +2101,13 @@ def T2_Upcr(a,x,y) :
 
 def T2_Upp(a,x,y) :
      
-    df = round((Std(x)^2/len(x) + Std(y)^2/len(y))^2 / ((Std(x)^2/len(x))^2 / (len(x) - 1) + (Std(y)^2/len(y))^2 / (len(y) - 1)))      
-    t = round((Mean(x) - Mean(y))/sqrt(Std(x)^2/len(x) + Std(y)^2/len(y)),17)     
+    df = round((Std(x)**2/len(x) + Std(y)**2/len(y))**2/((Std(x)**2/len(x))**2/(len(x) - 1) + (Std(y)**2/len(y))**2/(len(y) - 1)))    
+    t = round((Mean(x) - Mean(y))/math.sqrt(Std(x)**2/len(x) + Std(y)**2/len(y)),17)     
     print("1.검정통계량 : %g" %t)
     print("\n2.자유도 :", df)
     
     z = sp.symbols('z')
-    f = (gamma((df + 1)/2)/(sqrt(df*pi)*gamma(df/2)))*((1 + (z^2)/df)^(-(df + 1)/2))  
+    f = (math.gamma((df + 1)/2)/(math.sqrt(df*math.pi)*math.gamma(df/2)))*((1 + (z**2)/df)**(-(df + 1)/2))  
     if t >= 0 :
         TI = 0.5 - sp.Integral(f,(z,0,t))
     else : 
@@ -2150,8 +2136,8 @@ def T2_Up(a,x,y) :
     
     df1 = pd.read_csv('./t분포표.csv',encoding='euc-kr',index_col=0)
      
-    df = round((Std(x)^2/len(x) + Std(y)^2/len(y))^2 / ((Std(x)^2/len(x))^2 / (len(x) - 1) + (Std(y)^2/len(y))^2 / (len(y) - 1)))      
-    t = round((Mean(x) - Mean(y))/sqrt(Std(x)^2/len(x) + Std(y)^2/len(y)),17)     
+    df = round((Std(x)**2/len(x) + Std(y)**2/len(y))**2/((Std(x)**2/len(x))**2/(len(x) - 1) + (Std(y)**2/len(y))**2/(len(y) - 1))) 
+    t = round((Mean(x) - Mean(y))/math.sqrt(Std(x)**2/len(x) + Std(y)**2/len(y)),17)     
     print("1.검정통계량 : %g" %t)
     print("\n2.자유도 :", df)
     
@@ -2160,7 +2146,7 @@ def T2_Up(a,x,y) :
     print("\n4.기각역 : ({0}, oo)".format(cr))
     
     z = sp.symbols('z')
-    f = (gamma((df + 1)/2)/(sqrt(df*pi)*gamma(df/2)))*((1 + (z^2)/df)^(-(df + 1)/2))  
+    f = (math.gamma((df + 1)/2)/(math.sqrt(df*math.pi)*math.gamma(df/2)))*((1 + (z**2)/df)**(-(df + 1)/2))  
     if t >= 0 :
         TI = 0.5 - sp.Integral(f,(z,0,t))
     else : 
@@ -2188,9 +2174,8 @@ def T2_Up(a,x,y) :
 def T2_Uncr(a,x,y) :
     
     df1 = pd.read_csv('./t분포표.csv',encoding='euc-kr',index_col=0)
-    
-    df = round((Std(x)^2/len(x) + Std(y)^2/len(y))^2/((Std(x)^2/len(x))^2/(len(x) - 1) + (Std(y)^2/len(y))^2/(len(y) - 1)))
-    T2 = (Mean(x) - Mean(y))/sqrt(Std(x)^2/len(x) + Std(y)^2/len(y))
+    df = round((Std(x)**2/len(x) + Std(y)**2/len(y))**2/((Std(x)**2/len(x))**2/(len(x) - 1) + (Std(y)**2/len(y))**2/(len(y) - 1))) 
+    t = round((Mean(x) - Mean(y))/math.sqrt(Std(x)**2/len(x) + Std(y)**2/len(y)),17) 
     print("1.검정통계량 : %g" %T2)
     print("\n2.자유도 :",df)
     
@@ -2217,13 +2202,13 @@ def T2_Uncr(a,x,y) :
 
 def T2_Unp(a,x,y) :
     
-    df = round((Std(x)^2/len(x) + Std(y)^2/len(y))^2 / ((Std(x)^2/len(x))^2 / (len(x) - 1) + (Std(y)^2/len(y))^2 / (len(y) - 1)))      
-    t = round((Mean(x) - Mean(y))/sqrt(Std(x)^2/len(x) + Std(y)^2/len(y)),17)     
+    df = round((Std(x)**2/len(x) + Std(y)**2/len(y))**2/((Std(x)**2/len(x))**2/(len(x) - 1) + (Std(y)**2/len(y))**2/(len(y) - 1))) 
+    t = round((Mean(x) - Mean(y))/math.sqrt(Std(x)**2/len(x) + Std(y)**2/len(y)),17)  
     print("1.검정통계량 : %g" %t)
     print("\n2.자유도 :", df)
     
     z = sp.symbols('z')
-    f = (gamma((df + 1)/2)/(sqrt(df*pi)*gamma(df/2)))*((1 + (z^2)/df)^(-(df + 1)/2))  
+    f = (math.gamma((df + 1)/2)/(math.sqrt(df*math.pi)*math.gamma(df/2)))*((1 + (z^2)/df)^(-(df + 1)/2))  
     if t >= 0 :
         TI = 0.5 + sp.Integral(f,(z,0,t))
     else : 
