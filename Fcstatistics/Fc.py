@@ -4668,13 +4668,20 @@ def SSTR1(*A) :
 
 
 # 입력값: 데이터프레임 내에서 행 값
-def SSTR2(*B) :
+def SSTR2(*B):
     if isinstance(B[0], pd.DataFrame):
-        x = sum(sum(map(sum, B))) / (len(B[0])*B[0].shape[1]*len(B)) 
-        return sum(map(lambda b : (sum(sum(b)/len(b))/b.shape[1] - x)**2, B))*B[0].shape[1]*len(B[0])
-    else:    
-        x = sum(map(sum, B))/sum(map(len, B))
-        return sum(map(lambda b : len(b)*(Mean(b) - x)**2, B))
+        # 모든 DataFrame에서 숫자만 추출하여 합산
+        total_sum = sum(b.values.sum() for b in B)
+        # 전체 평균 x 계산
+        x = total_sum / (len(B[0]) * B[0].shape[1] * len(B))
+        
+        # 편차 제곱 합계 계산
+        return sum(map(lambda b: ((b.values.sum() / (len(b) * b.shape[1])) - x) ** 2, B)) * B[0].shape[1] * len(B[0])
+    
+    else:
+        # DataFrame이 아닌 경우 리스트 등의 경우
+        x = sum(map(sum, B)) / sum(map(len, B))
+        return sum(map(lambda b: len(b) * (Mean(b) - x) ** 2, B))
 
 
 # #### 상호작용제곱합 SSINT [수정함]
@@ -5193,7 +5200,7 @@ def Fsttb_test(a, A = [ ], B = [ ]) :
 
 # In[205]:
 
-## 여기서부터 진행하기
+
 def B_AOV(a, A = [ ], B = [ ]) :
     
     print('[귀무가설] : 각 모집단의 평균들은 유의한 차이가 없다. \n[대립가설] : 각 모집단의 평균들 중 유의한 차이가 존재한다.')  
@@ -5211,8 +5218,8 @@ def B_AOV(a, A = [ ], B = [ ]) :
     print("\n5.기각역 : (%g, oo)" %cr)
     
     x = sp.symbols('x')
-    f = (v^(0.5*v))*(w^(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(x^(0.5*(v - 2)))/(v*x + w)^(0.5*(v + w))
-    i = 1 - integral(f,x,0,Frd)    
+    f = (v**(0.5*v))*(w**(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(x**(0.5*(v - 2)))/(v*x + w)**(0.5*(v + w))
+    i = 1 - sp.integrate(f,(x,0,Frd))    
     print('\n6.p값 : %g' %i)
     print('\n7.유의수준 : %g' %a)
     
@@ -5413,10 +5420,10 @@ residual_independence_check(residual, None, 'Time')
 def normality_test(residuals):
     n = len(residuals)
     mean_res = sum(residuals) / n
-    std_res = sqrt(sum((x - mean_res) ** 2 for x in residuals) / n)
+    std_res = math.sqrt(sum((x - mean_res) ** 2 for x in residuals) / n)
     
     w_stat = sum(((i + 1 - 0.5) / n - (residuals[i] - mean_res) / std_res) ** 2 for i in range(n))
-    p_value = 1 - exp(-2 * w_stat / pi)
+    p_value = 1 - math.exp(-2 * w_stat / math.pi)
     
     alpha = 0.05  # 유의수준
     if p_value > alpha:
@@ -5562,8 +5569,8 @@ def Beta_T_Tscr(a, x, y) :
     df = pd.read_csv('./t분포표.csv', encoding='euc-kr', index_col=0) 
     
     _, b = est_sl_Reg_equation(x, y)
-    S = sqrt(Y_MSE(x, y))
-    S_b1 = S / sqrt(sum(map(lambda xi: (xi - Mean(x))**2, x)))
+    S = math.sqrt(Y_MSE(x, y))
+    S_b1 = S / math.sqrt(sum(map(lambda xi: (xi - Mean(x))**2, x)))
     T1 = b / S_b1
     
     print("1.검정통계량: %g" %T1)              
@@ -5596,8 +5603,8 @@ Beta_T_Tscr(0.05, 광고비, 매출액)
 def Beta_T_Tsp(a, x, y) :
 
     _, b = est_sl_Reg_equation(x, y)
-    S = sqrt(Y_MSE(x, y))
-    S_b1 = S / sqrt(sum(map(lambda xi: (xi - Mean(x))**2, x)))
+    S = math.sqrt(Y_MSE(x, y))
+    S_b1 = S / math.sqrt(sum(map(lambda xi: (xi - Mean(x))**2, x)))
     t = b / S_b1
     
     print("1.검정통계량 : %g" %t)
@@ -5606,8 +5613,8 @@ def Beta_T_Tsp(a, x, y) :
     print("\n2.자유도 :",v)
     
     z = sp.symbols('z')
-    f = (gamma((v+1)/2)/(sqrt(v*pi)*gamma(v/2)))*((1+(z^2)/v)^(-(v+1)/2))     
-    I = 0.5 - integral(f,z,0,abs(t))           
+    f = (gamma((v+1)/2)/(math.sqrt(v*math.pi)*gamma(v/2)))*((1+(z^2)/v)**(-(v+1)/2))     
+    I = 0.5 - sp.integrate(f,(z,0,abs(t)))           
     print("\n3.p값 : %g" %(I*2))
     print("\n4.유의수준 : %g" %a)
     
@@ -5681,8 +5688,8 @@ def Beta_F_Rp(a, x, y) :
     print("\n2.두 자유도 : %g, %g" %(v,w))
     
     z = sp.symbols('z')
-    f = (v^(0.5*v))*(w^(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(z^(0.5*(v - 2)))/(v*z + w)^(0.5*(v + w))
-    i = 1 - integral(f,z,0,F)
+    f = (v**(0.5*v))*(w**(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(z**(0.5*(v - 2)))/(v*z + w)**(0.5*(v + w))
+    i = 1 - sp.integrate(f,(z,0,F))
     print("\n3.p값 : %g" %i)
     print("\n4.유의수준 : %g" %a)
     
@@ -5746,8 +5753,8 @@ def E_con_interval(alpha, x, y, x0):
     df = pd.read_csv('./t분포표.csv', encoding='euc-kr', index_col=0) 
     a, b = est_sl_Reg_equation(x, y)
     y0 = predict(a, b, x0)
-    s = sqrt(Y_MSE(x, y))
-    Sy0 = s * sqrt(1 / len(x) + (x0-Mean(x))**2 / sum(map(lambda xi: (xi - Mean(x))**2, x)))
+    s = math.sqrt(Y_MSE(x, y))
+    Sy0 = s * math.sqrt(1 / len(x) + (x0-Mean(x))**2 / sum(map(lambda xi: (xi - Mean(x))**2, x)))
     cr = df["%g" %(alpha/2)][int(len(x) - 2)]
     return (y0 - cr*Sy0, y0 + cr*Sy0)
 
@@ -5768,8 +5775,8 @@ def E_pre_interval(alpha, x, y, x0):
     df = pd.read_csv('./t분포표.csv', encoding='euc-kr', index_col=0) 
     a, b = est_sl_Reg_equation(x, y)
     y0 = predict(a, b, x0)
-    s = sqrt(Y_MSE(x, y))
-    Sy0 = s * sqrt(1 + 1 / len(x) + (x0-Mean(x))**2 / sum(map(lambda xi: (xi - Mean(x))**2, x)))
+    s = math.sqrt(Y_MSE(x, y))
+    Sy0 = s * math.sqrt(1 + 1 / len(x) + (x0-Mean(x))**2 / sum(map(lambda xi: (xi - Mean(x))**2, x)))
     cr = df["%g" %(alpha/2)][int(len(x) - 2)]
     return (y0 - cr*Sy0, y0 + cr*Sy0)
 
@@ -5901,7 +5908,7 @@ multiple_linear_Reg_equation(X설명, Y반응, B계수)
 
 # 속도 수정(create_row)
 def create_row(i, x_list):
-    return [Integer(1)] + list(map(lambda j: x_list[j][i], range(len(x_list))))
+    return [sp.Integer(1)] + list(map(lambda j: x_list[j][i], range(len(x_list))))
 
 #입력값 'x_list': 설명변수 리스트, 'y': 반응변수
 def est_mul_Reg_equation(x_list, y):
@@ -6107,8 +6114,8 @@ def Beta_i_F_Rp(a, x_list, y) :
     print("\n2.두 자유도 : %g, %g" %(v,w))
     
     z = sp.symbols('z')
-    f = (v^(0.5*v))*(w^(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(z^(0.5*(v - 2)))/(v*z + w)^(0.5*(v + w))
-    i = 1 - integral(f,z,0,F)
+    f = (v**(0.5*v))*(w**(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(z**(0.5*(v - 2)))/(v*z + w)**(0.5*(v + w))
+    i = 1 - sp.integrate(f,(z,0,F))
     print("\n3.p값 : %g" %i)
     print("\n4.유의수준 : %g" %a)
     
@@ -6148,7 +6155,7 @@ def Beta_j_T_Tscr(a, j, x_list, y) :
         X_transpose = X.transpose()
         XT_X_inv = (X_transpose * X).inverse()
         var_beta_j = Y_i_MSE(x_list, y) * XT_X_inv[j, j]
-        return sqrt(var_beta_j)
+        return math.sqrt(var_beta_j)
 
     
     def t_statistic_j(j, x_list, y):
@@ -6193,7 +6200,7 @@ def Beta_j_T_Tsp(a, j, x_list, y) :
         X_transpose = X.transpose()
         XT_X_inv = (X_transpose * X).inverse()
         var_beta_j = Y_i_MSE(x_list, y) * XT_X_inv[j, j]
-        return sqrt(var_beta_j)
+        return math.sqrt(var_beta_j)
 
     
     def t_statistic_j(j, x_list, y):
@@ -6208,8 +6215,8 @@ def Beta_j_T_Tsp(a, j, x_list, y) :
     print("\n2.자유도 :",v)
     
     z = sp.symbols('z')
-    f = (gamma((v+1)/2)/(sqrt(v*pi)*gamma(v/2)))*((1+(z^2)/v)^(-(v+1)/2))     
-    I = 0.5 - integral(f,z,0,abs(t))           
+    f = (gamma((v+1)/2)/(math.sqrt(v*math.pi)*gamma(v/2)))*((1+(z**2)/v)**(-(v+1)/2))     
+    I = 0.5 - sp.integrate(f,(z,0,abs(t)))           
     print("\n3.p값 : %g" %(I*2))
     print("\n4.유의수준 : %g" %a)
     
@@ -6633,7 +6640,7 @@ def PearsonCor(*X) :
     for i in range(len(X_lst)) :
         dfempty['%s'%(X_lst[i])][int(i)] = 1
         for j in range(i+1,len(X_lst)) :
-            cor = sum(map(lambda xi, xj : (xi - Mean(X[i]))*(xj - Mean(X[j])) , X[i], X[j])) / (sqrt(sum(map(lambda xi : (xi - Mean(X[i]))^2 , X[i])))*sqrt(sum(map(lambda xj : (xj - Mean(X[j]))^2 , X[j]))))
+            cor = sum(map(lambda xi, xj : (xi - Mean(X[i]))*(xj - Mean(X[j])) , X[i], X[j])) / (math.sqrt(sum(map(lambda xi : (xi - Mean(X[i]))**2 , X[i])))*math.sqrt(sum(map(lambda xj : (xj - Mean(X[j]))**2 , X[j]))))
             dfempty['%s'%(X_lst[i])][int(j)],dfempty['%s'%(X_lst[j])][int(i)] = cor , cor     
     return dfempty
 
@@ -6653,7 +6660,7 @@ def Corcoeff_Test(*X) :
     X_lst = input('\n설명변수(X1,X2,...) : ').split(',')
     df = len(X[0]) - 2
     z = sp.symbols('z')
-    f = (gamma((df + 1)/2)/(sqrt(df*pi)*gamma(df/2)))*((1 + (z^2)/df)^(-(df + 1)/2))
+    f = (gamma((df + 1)/2)/(math.sqrt(df*math.pi)*gamma(df/2)))*((1 + (z**2)/df)**(-(df + 1)/2))
     n = len(X)
     
     dfempty = pd.DataFrame(index = X_lst*2, columns = X_lst)     
@@ -6661,10 +6668,10 @@ def Corcoeff_Test(*X) :
         dfempty['%s'%(X_lst[i])][int(i)] = 1
         dfempty['%s'%(X_lst[i])][int(n+i)] = 0
         for j in range(i+1,len(X_lst)) :    # 행
-            cor = sum(map(lambda xi, xj : (xi - Mean(X[i]))*(xj - Mean(X[j])) , X[i], X[j])) / (sqrt(sum(map(lambda xi : (xi - Mean(X[i]))^2 , X[i])))*sqrt(sum(map(lambda xj : (xj - Mean(X[j]))^2 , X[j]))))
+            cor = sum(map(lambda xi, xj : (xi - Mean(X[i]))*(xj - Mean(X[j])) , X[i], X[j])) / (math.sqrt(sum(map(lambda xi : (xi - Mean(X[i]))**2 , X[i])))*math.sqrt(sum(map(lambda xj : (xj - Mean(X[j]))**2 , X[j]))))
             dfempty['%s'%(X_lst[i])][int(j)], dfempty['%s'%(X_lst[j])][int(i)] = cor, cor 
-            t = cor*sqrt(df/(1 - cor^2))
-            p_value = float((0.5 - integral(f,z,0,abs(t)))*2)
+            t = cor*math.sqrt(df/(1 - cor**2))
+            p_value = float((0.5 - sp.integrate(f,(z,0,abs(t))))*2)
             dfempty['%s'%(X_lst[i])][int(n+j)], dfempty['%s'%(X_lst[j])][int(n+i)] = p_value, p_value 
     br = pd.DataFrame([['']*len(X)], index = [''], columns = dfempty.columns)
     test_name = pd.DataFrame([X_lst], index = ['[유의성검정 p값]'], columns = dfempty.columns)
@@ -6827,7 +6834,7 @@ nonlinear_Reg_equation(창문수, 난방비, 2)
 def nonlinear_Reg_model(x, y, degree):
     beta = nonlinear_Reg_equation(x, y, degree)
     
-    x_range = srange(min(x), max(x) + 0.1, 0.1)
+    x_range = range(min(x), max(x) + 0.1, 0.1)
     y_pred = [sum(beta[i] * (xi^i) for i in range(len(beta))) for xi in x_range]
 
     poly_line = line(list(zip(x_range, y_pred)), color='blue', legend_label=f'degree{degree} regression line', frame=True, figsize=4, fontsize=5)
