@@ -2279,7 +2279,7 @@ def Paired_Tscr(a,x1,x2) :
     df1 = pd.read_csv('./t분포표.csv',encoding='euc-kr',index_col=0)
     
     d = list(map(lambda x1, x2 : x1 - x2 , x1, x2))
-    T = Mean(d) / (Std(d)/sqrt(len(d)))
+    T = Mean(d) / (Std(d)/math.sqrt(len(d)))
     print("1.검정통계량 : %g" %T)     
     print("\n2.자유도 :", len(d) - 1)
     
@@ -2308,12 +2308,12 @@ def Paired_Tsp(a,x1,x2) :
     
     d = list(map(lambda x1, x2 : x1 - x2 , x1, x2))
     df = len(d) - 1
-    t = round(Mean(d) / (Std(d)/sqrt(len(d))),17)
+    t = round(Mean(d) / (Std(d)/math.sqrt(len(d))),17)
     print("1.검정통계량 : %g" %t)     
     print("\n2.자유도 :", df)
     
     z = sp.symbols('z')
-    f = (gamma((df + 1)/2)/(sqrt(df*pi)*gamma(df/2)))*((1 + (z^2)/df)^(-(df + 1)/2))  
+    f = (math.gamma((df + 1)/2)/(math.sqrt(df*math.pi)*math.gamma(df/2)))*((1 + (z**2)/df)**(-(df + 1)/2))  
     I = 0.5 - sp.Integral(f,(z,0,abs(t)))
     print("\n3.p값 : %f" %(I*2))
     print("\n4.유의수준 : %g" %a)
@@ -2341,7 +2341,7 @@ def Paired_Ts(a,x1,x2) :
     
     d = list(map(lambda x1, x2 : x1 - x2 , x1, x2))
     df = len(d) - 1
-    t = round(Mean(d) / (Std(d)/sqrt(len(d))),17)
+    t = round(Mean(d) / (Std(d)/math.sqrt(len(d))),17)
     print("1.검정통계량 : %g" %t)     
     print("\n2.자유도 :", df)
     
@@ -2350,7 +2350,7 @@ def Paired_Ts(a,x1,x2) :
     print("\n4.기각역 : (-oo, {0}) or ({1}, oo)".format(-cr,cr))
     
     z = sp.symbols('z')
-    f = (gamma((df + 1)/2)/(sqrt(df*pi)*gamma(df/2)))*((1 + (z^2)/df)^(-(df + 1)/2))  
+    f = (math.gamma((df + 1)/2)/(math.sqrt(df*math.pi)*math.gamma(df/2)))*((1 + (z**2)/df)**(-(df + 1)/2))  
     I = 0.5 - sp.Integral(f,(z,0,abs(t)))
     print("\n5.p값 : %f" %(I*2))
     print("\n6.유의수준 : %g" %a)
@@ -2377,7 +2377,7 @@ def Paired_Lcr(a,x1,x2) :
     df1 = pd.read_csv('./t분포표.csv',encoding='euc-kr',index_col=0)
     
     d = list(map(lambda x1, x2 : x1 - x2 , x1, x2))
-    T = Mean(d) / (Std(d)/sqrt(len(d)))
+    T = Mean(d) / (Std(d)/math.sqrt(len(d)))
     print("1.검정통계량 : %g" %T)     
     print("\n2.자유도 :", len(d) - 1)
     
@@ -2406,12 +2406,12 @@ def Paired_Lp(a,x1,x2) :
     
     d = list(map(lambda x1, x2 : x1 - x2 , x1, x2))
     df = len(d) - 1
-    t = round(Mean(d) / (Std(d)/sqrt(len(d))),17)
+    t = round(Mean(d) / (Std(d)/math.sqrt(len(d))),17)
     print("1.검정통계량 : %g" %t)     
     print("\n2.자유도 :", df)
     
     z = sp.symbols('z')
-    f = (gamma((df + 1)/2)/(sqrt(df*pi)*gamma(df/2)))*((1 + (z^2)/df)^(-(df + 1)/2))
+    f = (math.gamma((df + 1)/2)/(math.sqrt(df*math.pi)*math.gamma(df/2)))*((1 + (z**2)/df)**(-(df + 1)/2))
     if t >= 0 :
         I = 0.5 + sp.Integral(f,(z,0,t))
     else : 
@@ -2442,7 +2442,7 @@ def Paired_L(a,x1,x2) :
     
     d = list(map(lambda x1, x2 : x1 - x2 , x1, x2))
     df = len(d) - 1
-    t = round(Mean(d) / (Std(d)/sqrt(len(d))),17)
+    t = round(Mean(d) / (Std(d)/math.sqrt(len(d))),17)
     print("1.검정통계량 : %g" %t)     
     print("\n2.자유도 :", df)
     
@@ -2451,7 +2451,7 @@ def Paired_L(a,x1,x2) :
     print("\n4.기각역 : (-oo, {0})".format(-cr))
     
     z = sp.symbols('z')
-    f = (gamma((df + 1)/2)/(sqrt(df*pi)*gamma(df/2)))*((1 + (z^2)/df)^(-(df + 1)/2))
+    f = (math.gamma((df + 1)/2)/(math.sqrt(df*math.pi)*math.gamma(df/2)))*((1 + (z**2)/df)**(-(df + 1)/2))
     if t >= 0 :
         I = 0.5 + sp.Integral(f,(z,0,t))
     else : 
@@ -2481,7 +2481,7 @@ def Paired_Rcr(a,x1,x2) :
     df1 = pd.read_csv('./t분포표.csv',encoding='euc-kr',index_col=0)
     
     d = list(map(lambda x1, x2 : x1 - x2 , x1, x2))
-    T = Mean(d) / (Std(d)/sqrt(len(d)))
+    T = Mean(d) / (Std(d)/math.sqrt(len(d)))
     print("1.검정통계량 : %g" %T)   
     print("\n2.자유도 :", len(d) - 1)
     
@@ -2510,12 +2510,12 @@ def Paired_Rp(a,x1,x2) :
     
     d = list(map(lambda x1, x2 : x1 - x2 , x1, x2))
     df = len(d) - 1
-    t = round(Mean(d) / (Std(d)/sqrt(len(d))),17)
+    t = round(Mean(d) / (Std(d)/math.sqrt(len(d))),17)
     print("1.검정통계량 : %g" %t)     
     print("\n2.자유도 :", df)
     
     z = sp.symbols('z')
-    f = (gamma((df + 1)/2)/(sqrt(df*pi)*gamma(df/2)))*((1 + (z^2)/df)^(-(df + 1)/2))
+    f = (math.gamma((df + 1)/2)/(math.sqrt(df*math.pi)*math.gamma(df/2)))*((1 + (z**2)/df)**(-(df + 1)/2))
     if t >= 0 :
         I = 0.5 - sp.Integral(f,(z,0,t))
     else : 
@@ -2546,7 +2546,7 @@ def Paired_R(a,x1,x2) :
     
     d = list(map(lambda x1, x2 : x1 - x2 , x1, x2))
     df = len(d) - 1
-    t = round(Mean(d) / (Std(d)/sqrt(len(d))),17)
+    t = round(Mean(d) / (Std(d)/math.sqrt(len(d))),17)
     print("1.검정통계량 : %g" %t)     
     print("\n2.자유도 :", df)
      
@@ -2555,7 +2555,7 @@ def Paired_R(a,x1,x2) :
     print("\n4.기각역 : ({0}, oo)".format(cr))
     
     z = sp.symbols('z')
-    f = (gamma((df + 1)/2)/(sqrt(df*pi)*gamma(df/2)))*((1 + (z^2)/df)^(-(df + 1)/2))
+    f = (math.gamma((df + 1)/2)/(math.sqrt(df*math.pi)*math.gamma(df/2)))*((1 + (z**2)/df)**(-(df + 1)/2))
     if t >= 0 :
         I = 0.5 - sp.Integral(f,(z,0,t))
     else : 
@@ -2590,11 +2590,11 @@ def Paired_R(a,x1,x2) :
 def P1_Ts(a,n,x,p0):
     p = x/n
     if n * p0 >=5 and n * (1-p0) >=5:
-        Z = round((p - p0) / sqrt(p0*(1 - p0)/n),17)
+        Z = round((p - p0) / math.sqrt(p0*(1 - p0)/n),17)
         print("1.검정통계량 : %g" %Z)
         
         y, z = sp.symbols('y z') 
-        f = 1/sqrt(2*pi)*exp(-(z^2)/2)
+        f = 1 / sp.sqrt(2 * sp.pi) * sp.exp(-(z ** 2) / 2)
         I = sp.integrate(f,(z,0,y))
         eqn = sp.Eq(I, 0.5 - a/2)
         cr = round(sp.solve( eqn, y )[0],3)
@@ -2628,11 +2628,11 @@ def P1_Tscr(a,n,x,p0):
     
     p = x/n
     if n * p0 >=5 and n * (1-p0) >=5:
-        Z = round((p - p0) / sqrt(p0*(1 - p0)/n),17)
+        Z = round((p - p0) / math.sqrt(p0*(1 - p0)/n),17)
         print("1.검정통계량 : %g" %Z)
         
         z = sp.symbols('z') 
-        f = 1/sqrt(2*pi)*exp(-(z^2)/2)
+        f = 1 / sp.sqrt(2 * sp.pi) * sp.exp(-(z ** 2) / 2)
         cr = two_tailed_pred_interval_p(a)
         print("\n2.임계값 : {0}, {1}".format(-cr,cr))
         print("\n3.기각역 : (-oo, {0}) or ({1}, oo)".format(-cr,cr))
