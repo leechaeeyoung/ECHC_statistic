@@ -366,7 +366,7 @@ def bi_variance(n, p):
 
 # 'lambd': 평균 발생 횟수, 'k': 발생 횟수, 관찰수 
 def po_pmf(lambd, k):
-    return float((exp(-lambd) * (lambd ** k)) / factorial(k))
+    return float((math.exp(-lambd) * (lambd ** k)) / math.factorial(k))
 
 
 # #### 이항분포의 포아송분포 근사 후 평균
@@ -470,7 +470,7 @@ def uni_variance(a, b):
 
 # 'x': 확률변수 값, 'm': 평균, 's': 표준편차
 def nor_pdf(x, m, s):
-    return float((1 / (math.sqrt(2 * pi) * s)) * exp(-((x - m) ** 2) / (2 * s ** 2)))
+    return float((1 / (math.sqrt(2 * math.pi) * s)) * math.exp(-((x - m) ** 2) / (2 * s ** 2)))
 
 
 # #### 표준정규분포의 확률밀도함수
@@ -480,7 +480,7 @@ def nor_pdf(x, m, s):
 
 # 'x': 확률변수 값
 def sta_nor_pdf(x):
-    return float((1 / math.sqrt(2 * pi)) * math.exp(-0.5 * x ** 2))
+    return float((1 / math.sqrt(2 * math.pi)) * math.exp(-0.5 * x ** 2))
 
 
 # #### 표준정규분포의 누적분포함수
@@ -699,7 +699,7 @@ def sam_pro_variance_list(x, p):
 
 # 'n':전체 수, 'p': 확률
 def sam_pro_std_err(n, p):
-    return sqrt(sam_pro_variance(n, p))
+    return math.sqrt(sam_pro_variance(n, p))
 
 
 # In[58]:
@@ -707,7 +707,7 @@ def sam_pro_std_err(n, p):
 
 # 경우 추가- 'x': 표본평균 리스트, 'p': 표본평균에 해당하는 확률
 def sam_pro_std_err_list(x, p):
-    return sqrt(sam_pro_variance_list(x, p))
+    return math.sqrt(sam_pro_variance_list(x, p))
 
 
 # ## 추정
@@ -1029,11 +1029,11 @@ def Z1_Up(a,x,m,s) :
 
 def Z1_Upcr(a,x,m,s) :            
     df = pd.read_csv('./표준정규분포표.csv', encoding='euc-kr', index_col=0)
-    Z = round((Mean(x) - m)/(s/sqrt(len(x))),17)
+    Z = round((Mean(x) - m)/(s/math.sqrt(len(x))),17)
     print("1.검정통계량 : %g" %Z)
 
     z = sp.symbols('z') 
-    f = 1/sqrt(2*pi)*exp(-(z^2)/2)
+    f = 1/math.sqrt(2*math.pi)*math.exp(-(z^2)/2)
     
     cr = one_tailed_pred_interval_p(a)
     print("\n2.임계값 : {0}".format(cr))
@@ -1795,7 +1795,7 @@ def T2_UppEqv(a,x,y) :
     
     df = len(x) + len(y) - 2                  
     psv = ((len(x) - 1)*Std(x)**2 + (len(y) - 1)*Std(y)**2)/df            
-    t = round((Mean(x) - Mean(y))/sqrt(((1/len(x)) + (1/len(y)))*psv),17)     
+    t = round((Mean(x) - Mean(y))/math.sqrt(((1/len(x)) + (1/len(y)))*psv),17)     
     print("1.검정통계량 : %g" %t)
     print("\n2.자유도 :", df)
     print("\n3.합동표본분산(합동추정치) : %g" %psv)
@@ -2177,14 +2177,14 @@ def T2_Uncr(a,x,y) :
     df1 = pd.read_csv('./t분포표.csv',encoding='euc-kr',index_col=0)
     df = round((Std(x)**2/len(x) + Std(y)**2/len(y))**2/((Std(x)**2/len(x))**2/(len(x) - 1) + (Std(y)**2/len(y))**2/(len(y) - 1))) 
     t = round((Mean(x) - Mean(y))/math.sqrt(Std(x)**2/len(x) + Std(y)**2/len(y)),17) 
-    print("1.검정통계량 : %g" %T2)
+    print("1.검정통계량 : %g" %t)
     print("\n2.자유도 :",df)
     
     cr = df1["%g" %a][int(df)]
     print("\n3.임계값 : {0}".format(-cr))
     print("\n4.기각역 : (-oo, {0})".format(-cr))
     
-    if T2 < -cr :
+    if t < -cr :
         ans = "[결과] : 귀무가설을 기각한다."
     else :
         ans = "[결과] : 귀무가설을 기각하지 못한다."
@@ -2238,8 +2238,8 @@ def T2_Un(a,x,y) :
     
     df1 = pd.read_csv('./t분포표.csv',encoding='euc-kr',index_col=0)
     
-    df = round((Std(x)^2/len(x) + Std(y)^2/len(y))^2 / ((Std(x)^2/len(x))^2 / (len(x) - 1) + (Std(y)^2/len(y))^2 / (len(y) - 1)))      
-    t = round((Mean(x) - Mean(y))/sqrt(Std(x)^2/len(x) + Std(y)^2/len(y)),17)     
+    df = round((Std(x)**2/len(x) + Std(y)**2/len(y))**2 / ((Std(x)**2/len(x))**2 / (len(x) - 1) + (Std(y)**2/len(y))**2 / (len(y) - 1)))      
+    t = round((Mean(x) - Mean(y))/math.sqrt(Std(x)**2/len(x) + Std(y)**2/len(y)),17)     
     print("1.검정통계량 : %g" %t)
     print("\n2.자유도 :", df)
      
@@ -2248,7 +2248,7 @@ def T2_Un(a,x,y) :
     print("\n4.기각역 : (-oo, {0})".format(-cr))
     
     z = sp.symbols('z')
-    f = (gamma((df + 1)/2)/(sqrt(df*pi)*gamma(df/2)))*((1 + (z^2)/df)^(-(df + 1)/2))  
+    f = (gamma((df + 1)/2)/(math.sqrt(df*math.pi)*math.gamma(df/2)))*((1 + (z**2)/df)**(-(df + 1)/2))  
     if t >= 0 :
         TI = 0.5 + sp.Integral(f,(z,0,t))
     else : 
