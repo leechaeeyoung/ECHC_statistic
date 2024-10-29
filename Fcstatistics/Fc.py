@@ -7,6 +7,7 @@
 
 import math
 from scipy.special import gamma
+from scipy import integrate as spi
 import sympy as sp
 import pandas as pd
 
@@ -47,7 +48,7 @@ def MStd(x) :
 
 
 def Std(x) :
-    return sqrt(Var(x))
+    return math.sqrt(Var(x))
 
 
 # ### 최빈값
@@ -4691,10 +4692,23 @@ def SSTR2(*B):
 
 # 입력값: 데이터프레임 내에서 행 값
 def SSINT(*B):
+    # 요인1: 자동차 요인2: 제조사 
     if isinstance(B[0], pd.DataFrame):
-        x = sum(sum(map(sum,B))) / (len(B[0])*B[0].shape[1]*len(B)) # 모든 표본의 평균
-        y = sum(map(sum,B)) / (len(B[0])*len(B)) # 요인1의 각 그룹 평균
-        return sum(sum(map(lambda b : (sum(b)/len(b) - y - sum(sum(b)/len(B[0]))/B[0].shape[1] + x)**2, B)))*len(B[0])
+        # 전체 평균
+        total_sum = sum(b.values.sum() for b in B)
+        x = total_sum / (len(B[0]) * B[0].shape[1] * len(B))
+        # 요인1의 각 평균
+        y = sum(b.values.sum(axis=0) for b in B) / (len(B) * len(B[0]))
+        # 요인2의 각 평균
+        z = [b.mean().mean() for b in B]
+        #상호작용제곱합
+        ssint = 0
+        for i in range(len(z)):
+                # 요인1과 요인2의 평균
+                w = sum(map(lambda x: x, B[i].values)) / len(B[i])
+                ssint += sum(map(lambda y_val, w_val: (w_val - y_val - z[i] + x)**2, y, w))
+        return len(B[0]) * ssint
+    
     else:
         x = sum(map(sum,B)) / (len(B[0])*len(B)) # 모든 표본의 평균 #len(B[0]):열의 갯수 #len(B): 행의 갯수
         y = list(map(lambda b: sum(b)/len(b),B)) # 요인2의 각 그룹의 평균 (행)
@@ -4852,8 +4866,10 @@ def Tw_AOV(a, A = [ ], B = [ ]) :
         
     F = round(Fint(A,B),17)
     x = sp.symbols('x')
-    fint = (dfint**(0.5*dfint))*(dferr**(0.5*dferr))*(gamma((dfint+dferr)/2))/(gamma(0.5*dfint)*gamma(0.5*dferr))*(x**(0.5*(dfint-2)))/(dfint*x+dferr)**(0.5*(dfint+dferr))
-    iint = round(1 - integral(fint,x,0,F), 4)   
+    fint = (dfint**(0.5*dfint))*(dferr**(0.5*dferr))*(math.gamma((dfint+dferr)/2))/(math.gamma(0.5*dfint)*math.gamma(0.5*dferr))*(x**(0.5*(dfint-2)))/(dfint*x+dferr)**(0.5*(dfint+dferr))
+    fint_num = sp.lambdify(x, fint, 'numpy')
+    iinte, error = spi.quad(fint_num, 0, F)
+    iint = round(1 - iinte, 4)
     cr = df['%g' % dfint][int(dferr)] 
     
     print('%-15s' %'\n3.상호작용 F통계량 : ','%g' %F)
@@ -4874,16 +4890,22 @@ def Tw_AOV(a, A = [ ], B = [ ]) :
         cr_a = df['%g' % df1][int(dferr)]   
         cr_b = df['%g' % df2][int(dferr)]   
         
-        f1 = (df1**(0.5*df1))*(dferr**(0.5*dferr))*(gamma((df1+dferr)/2))/(gamma(0.5*df1)*gamma(0.5*dferr))*(x**(0.5*(df1-2)))/(df1*x+dferr)**(0.5*(df1+dferr))
-        i1 = round(1 - integral(f1,x,0,F1), 4)                 
+        f1 = (df1**(0.5*df1))*(dferr**(0.5*dferr))*(math.gamma((df1+dferr)/2))/(math.gamma(0.5*df1)*math.gamma(0.5*dferr))*(x**(0.5*(df1-2)))/(df1*x+dferr)**(0.5*(df1+dferr))
+        f1_num = sp.lambdify(x, f1, 'numpy')
+        i1e, error = spi.quad(f1_num, 0, F1)
+        i1 = round(1 - i1e, 4)
+                      
         print('%-17s'%'\n4.요인1 F통계량 : ','%g' %F1)
         print('%-17s'%'  유의수준 : ', '%g' %a)
         print('%-17s'%'  요인1의 p값 : ' , i1)
         print('%-15s' %'  임계값 : %g' %cr_a)                                    
         print('%-15s' %'  기각역: (%g, oo)'%cr_a)
         
-        f2 = (df2**(0.5*df2))*(dferr**(0.5*dferr))*(gamma((df2+dferr)/2))/(gamma(0.5*df2)*gamma(0.5*dferr))*(x**(0.5*(df2-2)))/(df2*x+dferr)**(0.5*(df2+dferr))
-        i2 = round(1 - integral(f2,x,0,F2), 4)                     
+        f2 = (df2**(0.5*df2))*(dferr**(0.5*dferr))*(math.gamma((df2+dferr)/2))/(math.gamma(0.5*df2)*math.gamma(0.5*dferr))*(x**(0.5*(df2-2)))/(df2*x+dferr)**(0.5*(df2+dferr))
+        f2_num = sp.lambdify(x, f2, 'numpy')
+        i2e, error = spi.quad(f2_num, 0, F2)
+        i2 = round(1 - i2e, 4)
+
         print('%-17s'%'\n  요인2 F통계량 : ','%g' %F2)
         print('%-17s'%'  유의수준 : ', '%g' %a)
         print('%-17s'%'  요인2의 p값 : ' , i2)
