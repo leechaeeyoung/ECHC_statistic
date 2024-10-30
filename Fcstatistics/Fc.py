@@ -6,10 +6,11 @@
 # In[1]:
 
 import math
-from scipy.special import gamma
+#from scipy.special import gamma
 from scipy import integrate as spi
 import sympy as sp
 import pandas as pd
+import matplotlib.pyplot as plt
 
 def Mean(x) :
     return float(sum(x)/len(x))
@@ -5055,8 +5056,8 @@ def Fsttrd_testp(a, A = [ ], B = [ ]) :
     w = (len(A)-1)*(len(B)-1)            # 오차자유도
     Frd = round(Fsttrd(A, B),17)
     x = sp.symbols('x')
-    f = (v**(0.5*v))*(w**(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(x**(0.5*(v - 2)))/(v*x + w)**(0.5*(v + w))
-    i = 1 - integral(f,x,0,Frd)    
+    f = (v**(0.5*v))*(w**(0.5*w))*(math.gamma((v + w)/2))/(math.gamma(0.5*v)*math.gamma(0.5*w))*(x**(0.5*(v - 2)))/(v*x + w)**(0.5*(v + w))
+    i = 1 - sp.integrate(f,(x,0,Frd))    
     print('1.확률화블록설계 처리 F통계량 : %g' %Frd)
     print('\n2.p값 : %g' %i)
     print('\n3.유의수준 : %g' %a)
@@ -5114,8 +5115,8 @@ def Fsttrd_test(a, A = [ ], B = [ ]) :
     print("\n4.기각역 : (%g, oo)" %cr)
     
     x = sp.symbols('x')
-    f = (v**(0.5*v))*(w**(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(x**(0.5*(v - 2)))/(v*x + w)**(0.5*(v + w))
-    i = 1 - integral(f,x,0,Frd)    
+    f = (v**(0.5*v))*(w**(0.5*w))*(math.gamma((v + w)/2))/(math.gamma(0.5*v)*math.gamma(0.5*w))*(x**(0.5*(v - 2)))/(v*x + w)**(0.5*(v + w))
+    i = 1 - sp.integrate(f,(x,0,Frd))    
     print('\n5.p값 : %g' %i)
     print('\n6.유의수준 : %g' %a)
     
@@ -5144,8 +5145,10 @@ def Fsttb_testp(a, A = [ ], B = [ ]) :
     Fb = round(Fsttb(A, B),17)
     
     x = sp.symbols('x')
-    f = (v**(0.5*v))*(w**(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(x**(0.5*(v - 2)))/(v*x + w)**(0.5*(v + w))
-    i = 1 - integral(f,x,0,Fb)    
+    f = (v**(0.5*v))*(w**(0.5*w))*(math.gamma((v + w)/2))/(math.gamma(0.5*v)*math.gamma(0.5*w))*(x**(0.5*(v - 2)))/(v*x + w)**(0.5*(v + w))
+    f_num = sp.lambdify(x, f, 'numpy')
+    ie, error = spi.quad(f_num, 0, Fb)
+    i = 1 - ie    
     print('1.확률화블록설계 블록 F통계량 : %g' %Fb)
     print('\n2.p값 : %g' %i)
     print('\n3.유의수준 : %g' %a)
@@ -5205,8 +5208,10 @@ def Fsttb_test(a, A = [ ], B = [ ]) :
     print("\n4.기각역 : (%g, oo)" %cr)
     
     x = sp.symbols('x')
-    f = (v**(0.5*v))*(w**(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(x**(0.5*(v - 2)))/(v*x + w)**(0.5*(v + w))
-    i = 1 - integral(f,x,0,Fb)    
+    f = (v**(0.5*v))*(w**(0.5*w))*(math.gamma((v + w)/2))/(math.gamma(0.5*v)*math.gamma(0.5*w))*(x**(0.5*(v - 2)))/(v*x + w)**(0.5*(v + w))
+    f_num = sp.lambdify(x, f, 'numpy')
+    ie, error = spi.quad(f_num, 0, Fb)
+    i = 1 - ie  
     print('\n5.p값 : %g' %i)
     print('\n6.유의수준 : %g' %a)
     
@@ -5240,7 +5245,7 @@ def B_AOV(a, A = [ ], B = [ ]) :
     print("\n5.기각역 : (%g, oo)" %cr)
     
     x = sp.symbols('x')
-    f = (v**(0.5*v))*(w**(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(x**(0.5*(v - 2)))/(v*x + w)**(0.5*(v + w))
+    f = (v**(0.5*v))*(w**(0.5*w))*(math.gamma((v + w)/2))/(math.gamma(0.5*v)*math.gamma(0.5*w))*(x**(0.5*(v - 2)))/(v*x + w)**(0.5*(v + w))
     i = 1 - sp.integrate(f,(x,0,Frd))    
     print('\n6.p값 : %g' %i)
     print('\n7.유의수준 : %g' %a)
@@ -5382,11 +5387,15 @@ def residuals(x, y):
 def plot_residuals(x, y, x_label):
     a, b = est_sl_Reg_equation(x, y)
     residual = residuals(x, y)
-    data = list(zip(x, residual))
-    scatter_plot = list_plot(data, plotjoined=False, marker='o')
-    scatter_plot += line([(min(x), 0), (max(x), 0)], color='red', linestyle='--')
-    scatter_plot.axes_labels([x_label, 'Residuals'])
-    scatter_plot.show(frame=True, figsize=4, fontsize=5)
+    plt.figure(figsize=(4.5, 3))
+    plt.scatter(x, residual, marker='o', color='blue', s=10)
+    plt.axhline(y=0, color='red', linestyle='--', linewidth=0.7)
+    font_size = 7
+    plt.xlabel(x_label, fontsize=font_size)
+    plt.ylabel('Residuals', fontsize=font_size)
+    plt.xticks(fontsize=font_size)  
+    plt.yticks(fontsize=font_size)  
+    plt.show()
 
 
 # ###### 여기서부터 입력값 형태 때문에 예시 적용도 함께 함 
