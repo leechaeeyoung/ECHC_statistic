@@ -2662,11 +2662,11 @@ def P1_Tscr(a,n,x,p0):
 def P1_Up(a,n,x,p0):
     p = x/n
     if n * p0 >=5 and n * (1-p0) >=5:
-        Z = round((p - p0) / sqrt(p0*(1 - p0)/n),17)
+        Z = round((p - p0) / math.sqrt(p0*(1 - p0)/n),17)
         print("1.검정통계량 : %g" %Z)
         
         y, z = sp.symbols('y z') 
-        f = 1/sqrt(2*pi)*exp(-(z^2)/2)
+        f = 1/sp.sqrt(2*sp.pi)*sp.exp(-(z**2)/2)
         I = sp.integrate(f,(z,0,y))
         eqn = sp.Eq(I, 0.5 - a)
         cr = round(sp.solve( eqn, y )[0],3)
@@ -2702,11 +2702,11 @@ def P1_Upcr(a,n,x,p0):
     df = pd.read_csv('./표준정규분포표.csv', encoding='euc-kr', index_col=0)
     p = x/n
     if n * p0 >=5 and n * (1-p0) >=5:
-        Z = round((p - p0) / sqrt(p0*(1 - p0)/n),17)
+        Z = round((p - p0) / math.sqrt(p0*(1 - p0)/n),17)
         print("1.검정통계량 : %g" %Z)
         
         z = sp.symbols('z') 
-        f = 1/sqrt(2*pi)*exp(-(z^2)/2)
+        f = 1/sp.sqrt(2*sp.pi)*sp.exp(-(z**2)/2)
         cr = one_tailed_pred_interval_p(a)
         print("\n2.임계값 : {0}".format(cr))
         print("\n3.기각역 : ({0}, oo)".format(cr)) 
@@ -2739,11 +2739,11 @@ def P1_Upcr(a,n,x,p0):
 def P1_Un(a,n,x,p0):
     p = x/n
     if n * p0 >=5 and n * (1-p0) >=5:
-        Z = round((p - p0) / sqrt(p0*(1 - p0)/n),17)
+        Z = round((p - p0) / math.sqrt(p0*(1 - p0)/n),17)
         print("1.검정통계량 : %g" %Z)
         
         y, z = sp.symbols('y z') 
-        f = 1/sqrt(2*pi)*exp(-(z^2)/2)
+        f = 1/sp.sqrt(2*sp.pi)*sp.exp(-(z**2)/2)
         I = sp.integrate(f,(z,0,y))
         eqn = sp.Eq(I, 0.5 - a)
         cr = round(sp.solve( eqn, y )[0],3)
