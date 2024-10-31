@@ -2249,7 +2249,7 @@ def T2_Un(a,x,y) :
     print("\n4.기각역 : (-oo, {0})".format(-cr))
     
     z = sp.symbols('z')
-    f = (gamma((df + 1)/2)/(math.sqrt(df*math.pi)*math.gamma(df/2)))*((1 + (z**2)/df)**(-(df + 1)/2))  
+    f = (math.gamma((df + 1)/2)/(math.sqrt(df*math.pi)*math.gamma(df/2)))*((1 + (z**2)/df)**(-(df + 1)/2))  
     if t >= 0 :
         TI = 0.5 + sp.Integral(f,(z,0,t))
     else : 
@@ -2781,11 +2781,11 @@ def P1_Uncr(a,n,x,p0):
     df = pd.read_csv('./표준정규분포표.csv', encoding='euc-kr', index_col=0)
     p = x/n
     if n * p0 >=5 and n * (1-p0) >=5:
-        Z = round((p - p0) / sqrt(p0*(1 - p0)/n),17)
+        Z = round((p - p0) / math.sqrt(p0*(1 - p0)/n),17)
         print("1.검정통계량 : %g" %Z)
         
         z = sp.symbols('z') 
-        f = 1/sqrt(2*pi)*exp(-(z^2)/2)
+        f = 1/sp.sqrt(2*sp.pi)*sp.exp(-(z**2)/2)
         cr = one_tailed_pred_interval_p(a)
         print("\n2.임계값 : {0}".format(-cr))
         print("\n3.기각역 : (-oo, {0})".format(-cr))
@@ -2823,11 +2823,11 @@ def P2_Ts(a,nx,x,ny,y):
     p1 = x / nx
     p2 = y / ny
     p = (x + y) / (nx + ny) #공통 모비율의 추정값 
-    Z = round((p1 - p2) / sqrt(p*(1-p)*(1/nx + 1/ny)),17)
+    Z = round((p1 - p2) / math.sqrt(p*(1-p)*(1/nx + 1/ny)),17)
     print("1.검정통계량 : %g" %Z)  
     
     w, z = sp.symbols('w z') 
-    f = 1/sqrt(2*pi)*exp(-(z^2)/2)
+    f = 1/sp.sqrt(2*sp.pi)*sp.exp(-(z**2)/2)
     I = sp.integrate(f,(z,0,w))
     eqn = sp.Eq(I, 0.5 - a/2)
     cr = round(sp.solve( eqn, w )[0],3)
@@ -2858,11 +2858,11 @@ def P2_Tscr(a,nx,x,ny,y):
     p1 = x / nx
     p2 = y / ny
     p = (x + y) / (nx + ny) #공통 모비율의 추정값 
-    Z = round((p1 - p2) / sqrt(p*(1-p)*(1/nx + 1/ny)),17)
+    Z = round((p1 - p2) / math.sqrt(p*(1-p)*(1/nx + 1/ny)),17)
     print("1.검정통계량 : %g" %Z)  
     
     z = sp.symbols('z') 
-    f = 1/sqrt(2*pi)*exp(-(z^2)/2)
+    f = 1/sp.sqrt(2*sp.pi)*sp.exp(-(z**2)/2)
     cr = two_tailed_pred_interval_p(a)
     print("\n2.임계값 : {0}, {1}".format(-cr, cr))
     print("\n3.기각역 : (-oo, {0}) or ({1}, oo)".format(-cr, cr))
@@ -2890,11 +2890,11 @@ def P2_Up(a,nx,x,ny,y):
     p1 = x / nx
     p2 = y / ny
     p = (x + y) / (nx + ny) #공통 모비율의 추정값 
-    Z = round((p1 - p2) / sqrt(p*(1-p)*(1/nx + 1/ny)),17)
+    Z = round((p1 - p2) / math.sqrt(p*(1-p)*(1/nx + 1/ny)),17)
     print("1.검정통계량 : %g" %Z)  
     
     w, z = sp.symbols('w z') 
-    f = 1/sqrt(2*pi)*exp(-(z^2)/2)
+    f = 1/sp.sqrt(2*sp.pi)*sp.exp(-(z**2)/2)
     I = sp.integrate(f,(z,0,w)) 
     eqn = sp.Eq(I, 0.5 - a)
     cr = round(sp.solve( eqn, w )[0], 3)
@@ -2928,11 +2928,11 @@ def P2_Upcr(a,nx,x,ny,y):
     p1 = x / nx
     p2 = y / ny
     p = (x + y) / (nx + ny) #공통 모비율의 추정값 
-    Z = round((p1 - p2) / sqrt(p*(1-p)*(1/nx + 1/ny)),17)
+    Z = round((p1 - p2) / math.sqrt(p*(1-p)*(1/nx + 1/ny)),17)
     print("1.검정통계량 : %g" %Z)  
     
     z = sp.symbols('z') 
-    f = 1/sqrt(2*pi)*exp(-(z^2)/2)
+    f = 1/sp.sqrt(2*sp.pi)*sp.exp(-(z**2)/2)
     cr = one_tailed_pred_interval_p(a)
     print("\n2.임계값 : {0}".format(cr))
     print("\n3.기각역 : ({0}, oo)".format(cr))
@@ -2963,11 +2963,11 @@ def P2_Un(a,nx,x,ny,y):
     p1 = x / nx
     p2 = y / ny
     p = (x + y) / (nx + ny) #공통 모비율의 추정값 
-    Z = round((p1 - p2) / sqrt(p*(1-p)*(1/nx + 1/ny)),17)
+    Z = round((p1 - p2) / math.sqrt(p*(1-p)*(1/nx + 1/ny)),17)
     print("1.검정통계량 : %g" %Z)  
     
     w, z = sp.symbols('w z') 
-    f = 1/sqrt(2*pi)*exp(-(z^2)/2)
+    f = 1/sp.sqrt(2*sp.pi)*sp.exp(-(z**2)/2)
     I = sp.integrate(f,(z,0,w))
     eqn = sp.Eq(I, 0.5 - a)
     cr = round(sp.solve( eqn, w)[0],3)
@@ -3001,11 +3001,11 @@ def P2_Uncr(a,nx,x,ny,y):
     p1 = x / nx
     p2 = y / ny
     p = (x + y) / (nx + ny) #공통 모비율의 추정값 
-    Z = round((p1 - p2) / sqrt(p*(1-p)*(1/nx + 1/ny)),17)
+    Z = round((p1 - p2) / math.sqrt(p*(1-p)*(1/nx + 1/ny)),17)
     print("1.검정통계량 : %g" %Z)  
     
     z = sp.symbols('z') 
-    f = 1/sqrt(2*pi)*exp(-(z^2)/2)
+    f = 1/sp.sqrt(2*sp.pi)*sp.exp(-(z**2)/2)
     cr = one_tailed_pred_interval_p(a)
     print("\n2.임계값 : {0}".format(-cr))
     print("\n3.기각역 : (-oo, {0})".format(-cr))
