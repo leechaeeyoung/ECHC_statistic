@@ -5403,13 +5403,6 @@ def plot_residuals(x, y, x_label):
 # In[212]:
 
 
-순이익 = [1.5, 0.8, 1.2, 1.4, 0.2, 0.8, 0.6, 1.3, 0.4, 0.6]
-매장 = [8.4, 3.3, 5.8, 10, 4.7, 7.7, 4.5, 8.6, 5.9, 6.3]
-승차 = [7.7, 4.5, 8.4, 7.8, 2.4, 4.8, 2.5, 3.4, 2, 4.1]
-
-
-# 잔차의 산포도 그리기
-plot_residuals(매장, 순이익, 'counter')
 
 
 # ##### 2. 오차항(ε_i)들은 서로 독립이다.
@@ -5438,12 +5431,6 @@ def residual_independence_check(residuals, variable=None, variable_name='Variabl
 
 
 # In[214]:
-
-
-residual = residuals(매장, 순이익)
-
-# 잔차들 간의 독립성 확인
-residual_independence_check(residual, None, 'Time')
 
 
 # ##### 3. 오차항(ε_i)은 정규분포를 따른다.
@@ -5495,9 +5482,6 @@ def Y_MST(y):
 # In[218]:
 
 
-광고비 = [5, 6, 7, 8, 9, 11, 12, 13, 14, 15]
-매출액 = [16, 19, 18, 20, 24, 26, 30, 32, 31, 34]
-Y_SST(매출액), Y_MST(매출액)
 
 
 # #### Y의 회귀제곱합 SSR
@@ -5525,7 +5509,7 @@ def Y_MSR(x, y):
 # In[221]:
 
 
-Y_SSR(광고비, 매출액), Y_MSR(광고비, 매출액)
+
 
 
 # #### Y의 오차제곱합 SSE
@@ -5553,7 +5537,7 @@ def Y_MSE(x, y):
 # In[224]:
 
 
-Y_SSE(광고비, 매출액), Y_MSE(광고비, 매출액)
+
 
 
 # #### 반응변수와 설명변수 사이에 선형 연관성 검정을 위한 F통계량
@@ -5585,7 +5569,7 @@ def simple_linear_AOVtbl(x, y) :
 # In[227]:
 
 
-simple_linear_AOVtbl(광고비, 매출액)
+
 
 
 # #### 기울기(β_1)에 대한 유의성 t검정
@@ -5626,7 +5610,7 @@ def Beta_T_Tscr(a, x, y) :
 # In[229]:
 
 
-Beta_T_Tscr(0.05, 광고비, 매출액)
+
 
 
 # ##### 양측 t검정(함수: p값과 유의수준)
@@ -5667,7 +5651,7 @@ def Beta_T_Tsp(a, x, y) :
 # In[231]:
 
 
-Beta_T_Tsp(0.05, 광고비, 매출액)
+
 
 
 # #### 단순회귀모형에 대한 유의성 F검정
@@ -5705,7 +5689,7 @@ def Beta_F_Rcr(a, x, y) :
 # In[233]:
 
 
-Beta_F_Rcr(0.01, 광고비, 매출액)
+
 
 
 # ##### 우측 F검정 (함수: p값과 유의수준)
@@ -5742,7 +5726,7 @@ def Beta_F_Rp(a, x, y) :
 # In[235]:
 
 
-Beta_F_Rp(0.01, 광고비, 매출액)
+
 
 
 # ### 결정계수
@@ -5771,7 +5755,7 @@ def CodeR2(x, y):
 # In[237]:
 
 
-CodeR2(광고비, 매출액)
+
 
 
 # ### 회귀모형을 이용한 예측
@@ -5800,7 +5784,7 @@ def E_con_interval(alpha, x, y, x0):
 # In[239]:
 
 
-E_con_interval(0.05, 광고비, 매출액, 10)
+
 
 
 # #### 개별 반응변수 값의 (1-α)100% 예측구간
@@ -5822,7 +5806,7 @@ def E_pre_interval(alpha, x, y, x0):
 # In[241]:
 
 
-E_pre_interval(0.05, 광고비, 매출액, 10)
+
 
 
 # ### 회귀모형 진단 및 처방
@@ -5853,13 +5837,13 @@ def residuals_i(x, y, i):
 # In[243]:
 
 
-residuals_i(광고비, 매출액, 3)
+
 
 
 # In[244]:
 
 
-plot_residuals(광고비, 매출액, "x_label")
+
 
 
 # In[ ]:
@@ -5906,11 +5890,7 @@ def multiple_linear_Reg_model(x, y, B):
 # In[246]:
 
 
-X설명 = [[1, 2, 3, 4, 5],[2, 3, 4, 5, 6]]
-Y반응 = [2, 3, 4, 5, 6]
-B계수 = [1, 0.5, 0.3] 
 
-multiple_linear_Reg_model(X설명, Y반응, B계수)
 
 
 # #### 다중선형회귀식
@@ -5932,11 +5912,6 @@ def multiple_linear_Reg_equation(x, y, B):
 # In[248]:
 
 
-X설명 = [[1, 2, 3, 4, 5],[2, 3, 4, 5, 6]]
-Y반응 = [2, 3, 4, 5, 6]
-B계수 = [1, 0.5, 0.3] 
-
-multiple_linear_Reg_equation(X설명, Y반응, B계수)
 
 
 # #### 추정된 다중선형회귀식(&최소제곱추정법)
@@ -5970,13 +5945,7 @@ def est_mul_Reg_equation(x_list, y):
 # In[250]:
 
 
-XX = pd.read_excel('./난방비.xlsx')
-난방비 = XX['난방비'].to_list()
-외부최저기온 = XX['외부최저기온'].to_list()
-단열재두께 = XX['단열재두께'].to_list()
-창문수 = XX['창문수'].to_list()
-굴뚝사용년수 = XX['굴뚝사용년수'].to_list()
-est_mul_Reg_equation([외부최저기온, 단열재두께, 창문수, 굴뚝사용년수], 난방비)
+
 
 
 # ### 유의성 검정
@@ -5993,8 +5962,6 @@ def Y_i_SST(y):
 
 # In[252]:
 
-
-Y_i_SST(매출액)
 
 
 # #### i번째 관찰값의 추정된 다중선형회귀식에 대한 회귀제곱합 SSR
@@ -6028,8 +5995,7 @@ def Y_i_MSR(x_list, y):
 # In[255]:
 
 
-설비투자 = [2, 1.9, 4, 5.6, 6.1, 6.2, 7, 7.2, 8, 9]
-Y_i_SSR([광고비, 설비투자], 매출액), Y_i_MSR([광고비, 설비투자], 매출액)
+
 
 
 # #### i번째 관찰값의 추정된 다중선형회귀식에 대한 오차제곱합 SSE
@@ -6063,7 +6029,6 @@ def Y_i_MSE(x_list, y):
 # In[258]:
 
 
-Y_i_SSE([광고비, 설비투자], 매출액), Y_i_MSE([광고비, 설비투자], 매출액)
 
 
 # #### 설명변수들(X1,...,Xp)과 반응변수(Y) 사이에 선형 연관성 검정을 위한 F통계량
@@ -6095,7 +6060,6 @@ def multiple_linear_AOVtbl(x_list, y) :
 # In[261]:
 
 
-multiple_linear_AOVtbl([광고비, 설비투자], 매출액)
 
 
 # #### 다중선형회귀모형에 대한 유의성 F검정
@@ -6131,7 +6095,7 @@ def Beta_i_F_Rcr(a, x_list, y) :
 # In[263]:
 
 
-Beta_i_F_Rcr(0.05, [광고비, 설비투자], 매출액)
+
 
 
 # ##### 우측 F검정 (함수: p값과 유의수준)
@@ -6168,7 +6132,7 @@ def Beta_i_F_Rp(a, x_list, y) :
 # In[265]:
 
 
-Beta_i_F_Rp(0.05, [광고비, 설비투자], 매출액)
+
 
 
 # #### 개별 계수(β_j)에 대한 유의성 t검정
@@ -6220,7 +6184,7 @@ def Beta_j_T_Tscr(a, j, x_list, y) :
 # In[267]:
 
 
-Beta_j_T_Tscr(0.05, 2, [광고비, 설비투자], 매출액)
+
 
 
 # ##### 양측 t검정(함수: p값과 유의수준)
@@ -6269,7 +6233,7 @@ def Beta_j_T_Tsp(a, j, x_list, y) :
 # In[269]:
 
 
-Beta_j_T_Tsp(0.05, 1, [광고비, 설비투자], 매출액)
+
 
 
 # In[ ]:
@@ -6302,7 +6266,7 @@ def iCodeR2(x_list, y):
 # In[271]:
 
 
-iCodeR2([광고비, 설비투자], 매출액)
+
 
 
 # ### 다중회귀모형의 가정사항과 진단
@@ -6340,7 +6304,7 @@ def cal_residuals(x_list, y):
 # In[273]:
 
 
-cal_residuals([광고비, 설비투자], 매출액)
+
 
 
 # #### 잔차의 산포도 그리기 함수
@@ -6363,7 +6327,7 @@ def m_plot_residuals(x_list, y, x_label):
 # In[275]:
 
 
-m_plot_residuals([광고비, 설비투자], 매출액, "label")
+
 
 
 # #### 다중공선성의 진단
@@ -6435,7 +6399,7 @@ def calculate_vif(x_list):
 # In[277]:
 
 
-calculate_vif([광고비, 설비투자])
+
 
 
 # In[ ]:
@@ -6476,13 +6440,6 @@ def scatter_plots(*args):
 # In[279]:
 
 
-x1 = [5, 6, 7, 8, 9, 11, 12, 13, 14, 15]
-y1 = [2, 1.9, 4, 5.6, 6.1, 6.2, 7, 7.2, 8, 9]
-x2 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-y2 = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
-
-scatter_plots(x1, y1, x2, y2)
-
 
 # In[ ]:
 
@@ -6520,7 +6477,6 @@ def dummy_sel(i, t, x_list, y):
 # In[281]:
 
 
-dummy_sel(1, 6, [광고비, 설비투자], 매출액)
 
 
 # #### 가변수 중 '0'에 대한 다중선형회귀식
@@ -6548,7 +6504,7 @@ def dummy_sel0(i, t, x_list, y):
 # In[283]:
 
 
-dummy_sel0(1, 6, [광고비, 설비투자], 매출액)
+
 
 
 # #### 가변수 중 '1'에 대한 다중선형회귀식
@@ -6578,7 +6534,6 @@ def dummy_sel1(i, t, x_list, y):
 # In[285]:
 
 
-dummy_sel1(1, 6, [광고비, 설비투자], 매출액)
 
 
 # #### 가변수 더미함수
@@ -6614,12 +6569,7 @@ def my_get_dummies(data, dummy_na=True):
 # In[287]:
 
 
-x1 = [5, 6, 7, 8, 9, 11, 12, 13, 14, 15]
-x2 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-data = [x1, x2]
-print('data:',data)
 
-my_get_dummies(data)
 
 
 # In[ ]:
@@ -6661,7 +6611,6 @@ def dummy_multiple_linear_AOVtbl(i, t, x_list, y) :
 # In[289]:
 
 
-dummy_multiple_linear_AOVtbl(1, 6, [광고비, 설비투자], 매출액)
 
 
 # ### 피어슨 상관계수
@@ -6686,7 +6635,7 @@ def PearsonCor(*X) :
 # In[291]:
 
 
-PearsonCor(광고비, 설비투자)
+
 
 
 # In[292]:
@@ -6720,7 +6669,7 @@ def Corcoeff_Test(*X) :
 # In[293]:
 
 
-Corcoeff_Test(광고비,설비투자)  #광고비와 설비투자 사이의 선형관계는 강하다고 할 수 있다.
+
 
 
 # ---
@@ -6860,7 +6809,7 @@ def nonlinear_Reg_equation(x, y, degree):
 # In[300]:
 
 
-nonlinear_Reg_equation(창문수, 난방비, 2)
+
 
 
 # #### 다항회귀선
@@ -6882,13 +6831,12 @@ def nonlinear_Reg_model(x, y, degree):
 # In[302]:
 
 
-nonlinear_Reg_model(창문수, 난방비, 2)
+
 
 
 # In[303]:
 
 
-nonlinear_Reg_model(단열재두께, 난방비, 3)
 
 
 # In[ ]:
