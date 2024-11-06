@@ -5424,13 +5424,17 @@ plot_residuals(매장, 순이익, 'counter')
 def residual_independence_check(residuals, variable=None, variable_name='Variable'):
     if variable is None:
         variable = list(range(1, len(residuals) + 1))  # 변수가 제공되지 않으면 인덱스를 사용
-
+    
     # 잔차들의 산포도 그래프 생성
-    data = list(zip(variable, residuals))
-    scatter_plot = list_plot(data)
-    scatter_plot += line([(min(variable), 0), (max(variable), 0)], color='red', linestyle='--')
-    scatter_plot.axes_labels([variable_name, 'Residuals'])
-    scatter_plot.show(frame=True, figsize=4, fontsize=5)
+    plt.figure(figsize=(4.5, 3))
+    plt.scatter(variable, residuals, marker='o', color='blue', s=10)
+    plt.axhline(y=0, color='red', linestyle='--', linewidth=0.7)
+    font_size = 7
+    plt.xlabel(variable_name, fontsize=font_size)
+    plt.ylabel('Residuals', fontsize=font_size)
+    plt.xticks(fontsize=font_size)  
+    plt.yticks(fontsize=font_size)  
+    plt.show()
 
 
 # In[214]:
@@ -5644,8 +5648,11 @@ def Beta_T_Tsp(a, x, y) :
     print("\n2.자유도 :",v)
     
     z = sp.symbols('z')
-    f = (gamma((v+1)/2)/(math.sqrt(v*math.pi)*gamma(v/2)))*((1+(z^2)/v)**(-(v+1)/2))     
-    I = 0.5 - sp.integrate(f,(z,0,abs(t)))           
+    fint = (math.gamma((v+1)/2)/(math.sqrt(v*math.pi)*math.gamma(v/2)))*((1+(z**2)/v)**(-(v+1)/2))     
+    fint_num = sp.lambdify(z, fint, 'numpy')
+    iinte, error = spi.quad(fint_num, 0, abs(t))
+    I = round(0.5 - iinte, 4)
+         
     print("\n3.p값 : %g" %(I*2))
     print("\n4.유의수준 : %g" %a)
     

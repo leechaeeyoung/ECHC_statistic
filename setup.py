@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name='Fcstatistics',
-    version='0.1.0',
+    version='0.1.1',
     description='Fc statistics algorithm',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
