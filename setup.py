@@ -1,20 +1,15 @@
-import setuptools
+from setuptools import setup, Extension
+from Cython.Build import cythonize
 
-setuptools.setup(
-    name='Fcstatistics',
-    version='0.1.1',
-    description='Fc statistics algorithm',
-    long_description=open('README.md').read(),
-    long_description_content_type='text/markdown',
-    author='fourchains_R&D',
-    author_email='fourchainsrd@gmail.com',
-    url='https://github.com/leechaeeyoung/Fc',
-    packages=setuptools.find_packages(),
-    classifiers=[
-        "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
-    ],
-    python_requires='>=3.6',
-    include_package_data=True
+# Cython으로 빌드할 확장 모듈 정의
+extensions = [
+    Extension("Fcstatistic.Fc", ["Fcstatistic/Fc.pyx"]),
+]
+
+# setup 함수 정의
+setup(
+    name="Fcstatistics",
+    version="0.2.3",
+    long_description=open("README.md").read(),
+    ext_modules=cythonize(extensions),    # Cython 컴파일 활성화
 )
