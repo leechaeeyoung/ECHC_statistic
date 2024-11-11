@@ -3112,7 +3112,7 @@ def ChiVar_Ts(a,x,v) :
     df = pd.read_csv('./chi.csv',encoding='euc-kr',index_col=0) 
     
     k = len(x) - 1
-    chi = round(k*Std(x)^2/v,17)    
+    chi = round(k*Std(x)**2/v,17)    
     print("1.검정통계량 : %g" %chi)
     print("\n2.자유도 :", k)
      
@@ -3122,7 +3122,7 @@ def ChiVar_Ts(a,x,v) :
     print("\n4.기각역 : (0, {0}) or ({1}, oo)".format(cr1, cr2))
     
     z = sp.symbols('z')
-    C = (z^(k/2 - 1))*(e^(-z/2))/((2^(k/2))*gamma(k/2))  # 카이제곱 분포 함수
+    C = (z**(k/2 - 1))*(math.e**(-z/2))/((2**(k/2))*math.gamma(k/2))  # 카이제곱 분포 함수
     I = sp.Integral(C,(z,0,chi))    
     MI = min(I, 1 - I)
     print("\n5.p값 : %g" %(MI*2))     # 검정통계량을 기준으로 좌/우 면적 중 작은 것의 (양측이므로 2배)  
