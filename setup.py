@@ -9,7 +9,7 @@ extensions = [
 # setup 함수 정의
 setup(
     name="Fcstatistics",
-    version="0.2.8",
+    version="0.3.0",
     long_description=open("README.md", encoding="utf-8").read(),
     ext_modules=cythonize(extensions),    # Cython 컴파일 활성화
     package_data={

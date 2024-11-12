@@ -5,7 +5,6 @@ setup.cfg
 setup.py
 Fcstatistics/Fc.cp312-win_amd64.pyd
 Fcstatistics/Fc_test.c
-Fcstatistics/Fc_test.pyx
 Fcstatistics/__init__.py
 Fcstatistics.egg-info/PKG-INFO
 Fcstatistics.egg-info/SOURCES.txt
