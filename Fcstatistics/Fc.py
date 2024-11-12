@@ -5710,8 +5710,11 @@ def Beta_F_Rp(a, x, y) :
     print("\n2.두 자유도 : %g, %g" %(v,w))
     
     z = sp.symbols('z')
-    f = (v**(0.5*v))*(w**(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(z**(0.5*(v - 2)))/(v*z + w)**(0.5*(v + w))
-    i = 1 - sp.integrate(f,(z,0,F))
+    fint = (v**(0.5*v))*(w**(0.5*w))*(math.gamma((v + w)/2))/(math.gamma(0.5*v)*math.gamma(0.5*w))*(z**(0.5*(v - 2)))/(v*z + w)**(0.5*(v + w))
+    fint_num = sp.lambdify(z, fint, 'numpy')
+    iinte, error = spi.quad(fint_num, 0, F)
+    i = 1 - iinte
+    
     print("\n3.p값 : %g" %i)
     print("\n4.유의수준 : %g" %a)
     
