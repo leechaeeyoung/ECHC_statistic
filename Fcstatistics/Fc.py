@@ -3048,7 +3048,7 @@ def ChiVar_Tscr(a,x,v) :
 
     df = pd.read_csv('./chi.csv',encoding='euc-kr',index_col=0) 
     
-    chi = (len(x) - 1)*Std(x)^2/v    
+    chi = (len(x) - 1)*Std(x)**2/v    
     print("1.검정통계량 : %g" %chi)
     print("\n2.자유도 :", len(x) - 1)
     
@@ -3078,12 +3078,12 @@ def ChiVar_Tscr(a,x,v) :
 def ChiVar_Tsp(a,x,v) :     
     
     k = len(x) - 1
-    chi = round(k*Std(x)^2/v,17)    
+    chi = round(k*Std(x)**2/v,17)    
     print("1.검정통계량 : %g" %chi)
     print("\n2.자유도 :", k)
     
     z = sp.symbols('z')
-    C = (z^(k/2 - 1))*(math.e**(-z/2))/((2**(k/2))*gamma(k/2))  # 카이제곱 분포 함수
+    C = (z**(k/2 - 1))*(math.e**(-z/2))/((2**(k/2))*math.gamma(k/2))  # 카이제곱 분포 함수
     I = sp.Integral(C,(z,0,chi))    
     MI = min(I, 1 - I)
     print("\n3.p값 : %g" %(MI*2))     # 검정통계량을 기준으로 좌/우 면적 중 작은 것의 (양측이므로 2배)  
@@ -3150,7 +3150,7 @@ def ChiVar_Rcr(a,x,v) :
     
     df = pd.read_csv('./chi.csv',encoding='euc-kr',index_col=0) 
       
-    chi = (len(x) - 1)*Std(x)^2/v    
+    chi = (len(x) - 1)*Std(x)**2/v    
     print("1.검정통계량 : %g" %chi)
     print("\n2.자유도 :", len(x) - 1)
     
@@ -3179,12 +3179,12 @@ def ChiVar_Rcr(a,x,v) :
 def ChiVar_Rp(a,x,v) :
     
     k = len(x) - 1
-    chi = round(k*Std(x)^2/v,17)    
+    chi = round(k*Std(x)**2/v,17)    
     print("1.검정통계량 : %g" %chi)
     print("\n2.자유도 :", k)
     
     z = sp.symbols('z')
-    C = (z^(k/2 - 1))*(e^(-z/2))/((2^(k/2))*gamma(k/2))     # 카이제곱 분포 함수
+    C = (z**(k/2 - 1))*(math.e^(-z/2))/((2**(k/2))*math.gamma(k/2))     # 카이제곱 분포 함수
     I = 1 - sp.Integral(C,(z,0,chi))       # 검정통계량의 넓이 (비율 p) 바로 구함
     print("\n3.p값 : %g" %I)         # 검정통계량을 기준으로 오른쪽 면적
     print("\n4.유의수준 : %g" %a)    # 오른쪽 면적
@@ -3212,7 +3212,7 @@ def ChiVar_R(a,x,v) :
     df = pd.read_csv('./chi.csv',encoding='euc-kr',index_col=0) 
       
     k = len(x) - 1
-    chi = round(k*Std(x)^2/v,17)    
+    chi = round(k*Std(x)**2/v,17)    
     print("1.검정통계량 : %g" %chi)
     print("\n2.자유도 :", k)
     
@@ -3221,7 +3221,7 @@ def ChiVar_R(a,x,v) :
     print("\n4.기각역 : ({0}, oo)".format(cr))
     
     z = sp.symbols('z')
-    C = (z^(k/2 - 1))*(e^(-z/2))/((2^(k/2))*gamma(k/2))     # 카이제곱 분포 함수
+    C = (z**(k/2 - 1))*(math.e**(-z/2))/((2**(k/2))*math.gamma(k/2))     # 카이제곱 분포 함수
     I = 1 - sp.Integral(C,(z,0,chi))       # 검정통계량의 넓이 (비율 p) 바로 구함
     print("\n5.p값 : %g" %I)         # 검정통계량을 기준으로 오른쪽 면적
     print("\n6.유의수준 : %g" %a)    # 오른쪽 면적
@@ -3248,7 +3248,7 @@ def ChiVar_Lcr(a,x,v) :
     
     df = pd.read_csv('./chi.csv',encoding='euc-kr',index_col=0) 
      
-    chi = (len(x) - 1)*Std(x)^2/v    
+    chi = (len(x) - 1)*Std(x)**2/v    
     print("1.검정통계량 : %g" %chi)
     print("\n2.자유도 :", len(x) - 1)
     
@@ -3277,12 +3277,12 @@ def ChiVar_Lcr(a,x,v) :
 def ChiVar_Lp(a,x,v) :
     
     k = len(x) - 1
-    chi = round(k*Std(x)^2/v,17)    
+    chi = round(k*Std(x)**2/v,17)    
     print("1.검정통계량 : %g" %chi)
     print("\n2.자유도 :", k)
     
     z = sp.symbols('z')
-    C = (z^(k/2 - 1))*(e^(-z/2))/((2^(k/2))*gamma(k/2))     # 카이제곱 분포 함수
+    C = (z**(k/2 - 1))*(math.e**(-z/2))/((2**(k/2))*math.gamma(k/2))     # 카이제곱 분포 함수
     I = sp.Integral(C,(z,0,chi))       # 검정통계량의 넓이 (비율 p) 바로 구함
     print("\n3.p값 : %g" %I)         # 검정통계량을 기준으로 왼쪽 면적
     print("\n4.유의수준 : %g" %a)    # 왼쪽 면적
@@ -3310,7 +3310,7 @@ def ChiVar_L(a,x,v) :
     df = pd.read_csv('./chi.csv',encoding='euc-kr',index_col=0) 
      
     k = len(x) - 1
-    chi = round(k*Std(x)^2/v,17)    
+    chi = round(k*Std(x)**2/v,17)    
     print("1.검정통계량 : %g" %chi)
     print("\n2.자유도 :", k)
     
@@ -3319,7 +3319,7 @@ def ChiVar_L(a,x,v) :
     print("\n4.기각역 : (0, {0})".format(cr))
     
     z = sp.symbols('z')
-    C = (z^(k/2 - 1))*(e^(-z/2))/((2^(k/2))*gamma(k/2))     # 카이제곱 분포 함수
+    C = (z**(k/2 - 1))*(math.e**(-z/2))/((2**(k/2))*math.gamma(k/2))     # 카이제곱 분포 함수
     I = sp.Integral(C,(z,0,chi))       # 검정통계량의 넓이 (비율 p) 바로 구함
     print("\n5.p값 : %g" %I)         # 검정통계량을 기준으로 왼쪽 면적
     print("\n6.유의수준 : %g" %a)    # 왼쪽 면적
@@ -3349,7 +3349,7 @@ def FVar2_Tscr(a,x,y) :
         
     df = pd.read_csv('./F분포표(%g).csv' %(a/2), index_col=0)
     
-    F = Std(x)^2 / Std(y)^2
+    F = Std(x)**2 / Std(y)**2
     print("1.검정통계량 : %g" %F)
     print("\n2.두 자유도 : %g, %g" %(len(x) - 1, len(y) - 1))            
                                                                      # 임계값 관계
@@ -3377,7 +3377,7 @@ def FVar2_Tscr(a,x,y) :
 
 def FVar2_Tsp(a,x,y) : 
     
-    F = round(Std(x)^2 / Std(y)^2,17)
+    F = round(Std(x)**2 / Std(y)**2,17)
     print("1.검정통계량 : %g" %F)
     
     v = len(x) - 1 
@@ -3385,7 +3385,7 @@ def FVar2_Tsp(a,x,y) :
     print("\n2.두 자유도 : %g, %g" %(v,w)) 
     
     z = sp.symbols('z') 
-    f = (v^(0.5*v))*(w^(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(z^(0.5*(v - 2)))/(v*z + w)^(0.5*(v + w))
+    f = (v**(0.5*v))*(w**(0.5*w))*(math.gamma((v + w)/2))/(math.gamma(0.5*v)*math.gamma(0.5*w))*(z**(0.5*(v - 2)))/(v*z + w)**(0.5*(v + w))
     i = sp.Integral(f,(z,0,F))
     mi = min(1 - i, i)
     print("\n3.p값 : %g" %(mi*2))
@@ -6840,6 +6840,5 @@ def nonlinear_Reg_model(x, y, degree):
 
 
 # In[ ]:
-
 
 
