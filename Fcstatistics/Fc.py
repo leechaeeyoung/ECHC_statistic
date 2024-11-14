@@ -3410,7 +3410,7 @@ def FVar2_Tsp(a,x,y) :
 
 def FVar2_Ts(a,x,y) : 
     
-    F = round(Std(x)^2 / Std(y)^2,17)
+    F = round(Std(x)**2 / Std(y)**2,17)
     print("1.검정통계량 : %g" %F)
     
     v = len(x) - 1 
@@ -3424,7 +3424,7 @@ def FVar2_Ts(a,x,y) :
     print("\n4.기각역 : (0, %g) or (%g, oo)" %(cr1, cr2))
     
     z = sp.symbols('z') 
-    f = (v^(0.5*v))*(w^(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(z^(0.5*(v - 2)))/(v*z + w)^(0.5*(v + w))
+    f = (v**(0.5*v))*(w**(0.5*w))*(math.gamma((v + w)/2))/(math.gamma(0.5*v)*math.gamma(0.5*w))*(z**(0.5*(v - 2)))/(v*z + w)**(0.5*(v + w))
     i = sp.Integral(f,(z,0,F))
     mi = min(1 - i, i)
     print("\n5.p값 : %g" %(mi*2))
@@ -3451,7 +3451,7 @@ def FVar2_Rcr(a,x,y) :
         
     df = pd.read_csv('./F분포표(%g).csv' %a, index_col=0)
     
-    F = Std(x)^2 / Std(y)^2
+    F = Std(x)**2 / Std(y)**2
     print("1.검정통계량 : %g" %F)
     print("\n2.두 자유도 : %g, %g" %(len(x) - 1, len(y) - 1))             
                                                                     
@@ -3478,7 +3478,7 @@ def FVar2_Rcr(a,x,y) :
 
 def FVar2_Rp(a,x,y) :
     
-    F = round(Std(x)^2 / Std(y)^2,17)
+    F = round(Std(x)**2 / Std(y)**2,17)
     print("1.검정통계량 : %g" %F)
     
     v = len(x) - 1 
@@ -3486,7 +3486,7 @@ def FVar2_Rp(a,x,y) :
     print("\n2.두 자유도 : %g, %g" %(v,w))
     
     z = sp.symbols('z')
-    f = (v^(0.5*v))*(w^(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(z^(0.5*(v - 2)))/(v*z + w)^(0.5*(v + w))
+    f = (v**(0.5*v))*(w**(0.5*w))*(math.gamma((v + w)/2))/(math.gamma(0.5*v)*math.gamma(0.5*w))*(z**(0.5*(v - 2)))/(v*z + w)**(0.5*(v + w))
     i = 1 - sp.Integral(f,(z,0,F))
     print("\n3.p값 : %g" %i)
     print("\n4.유의수준 : %g" %a)
@@ -3512,7 +3512,7 @@ def FVar2_R(a,x,y) :
         
     df = pd.read_csv('./F분포표(%g).csv' %a, index_col=0)
     
-    F = round(Std(x)^2 / Std(y)^2,17)
+    F = round(Std(x)**2 / Std(y)**2,17)
     print("1.검정통계량 : %g" %F)
     
     v = len(x) - 1 
@@ -3524,7 +3524,7 @@ def FVar2_R(a,x,y) :
     print("\n4.기각역 : (%g, oo)" %cr)
     
     z = sp.symbols('z')
-    f = (v^(0.5*v))*(w^(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(z^(0.5*(v - 2)))/(v*z + w)^(0.5*(v + w))
+    f = (v**(0.5*v))*(w**(0.5*w))*(math.gamma((v + w)/2))/(math.gamma(0.5*v)*math.gamma(0.5*w))*(z**(0.5*(v - 2)))/(v*z + w)**(0.5*(v + w))
     i = 1 - sp.Integral(f,(z,0,F))
     print("\n5.p값 : %g" %i)
     print("\n6.유의수준 : %g" %a)
@@ -3550,7 +3550,7 @@ def FVar2_Lcr(a,x,y) :
         
     df = pd.read_csv('./F분포표(%g).csv' %a, index_col=0)
     
-    F = Std(x)^2 / Std(y)^2
+    F = Std(x)**2 / Std(y)**2
     print("1.검정통계량 : %g" %F)
     print("\n2.두 자유도 : %g, %g" %(len(x) - 1, len(y) - 1))             
                                                                     
@@ -3577,7 +3577,7 @@ def FVar2_Lcr(a,x,y) :
 
 def FVar2_Lp(a,x,y) :
     
-    F = round(Std(x)^2 / Std(y)^2,17)
+    F = round(Std(x)**2 / Std(y)**2,17)
     print("1.검정통계량 : %g" %F)
     
     v = len(x) - 1 
@@ -3585,7 +3585,7 @@ def FVar2_Lp(a,x,y) :
     print("\n2.두 자유도 : %g, %g" %(v,w))
     
     z = sp.symbols('z')
-    f = (v^(0.5*v))*(w^(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(z^(0.5*(v - 2)))/(v*z + w)^(0.5*(v + w))
+    f = (v**(0.5*v))*(w**(0.5*w))*(math.gamma((v + w)/2))/(math.gamma(0.5*v)*math.gamma(0.5*w))*(z**(0.5*(v - 2)))/(v*z + w)**(0.5*(v + w))
     i = sp.Integral(f,(z,0,F))
     print("\n3.p값 : %g" %i)
     print("\n4.유의수준 : %g" %a)
@@ -3611,7 +3611,7 @@ def FVar2_L(a,x,y) :
         
     df = pd.read_csv('./F분포표(%g).csv' %a, index_col=0)
     
-    F = round(Std(x)^2 / Std(y)^2,17)
+    F = round(Std(x)**2 / Std(y)**2,17)
     print("1.검정통계량 : %g" %F)
     
     v = len(x) - 1 
@@ -3623,7 +3623,7 @@ def FVar2_L(a,x,y) :
     print("\n4.기각역 : (%g, oo)" %cr)
     
     z = sp.symbols('z')
-    f = (v^(0.5*v))*(w^(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(z^(0.5*(v - 2)))/(v*z + w)^(0.5*(v + w))
+    f = (v**(0.5*v))*(w**(0.5*w))*(math.gamma((v + w)/2))/(math.gamma(0.5*v)*math.gamma(0.5*w))*(z**(0.5*(v - 2)))/(v*z + w)**(0.5*(v + w))
     i = sp.Integral(f,(z,0,F))
     print("\n5.p값 : %g" %i)
     print("\n6.유의수준 : %g" %a)
@@ -3670,7 +3670,7 @@ def fit_chi(x,p):
 
 # 'x': 각 표본 수의 전체 리스트, 'p': 각 범주의 확률 전체 리스트
 def pea_res(x,p):
-    return sqrt(fit_chi(x,p))
+    return math.sqrt(fit_chi(x,p))
 
 
 # ### 적합도 검정
@@ -3801,7 +3801,7 @@ def Po1_Ts2(x, y):
 # 정규분포의 적합도 검정 (Ho(귀무가설): -가 정규분포를 따른다. H1(대립가설): -가 정규분포를 따르지 않는다.)
 # 표준정규분포의 누적 분포 함수 (CDF)
 def norm_cdf(x):
-    return 0.5 * (1 + erf(x / sqrt(2)))
+    return 0.5 * (1 + math.erf(x / math.sqrt(2)))
 
 # 누적 확률 값 계산 함수
 def calculate_cpr(cp3_val):
@@ -4320,7 +4320,7 @@ def bi_equal_Ht(x):
 # 'A': 집단 자료 (리스트 or pd.Series 형태)
 def SSTR(*A) :
     x = sum(map(sum, A))/sum(map(len, A))
-    return sum(map(lambda a : len(a)*(Mean(a) - x)^2, A))
+    return sum(map(lambda a : len(a)*(Mean(a) - x)**2, A))
 
 
 # #### 처리평균제곱
@@ -4340,7 +4340,7 @@ def MSTR(*A) :
 
 # 'A': 집단 자료 (리스트 or pd.Series 형태)
 def SSE(*A) :
-    return sum(map(lambda a : (len(a) - 1)*Std(a)^2, A))
+    return sum(map(lambda a : (len(a) - 1)*Std(a)**2, A))
 
 
 # #### 오차평균제곱
@@ -4371,7 +4371,7 @@ def Fstt(*A) :
 # 'A': 집단 자료 (리스트 or pd.Series 형태)
 def SST(*A) :
     x = sum(map(sum,A))/sum(map(len,A))
-    return float(sum(map(lambda a : sum(map(lambda a1 : (a1 - x)^2, a)), A)))
+    return float(sum(map(lambda a : sum(map(lambda a1 : (a1 - x)**2, a)), A)))
 
 def SST2(*A) :
     return SSTR(*A) + SSE(*A)
@@ -4393,7 +4393,7 @@ def FAOVp(a,*A) :
     print("\n2.두 자유도 : %g, %g" %(v,w))
     
     x = sp.symbols('x')
-    f = (v^(0.5*v))*(w^(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(x^(0.5*(v - 2)))/(v*x + w)^(0.5*(v + w))
+    f = (v**(0.5*v))*(w**(0.5*w))*(math.gamma((v + w)/2))/(math.gamma(0.5*v)*math.gamma(0.5*w))*(x**(0.5*(v - 2)))/(v*x + w)**(0.5*(v + w))
     i = float(1 - sp.integrate(f, (x, 0, F)))
     print("\n3.p값 : %g" %i)
     print("\n4.유의수준 : %g" %a)
@@ -4453,8 +4453,8 @@ def FAOV(a,*A) :
     print("\n4.기각역 : (%g, oo)" %cr)
     
     x = sp.symbols('x')
-    f = (v^(0.5*v))*(w^(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(x^(0.5*(v - 2)))/(v*x + w)^(0.5*(v + w))
-    i = float(1 - integral(f,x,0,F))
+    f = (v**(0.5*v))*(w**(0.5*w))*(math.gamma((v + w)/2))/(math.gamma(0.5*v)*math.gamma(0.5*w))*(x**(0.5*(v - 2)))/(v*x + w)**(0.5*(v + w))
+    i = float(1 - sp.integral(f,x,0,F))
     print("\n3.p값 : %g" %i)
     print("\n4.유의수준 : %g" %a)
     
@@ -4500,8 +4500,8 @@ def Ow_AOVp(a,*A) :
     print("\n3.두 자유도 : %g, %g" %(v,w))
     
     x = sp.symbols('x')
-    f = (v^(0.5*v))*(w^(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(x^(0.5*(v - 2)))/(v*x + w)^(0.5*(v + w))
-    i = 1 - integral(f,x,0,F)  
+    f = (v**(0.5*v))*(w**(0.5*w))*(math.gamma((v + w)/2))/(math.gamma(0.5*v)*math.gamma(0.5*w))*(x**(0.5*(v - 2)))/(v*x + w)**(0.5*(v + w))
+    i = 1 - sp.integral(f,x,0,F)  
     print('\n4.F 통계량 : %g' %F)
     print('\n5.p값 : %g' %i)
     
@@ -4565,8 +4565,8 @@ def Ow_AOV(a,*A) :
     print("\n5.기각역 : (%g, oo)" %cr)
     
     x = sp.symbols('x')
-    f = (v^(0.5*v))*(w^(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(x^(0.5*(v - 2)))/(v*x + w)^(0.5*(v + w))
-    i = 1 - integral(f,x,0,F)  
+    f = (v**(0.5*v))*(w**(0.5*w))*(math.gamma((v + w)/2))/(math.gamma(0.5*v)*math.gamma(0.5*w))*(x**(0.5*(v - 2)))/(v*x + w)**(0.5*(v + w))
+    i = 1 - sp.integral(f,x,0,F)  
     print('\n6.p값 : %g' %i)
     print('\n7.유의수준 : %g' %a)   
     if i < a:
@@ -4603,7 +4603,7 @@ def q_ci(*A) :
     x = int(len(A[i]))
     y = int(len(A[j]))
     q1 = q(*A)
-    return Mean(A[i]) - Mean(A[j]) - round(q1/sqrt(2),5)*sqrt(MSE(*A)*(1/x + 1/y)), Mean(A[i])-Mean(A[j]) + round(q1/sqrt(2),5)*sqrt(MSE(*A)*(1/x + 1/y))
+    return Mean(A[i]) - Mean(A[j]) - round(q1/math.sqrt(2),5)*math.sqrt(MSE(*A)*(1/x + 1/y)), Mean(A[i])-Mean(A[j]) + round(q1/math.sqrt(2),5)*math.sqrt(MSE(*A)*(1/x + 1/y))
 
 
 # #### Tukey의 다중비교 방법
@@ -4625,11 +4625,11 @@ def Tukey(a, *x):
     dfempty = pd.DataFrame(index=range(2, len(m) + 1), columns=range(1, len(m)))
 
     indices = [(i, j) for i in range(1, len(m) + 1) for j in range(i + 1, len(m) + 1)]
-    results = list(map(lambda ij: (ij[1], ij[0], round(m[ij[0] - 1] - m[ij[1] - 1] - q * sqrt(MSE(*x) * (1 / n[ij[0] - 1] + 1 / n[ij[1] - 1]) / 2), 2), round(m[ij[0] - 1] - m[ij[1] - 1] + q * sqrt(MSE(*x) * (1 / n[ij[0] - 1] + 1 / n[ij[1] - 1]) / 2), 2)), indices))
+    results = list(map(lambda ij: (ij[1], ij[0], round(m[ij[0] - 1] - m[ij[1] - 1] - q * math.sqrt(MSE(*x) * (1 / n[ij[0] - 1] + 1 / n[ij[1] - 1]) / 2), 2), round(m[ij[0] - 1] - m[ij[1] - 1] + q * math.sqrt(MSE(*x) * (1 / n[ij[0] - 1] + 1 / n[ij[1] - 1]) / 2), 2)), indices))
     
     for j, i, minus, plus in results:
         dfempty.loc[j:j, int(i)] = str((minus, plus))
-        if 0 in range(floor(minus), ceil(plus)):
+        if 0 in range(math.floor(minus), math.ceil(plus)):
             print('  {0}번째와 {1}번째의 모평균은 서로 다르지 않고,'.format(i, j))
     
     print('  그 외에 다른 것들의 모평균은 유의적으로 차이가 있다고 결론 내릴 수 있다.')
