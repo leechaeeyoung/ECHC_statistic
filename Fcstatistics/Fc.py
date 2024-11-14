@@ -7,6 +7,7 @@
 
 import math
 #from scipy.special import gamma
+import numpy as np
 from scipy import integrate as spi
 import sympy as sp
 import pandas as pd
@@ -5924,23 +5925,20 @@ def multiple_linear_Reg_equation(x, y, B):
 
 # 속도 수정(create_row)
 def create_row(i, x_list):
-    return [sp.Integer(1)] + list(map(lambda j: x_list[j][i], range(len(x_list))))
+    return [1] + [x_list[j][i] for j in range(len(x_list))]
 
-#입력값 'x_list': 설명변수 리스트, 'y': 반응변수
+#입력값 'x_list': 설명변수 리스트(각 x도 리스트 형태), 'y': 반응변수
 def est_mul_Reg_equation(x_list, y):
-    X = list(map(lambda i: create_row(i, x_list), range(len(y))))
+    X = [create_row(i, x_list) for i in range(len(y))]
 
-    X = matrix(X)
-    y = vector(y)
+    X = np.array(X)  # numpy 배열로 변환
+    y = np.array(y)  # numpy 배열로 변환
     
-    X_transpose = X.transpose()
-    beta = (X_transpose * X).inverse() * X_transpose * y
+    X_transpose = X.T  # 전치 행렬
+    beta = np.linalg.inv(X_transpose.dot(X)).dot(X_transpose).dot(y)  # 베타 계산
     
-    beta = list(map(lambda x: float(x.n(digits=7)), beta))
-    
-    equation_terms = list(map(lambda i_b: f"{i_b[1]}" if i_b[0] == 0 else f"{i_b[1]}(x^{i_b[0]})", enumerate(beta)))
+    equation_terms = [f"{b}" if i == 0 else f"{b}(x^{i})" for i, b in enumerate(beta)]
     equation = " + ".join(equation_terms)
-    # print(f"다중선형회귀식: y = {equation}")
     
     return beta
 
@@ -6119,7 +6117,7 @@ def Beta_i_F_Rp(a, x_list, y) :
     print("\n2.두 자유도 : %g, %g" %(v,w))
     
     z = sp.symbols('z')
-    f = (v**(0.5*v))*(w**(0.5*w))*(gamma((v + w)/2))/(gamma(0.5*v)*gamma(0.5*w))*(z**(0.5*(v - 2)))/(v*z + w)**(0.5*(v + w))
+    f = (v**(0.5*v))*(w**(0.5*w))*(math.gamma((v + w)/2))/(math.gamma(0.5*v)*math.gamma(0.5*w))*(z**(0.5*(v - 2)))/(v*z + w)**(0.5*(v + w))
     i = 1 - sp.integrate(f,(z,0,F))
     print("\n3.p값 : %g" %i)
     print("\n4.유의수준 : %g" %a)
@@ -6155,12 +6153,15 @@ def Beta_j_T_Tscr(a, j, x_list, y) :
     df = pd.read_csv('./t분포표.csv', encoding='euc-kr', index_col=0) 
     
     def standard_error_j(j, x_list, y):
-        X = list(map(lambda i: create_row(i, x_list), range(len(y))))
-        X = matrix(X)
-        X_transpose = X.transpose()
-        XT_X_inv = (X_transpose * X).inverse()
-        var_beta_j = Y_i_MSE(x_list, y) * XT_X_inv[j, j]
-        return math.sqrt(var_beta_j)
+        X = [create_row(i, x_list) for i in range(len(y))]  # X 행렬 생성
+        X = np.array(X)  # numpy 배열로 변환
+        X_transpose = X.T  # 전치 행렬
+
+        XT_X_inv = np.linalg.inv(X_transpose.dot(X))  # X^T * X의 역행렬
+
+        var_beta_j = Y_i_MSE(x_list, y) * XT_X_inv[j, j]  # var(β_j) 계산
+
+        return math.sqrt(var_beta_j)  # 표준 오차 계산
 
     
     def t_statistic_j(j, x_list, y):
@@ -6200,12 +6201,15 @@ def Beta_j_T_Tscr(a, j, x_list, y) :
 def Beta_j_T_Tsp(a, j, x_list, y) :
 
     def standard_error_j(j, x_list, y):
-        X = list(map(lambda i: create_row(i, x_list), range(len(y))))
-        X = matrix(X)
-        X_transpose = X.transpose()
-        XT_X_inv = (X_transpose * X).inverse()
-        var_beta_j = Y_i_MSE(x_list, y) * XT_X_inv[j, j]
-        return math.sqrt(var_beta_j)
+        X = [create_row(i, x_list) for i in range(len(y))]  # X 행렬 생성
+        X = np.array(X)  # numpy 배열로 변환
+        X_transpose = X.T  # 전치 행렬
+
+        XT_X_inv = np.linalg.inv(X_transpose.dot(X))  # X^T * X의 역행렬
+
+        var_beta_j = Y_i_MSE(x_list, y) * XT_X_inv[j, j]  # var(β_j) 계산
+
+        return math.sqrt(var_beta_j)  # 표준 오차 계산
 
     
     def t_statistic_j(j, x_list, y):
@@ -6220,8 +6224,11 @@ def Beta_j_T_Tsp(a, j, x_list, y) :
     print("\n2.자유도 :",v)
     
     z = sp.symbols('z')
-    f = (gamma((v+1)/2)/(math.sqrt(v*math.pi)*gamma(v/2)))*((1+(z**2)/v)**(-(v+1)/2))     
-    I = 0.5 - sp.integrate(f,(z,0,abs(t)))           
+    fint = (math.gamma((v+1)/2)/(math.sqrt(v*math.pi)*math.gamma(v/2)))*((1+(z**2)/v)**(-(v+1)/2))  
+    fint_num = sp.lambdify(z, fint, 'numpy')
+    iinte, error = spi.quad(fint_num, 0, abs(t))
+
+    I = 0.5 - iinte         
     print("\n3.p값 : %g" %(I*2))
     print("\n4.유의수준 : %g" %a)
     
