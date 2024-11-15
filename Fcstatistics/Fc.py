@@ -6,12 +6,13 @@
 # In[1]:
 
 import math
-#from scipy.special import gamma
 import numpy as np
 from scipy import integrate as spi
 import sympy as sp
 import pandas as pd
 import matplotlib.pyplot as plt
+from numpy.linalg import inv
+import seaborn as sns
 
 def Mean(x) :
     return float(sum(x)/len(x))
@@ -6302,13 +6303,19 @@ def iCodeR2(x_list, y):
 
 # 속도 수정(create_row)
 def cal_residuals(x_list, y):
-    X = list(map(lambda i: create_row(i, x_list), range(len(y))))
-    X = matrix(X)
-    y = vector(y)
-    beta = est_mul_Reg_equation(x_list, y)
-    y_pred = list(map(lambda i: sum(map(lambda j: beta[j] * X[i,j], range(len(beta)))), range(len(y))))
-    residuals = list(map(lambda i: y[i] - y_pred[i], range(len(y))))
-    return residuals
+    X = [create_row(i, x_list) for i in range(len(y))]
+    X = np.array(X)  # numpy 배열로 변환
+    y = np.array(y)  # numpy 배열로 변환
+
+    beta = est_mul_Reg_equation(x_list, y)  # 회귀계수 계산
+
+    # 예측값 계산
+    y_pred = np.dot(X, beta)
+    
+    # 잔차 계산
+    residuals = y - y_pred
+
+    return residuals.tolist()
 
 
 # In[273]:
@@ -6328,10 +6335,17 @@ def m_plot_residuals(x_list, y, x_label):
     
     for i, x in enumerate(x_list):
         data = list(zip(x, residuals))
-        scatter_plot = list_plot(data, plotjoined=False, marker='o')
-        scatter_plot += line([(min(x), 0), (max(x), 0)], color='red', linestyle='--')
-        scatter_plot.axes_labels([x_label, 'Residuals'])
-        scatter_plot.show(frame=True, figsize=4, fontsize=5)
+
+        plt.figure(figsize=(6, 4))
+        plt.scatter(x, residuals, marker='o', color='blue', s=10)
+        plt.axhline(y=0, color='red', linestyle='--', linewidth=0.7)
+        font_size = 7
+        plt.xlabel(x_label, fontsize=font_size)
+        plt.ylabel('Residuals', fontsize=font_size)
+        plt.xticks(fontsize=font_size)  
+        plt.yticks(fontsize=font_size)  
+        plt.show()
+
 
 
 # In[275]:
@@ -6356,31 +6370,28 @@ def m_plot_residuals(x_list, y, x_label):
 
 
 # 속도 수정(필)
-def calculate_vif(x_list):
-    X = matrix([
-    [1] + x_list[j] for j in range(len(x_list))]).transpose()
-        
-    n, k = X.nrows(), X.ncols()
+def calculate_vif(df):
+    X = df.to_numpy()
+    n, k = X.shape
     vif = []
-
+    
     for i in range(k):
-        # y_i는 X의 i번째 열 (설명변수)
-        y_i = X.column(i)
-        X_i = X.delete_columns([i])  # X에서 i번째 열을 제거한 행렬
+        y_i = X[:, i]
+        X_i = np.delete(X, i, axis=1)
         
-        X_i_transpose = X_i.transpose()
-        beta_i = (X_i_transpose * X_i).inverse() * X_i_transpose * y_i
-        y_i_pred = X_i * beta_i
+        # 회귀분석
+        beta_i = inv(X_i.T @ X_i) @ X_i.T @ y_i
+        y_i_pred = X_i @ beta_i
         
         # R^2 계산
-        sst_i = sum((y_i[j] - Mean(y_i))**2 for j in range(n))
-        ssr_i = sum((y_i_pred[j] - Mean(y_i))**2 for j in range(n))
+        sst_i = np.sum((y_i - np.mean(y_i))**2)
+        ssr_i = np.sum((y_i_pred - np.mean(y_i))**2)
         
         if sst_i == 0:
             r_squared_i = float('inf')
         else:
             r_squared_i = ssr_i / sst_i
-
+        
         # VIF 계산
         if r_squared_i == 1:
             vif_i = float('inf')
@@ -6437,14 +6448,16 @@ def scatter_plots(*args):
 
     pairs = recursive_combinations(0, 1, n)
 
-    list(map(lambda ij: list_plot(
-        list(zip(args[ij[0]], args[ij[1]])), 
-        legend_label=f'List {ij[0]+1} vs List {ij[1]+1}', 
-        color=colors[(ij[0] * n + ij[1]) % len(colors)], 
-        gridlines=True, 
-        frame=True, 
-        figsize=4
-    ).show(), pairs))
+    for i, (idx1, idx2) in enumerate(pairs):
+        plt.figure(figsize=(6, 4))
+        plt.scatter(args[idx1], args[idx2], color=colors[i % len(colors)], s=10)
+        plt.xlabel(f'List {idx1 + 1}', fontsize=10)
+        plt.ylabel(f'List {idx2 + 1}', fontsize=10)
+        plt.title(f'List {idx1 + 1} vs List {idx2 + 1}', fontsize=12)
+        plt.grid(True)
+        plt.axhline(y=0, color='gray', linestyle='--', linewidth=0.7)
+        plt.axvline(x=0, color='gray', linestyle='--', linewidth=0.7)
+        plt.show()
 
 
 # In[279]:
@@ -6657,7 +6670,7 @@ def Corcoeff_Test(*X) :
     X_lst = input('\n설명변수(X1,X2,...) : ').split(',')
     df = len(X[0]) - 2
     z = sp.symbols('z')
-    f = (gamma((df + 1)/2)/(math.sqrt(df*math.pi)*gamma(df/2)))*((1 + (z**2)/df)**(-(df + 1)/2))
+    f = (math.gamma((df + 1)/2)/(math.sqrt(df*math.pi)*math.gamma(df/2)))*((1 + (z**2)/df)**(-(df + 1)/2))
     n = len(X)
     
     dfempty = pd.DataFrame(index = X_lst*2, columns = X_lst)     
@@ -6668,7 +6681,11 @@ def Corcoeff_Test(*X) :
             cor = sum(map(lambda xi, xj : (xi - Mean(X[i]))*(xj - Mean(X[j])) , X[i], X[j])) / (math.sqrt(sum(map(lambda xi : (xi - Mean(X[i]))**2 , X[i])))*math.sqrt(sum(map(lambda xj : (xj - Mean(X[j]))**2 , X[j]))))
             dfempty['%s'%(X_lst[i])][int(j)], dfempty['%s'%(X_lst[j])][int(i)] = cor, cor 
             t = cor*math.sqrt(df/(1 - cor**2))
-            p_value = float((0.5 - sp.integrate(f,(z,0,abs(t))))*2)
+
+            f_num = sp.lambdify(z, f, 'numpy')
+            iinte, error = spi.quad(f_num, 0, abs(t))
+            p_value = float((0.5 - iinte)*2)
+
             dfempty['%s'%(X_lst[i])][int(n+j)], dfempty['%s'%(X_lst[j])][int(n+i)] = p_value, p_value 
     br = pd.DataFrame([['']*len(X)], index = [''], columns = dfempty.columns)
     test_name = pd.DataFrame([X_lst], index = ['[유의성검정 p값]'], columns = dfempty.columns)
@@ -6804,15 +6821,15 @@ def scatter_relation(df, x_val, y_val):
 # 속도 수정(필)
 # 입력값 'x': 설명변수, 'y': 종속변수, 'degree': 설명변수에 대한 차수
 def nonlinear_Reg_equation(x, y, degree):
-    X = matrix([[xi^d for d in range(degree + 1)] for xi in x])
-    Y = vector(y)
+    X = np.array([[xi ** d for d in range(degree + 1)] for xi in x])
+    Y = np.array(y)
 
-    beta = (X.transpose() * X).inverse() * X.transpose() * Y
+    beta = np.linalg.inv(X.T @ X) @ X.T @ Y
     
-    equation_terms = [f"{float(beta[i])}*X^{i}" for i in range(len(beta))]
+    equation_terms = [f"{float(beta[i]):.3f}*X^{i}" for i in range(len(beta))]
     equation = " + ".join(equation_terms)
     print(f"다항회귀 추정식: Y = {equation}")
-    
+
     return beta
 
 
@@ -6831,24 +6848,18 @@ def nonlinear_Reg_equation(x, y, degree):
 def nonlinear_Reg_model(x, y, degree):
     beta = nonlinear_Reg_equation(x, y, degree)
     
-    x_range = range(min(x), max(x) + 0.1, 0.1)
-    y_pred = [sum(beta[i] * (xi^i) for i in range(len(beta))) for xi in x_range]
+    x_range = np.linspace(min(x), max(x), num=100)
+    y_pred = [sum(beta[i] * (xi ** i) for i in range(len(beta))) for xi in x_range]
 
-    poly_line = line(list(zip(x_range, y_pred)), color='blue', legend_label=f'degree{degree} regression line', frame=True, figsize=4, fontsize=5)
-    poly_line.show()
+    plt.figure(figsize=(6, 4))
+    plt.plot(x_range, y_pred, color='blue', label=f'degree {degree} regression line')
+    plt.scatter(x, y, color='red', label='Data points')
+    plt.xlabel('', fontsize=10)  
+    plt.ylabel('', fontsize=10)
+    plt.legend(fontsize=10)  
+    plt.xticks(fontsize=10)  
+    plt.yticks(fontsize=10)  
+    plt.show()
 
-
-# In[302]:
-
-
-
-
-
-# In[303]:
-
-
-
-
-# In[ ]:
 
 
