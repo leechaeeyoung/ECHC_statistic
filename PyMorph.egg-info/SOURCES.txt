@@ -1,0 +1,10 @@
+LICENSE
+MANIFEST.in
+README.md
+setup.cfg
+setup.py
+PyMorph/MorphAlyt.c
+PyMorph.egg-info/PKG-INFO
+PyMorph.egg-info/SOURCES.txt
+PyMorph.egg-info/dependency_links.txt
+PyMorph.egg-info/top_level.txt
