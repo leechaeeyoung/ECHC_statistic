@@ -10,10 +10,14 @@ MetaMorphic.egg-info/dependency_links.txt
 MetaMorphic.egg-info/top_level.txt
 MetaMorphic/data/F분포표(0.01).csv
 MetaMorphic/data/F분포표(0.1).csv
+MetaMorphic/data/Studentized Range q Table(0.05).csv
+MetaMorphic/data/chi.csv
 MetaMorphic/data/t분포표.csv
 MetaMorphic/data/표준정규분포표.csv
 Metamorphic/MorphAlyt.c
 Metamorphic/data/F분포표(0.01).csv
 Metamorphic/data/F분포표(0.1).csv
+Metamorphic/data/Studentized Range q Table(0.05).csv
+Metamorphic/data/chi.csv
 Metamorphic/data/t분포표.csv
 Metamorphic/data/표준정규분포표.csv
