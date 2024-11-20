@@ -1,5 +1,5 @@
 # MANIFEST.in
-include Fcstatistics/*.pyd
-recursive-include Fcstatistics *.pxd *.c *.h
-exclude src/*.py    # Exclude .py files
-exclude Fcstatistics/*.pyx  # Exclude .pyx files
+recursive-include MetaMorphic *.pxd *.c *.h *.pyd
+exclude MetaMorphic/*.py
+exclude MetaMorphic/*.pyx
+
