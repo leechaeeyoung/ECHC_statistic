@@ -790,7 +790,7 @@ def check_consistency(x, size, num):
 
 # 's': 모표준편차, x': 표본 데이터, 'a': 유의수준(alpha) 
 def con_interval_z(s, x, a):
-    df = pd.read_csv('./표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
     target_cell = df[df.eq(0.5-a/2).any(1)]
     row = target_cell.index.tolist()[0]
     column = target_cell.columns[target_cell.eq(0.5-a/2).any()][0]
@@ -820,7 +820,7 @@ def con_interval_t(x, a):
 def con_interval_p(n, x, a):
     p = x / n
     if n * p >= 5 and n * (1 - p) >= 5:
-        df = pd.read_csv('./표준정규분포표.csv', encoding='euc-kr', index_col=0)
+        df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
         target_cell = df[df.eq(0.5 - a/2).any(1)]
 
         if target_cell.empty:
@@ -859,7 +859,7 @@ def con_interval_p(n, x, a):
 
 # 속도 수정
 def two_tailed_pred_interval_p(a):
-    df = pd.read_csv('./표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
     target_cell = df[df.eq(0.5 - a/2).any(1)]
     
     if target_cell.empty:
@@ -887,7 +887,7 @@ def two_tailed_pred_interval_p(a):
 
 # 속도 수정
 def one_tailed_pred_interval_p(a):
-    df = pd.read_csv('./표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
     target_cell =  df[df.eq(0.5 - a).any(1)]
     
     if target_cell.empty:
@@ -964,7 +964,7 @@ def Z1_Ts(a,x,m,s) :
 # 모표준편차를 아는 경우이므로, z검정을 사용, 모집단 1개, 양측검정 [Z1_Twosided 축약 : Z1_Ts]
 
 def Z1_Tscr(a,x,m,s) :
-    df = pd.read_csv('./표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
     Z = round((Mean(x) - m)/(s/math.sqrt(len(x))),17)
     print("1.검정통계량 : %g" %Z)
     
@@ -1031,7 +1031,7 @@ def Z1_Up(a,x,m,s) :
 # 모표준편차를 아는 경우이므로, z검정을 사용, 모집단 1개, 위꼬리검정 [Z1_Upsided 축약 : Z1_Up]
 
 def Z1_Upcr(a,x,m,s) :            
-    df = pd.read_csv('./표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
     Z = round((Mean(x) - m)/(s/math.sqrt(len(x))),17)
     print("1.검정통계량 : %g" %Z)
 
@@ -1102,7 +1102,7 @@ def Z1_Un(a,x,m,s) :
 # 모표준편차를 아는 경우이므로, z검정을 사용, 모집단 1개, 아래꼬리검정 [Z1_Undersided 축약 : Z1_Un]
 
 def Z1_Uncr(a,x,m,s) :        
-    df = pd.read_csv('./표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
     Z = round((Mean(x) - m)/(s/math.sqrt(len(x))),17)
     print("1.검정통계량 : %g" %Z)
     
@@ -1170,7 +1170,7 @@ def Z2_Ts(a, x, y, xs, ys) :
 # 모표준편차를 아는 경우이므로, z검정을 사용, 모집단 2개, 양측검정 [Z2_Twosided 축약 : Z2_Ts]
 
 def Z2_Tscr(a, x, y, xs, ys) :       
-    df = pd.read_csv('./표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
     Z = round((Mean(x) - Mean(y)) / (math.sqrt(((xs**2)/len(x)) + ((ys**2)/len(y)))),17)
     print("1.검정통계량 : %g" %Z)  
     
@@ -1240,7 +1240,7 @@ def Z2_Upcr(a,x,y,xs,ys) :
     Z = round((Mean(x) - Mean(y)) / (math.sqrt(((xs**2)/len(x)) + ((ys**2)/len(y)))),17)
     print("1.검정통계량 : %g" %Z)
     
-    df = pd.read_csv('./표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
     z = sp.symbols('z') 
     f = 1/math.sqrt(2*math.pi)*sp.exp(-(z**2)/2)
     cr = one_tailed_pred_interval_p(a)
@@ -1311,7 +1311,7 @@ def Z2_Uncr(a,x,y,xs,ys) :
     Z = round((Mean(x) - Mean(y))/(math.sqrt(((xs**2)/len(x)) + ((ys**2)/len(y)))),17)
     print("1.검정통계량 : %g" %Z)
     
-    df = pd.read_csv('./표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
     z = sp.symbols('z') 
     f = 1/math.sqrt(2*math.pi)*sp.exp(-(z**2)/2)
     cr = one_tailed_pred_interval_p(a)
@@ -2628,7 +2628,7 @@ def P1_Ts(a,n,x,p0):
 # 모집단 1개, 표본비율 'x/n'와 가설비율(모비율) 'p0' 사이에 차이가 있는지 없는지 확인 (양측검정)
 # 'a': 유의수준, 'n': 전체 대상 수, 'x': 해당 대상 수, 'p0': 가설비율
 def P1_Tscr(a,n,x,p0):
-    df = pd.read_csv('./표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
     
     p = x/n
     if n * p0 >=5 and n * (1-p0) >=5:
@@ -2703,7 +2703,7 @@ def P1_Up(a,n,x,p0):
 # 모집단 1개, 표본비율 'x/n'이 가설비율(모비율) 'p0'보다 큰지 확인 (위 꼬리 단측검정)
 # 'a': 유의수준, 'n': 전체 대상 수, 'x': 해당 대상 수, 'p0': 가설비율
 def P1_Upcr(a,n,x,p0):
-    df = pd.read_csv('./표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
     p = x/n
     if n * p0 >=5 and n * (1-p0) >=5:
         Z = round((p - p0) / math.sqrt(p0*(1 - p0)/n),17)
@@ -2780,7 +2780,7 @@ def P1_Un(a,n,x,p0):
 # 모집단 1개, 표본비율 'x/n'이 가설비율(모비율) 'p0'보다 작은지 확인 (아래 꼬리 단측검정)
 # 'a': 유의수준, 'n': 전체 대상 수, 'x': 해당 대상 수, 'p0': 가설비율
 def P1_Uncr(a,n,x,p0):
-    df = pd.read_csv('./표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
     p = x/n
     if n * p0 >=5 and n * (1-p0) >=5:
         Z = round((p - p0) / math.sqrt(p0*(1 - p0)/n),17)
@@ -2856,7 +2856,7 @@ def P2_Ts(a,nx,x,ny,y):
 # 모집단 2개, 두 집단 모비율이 같은지 확인 (양측검정)
 # 'a': 유의수준, 'nx': 첫번째 전체 대상 수, 'x': 해당 대상 수, 'ny': 두번째 전체 대상 수, 'y': 해당 대상 수, 
 def P2_Tscr(a,nx,x,ny,y):
-    df = pd.read_csv('./표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
     p1 = x / nx
     p2 = y / ny
     p = (x + y) / (nx + ny) #공통 모비율의 추정값 
@@ -2926,7 +2926,7 @@ def P2_Up(a,nx,x,ny,y):
 # 모집단 2개, 첫번째 집단 모비율이 두번째 집단 모비율보다 큰지 확인 (위 꼬리 단측검정)
 # 'a': 유의수준, 'nx': 첫번째 전체 대상 수, 'x': 해당 대상 수, 'ny': 두번째 전체 대상 수, 'y': 해당 대상 수, 
 def P2_Upcr(a,nx,x,ny,y):
-    df = pd.read_csv('./표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
     p1 = x / nx
     p2 = y / ny
     p = (x + y) / (nx + ny) #공통 모비율의 추정값 
@@ -2999,7 +2999,7 @@ def P2_Un(a,nx,x,ny,y):
 # 모집단 2개, 첫번째 집단 모비율이 두번째 집단 모비율보다 작은지 확인 (아래 꼬리 단측검정)
 # 'a': 유의수준, 'nx': 첫번째 전체 대상 수, 'x': 해당 대상 수, 'ny': 두번째 전체 대상 수, 'y': 해당 대상 수, 
 def P2_Uncr(a,nx,x,ny,y):
-    df = pd.read_csv('./표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
     p1 = x / nx
     p2 = y / ny
     p = (x + y) / (nx + ny) #공통 모비율의 추정값 
@@ -3894,7 +3894,7 @@ def Z1_fit_Ts(x):
 
 # 속도 수정
 def classify_age(x):
-    df = pd.read_csv('./표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
     
     # 연령대를 계산하는 함수
     calc_age_group = lambda age: (age // 10) * 10
@@ -4037,7 +4037,7 @@ classify_age(x)
 
 # 속도 수정(중)
 def classify_age2(x):
-    df = pd.read_csv('./표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
     
     # 연령대를 계산하는 함수
     calc_age_group = lambda age: (age // 10) * 10

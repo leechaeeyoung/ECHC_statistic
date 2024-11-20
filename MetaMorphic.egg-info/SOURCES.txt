@@ -4,9 +4,16 @@ README.md
 setup.cfg
 setup.py
 MetaMorphic/MorphAlyt.c
-MetaMorphic/MorphAlyt.cp312-win_amd64.pyd
 MetaMorphic.egg-info/PKG-INFO
 MetaMorphic.egg-info/SOURCES.txt
 MetaMorphic.egg-info/dependency_links.txt
 MetaMorphic.egg-info/top_level.txt
+MetaMorphic/data/F분포표(0.01).csv
+MetaMorphic/data/F분포표(0.1).csv
+MetaMorphic/data/t분포표.csv
+MetaMorphic/data/표준정규분포표.csv
 Metamorphic/MorphAlyt.c
+Metamorphic/data/F분포표(0.01).csv
+Metamorphic/data/F분포표(0.1).csv
+Metamorphic/data/t분포표.csv
+Metamorphic/data/표준정규분포표.csv
