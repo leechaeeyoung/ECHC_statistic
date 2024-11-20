@@ -1,0 +1,12 @@
+LICENSE
+MANIFEST.in
+README.md
+setup.cfg
+setup.py
+MetaMorphic/MorphAlyt.c
+MetaMorphic/__init__.py
+MetaMorphic.egg-info/PKG-INFO
+MetaMorphic.egg-info/SOURCES.txt
+MetaMorphic.egg-info/dependency_links.txt
+MetaMorphic.egg-info/top_level.txt
+Metamorphic/MorphAlyt.c
