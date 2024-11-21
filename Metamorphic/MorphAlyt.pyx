@@ -13,6 +13,15 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from numpy.linalg import inv
 import seaborn as sns
+import pkg_resources
+
+normal_csv = pkg_resources.resource_filename('Metamorphic', 'data/표준정규분포표.csv')
+F01_csv = pkg_resources.resource_filename('Metamorphic', 'data/F분포표(0.1).csv')
+F001_csv = pkg_resources.resource_filename('Metamorphic', 'data/F분포표(0.01).csv')
+T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+chi_csv = pkg_resources.resource_filename('Metamorphic', 'data/chi.csv')
+qTable_csv = pkg_resources.resource_filename('Metamorphic', 'data/Studentized Range q Table(0.05).csv')
+
 
 def Mean(x) :
     return float(sum(x)/len(x))

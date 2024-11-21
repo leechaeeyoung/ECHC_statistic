@@ -4,6 +4,7 @@ README.md
 setup.cfg
 setup.py
 MetaMorphic/MorphAlyt.c
+MetaMorphic/MorphAlyt.cp312-win_amd64.pyd
 MetaMorphic.egg-info/PKG-INFO
 MetaMorphic.egg-info/SOURCES.txt
 MetaMorphic.egg-info/dependency_links.txt
