@@ -1,5 +1,5 @@
 
-__version__='0.0.14'
+__version__='0.0.17'
 
 import pkg_resources
 import pandas as pd

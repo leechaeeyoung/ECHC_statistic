@@ -10,7 +10,7 @@ extensions = [
 # setup 함수 정의
 setup(
     name="MetaMorphic",
-    version="0.0.14",
+    version="0.0.17",
     author='fourchains_R&D',
     author_email='fourchainsrd@gmail.com',
     url='https://github.com/leechaeeyoung/Fc', 

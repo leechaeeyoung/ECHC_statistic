@@ -15,13 +15,6 @@ from numpy.linalg import inv
 import seaborn as sns
 import pkg_resources
 
-normal_csv = pkg_resources.resource_filename('Metamorphic', 'data/표준정규분포표.csv')
-F01_csv = pkg_resources.resource_filename('Metamorphic', 'data/F분포표(0.1).csv')
-F001_csv = pkg_resources.resource_filename('Metamorphic', 'data/F분포표(0.01).csv')
-T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
-chi_csv = pkg_resources.resource_filename('Metamorphic', 'data/chi.csv')
-qTable_csv = pkg_resources.resource_filename('Metamorphic', 'data/Studentized Range q Table(0.05).csv')
-
 
 def Mean(x) :
     return float(sum(x)/len(x))
@@ -799,7 +792,8 @@ def check_consistency(x, size, num):
 
 # 's': 모표준편차, x': 표본 데이터, 'a': 유의수준(alpha) 
 def con_interval_z(s, x, a):
-    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    normal_csv = pkg_resources.resource_filename('Metamorphic', 'data/표준정규분포표.csv')
+    df = pd.read_csv(normal_csv, encoding='euc-kr', index_col=0)
     target_cell = df[df.eq(0.5-a/2).any(1)]
     row = target_cell.index.tolist()[0]
     column = target_cell.columns[target_cell.eq(0.5-a/2).any()][0]
@@ -814,7 +808,8 @@ def con_interval_z(s, x, a):
 
 # 'x': 표본 데이터, 'a': 유의수준(alpha)
 def con_interval_t(x, a):    
-    df = pd.read_csv('data/t분포표.csv', encoding='euc-kr', index_col=0) 
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df = pd.read_csv(T_csv, encoding='euc-kr', index_col=0) 
     cr = df["%g" %(a/2)][int(len(x) - 1)]
     return (float(Mean(x)-cr*(Std(x)/math.sqrt(len(x)))), float(Mean(x)+cr*(Std(x)/math.sqrt(len(x)))))
 
@@ -829,7 +824,8 @@ def con_interval_t(x, a):
 def con_interval_p(n, x, a):
     p = x / n
     if n * p >= 5 and n * (1 - p) >= 5:
-        df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
+        normal_csv = pkg_resources.resource_filename('Metamorphic', 'data/표준정규분포표.csv')
+        df = pd.read_csv(normal_csv, encoding='euc-kr', index_col=0)
         target_cell = df[df.eq(0.5 - a/2).any(1)]
 
         if target_cell.empty:
@@ -868,7 +864,8 @@ def con_interval_p(n, x, a):
 
 # 속도 수정
 def two_tailed_pred_interval_p(a):
-    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    normal_csv = pkg_resources.resource_filename('Metamorphic', 'data/표준정규분포표.csv')
+    df = pd.read_csv(normal_csv, encoding='euc-kr', index_col=0)
     target_cell = df[df.eq(0.5 - a/2).any(1)]
     
     if target_cell.empty:
@@ -896,7 +893,8 @@ def two_tailed_pred_interval_p(a):
 
 # 속도 수정
 def one_tailed_pred_interval_p(a):
-    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    normal_csv = pkg_resources.resource_filename('Metamorphic', 'data/표준정규분포표.csv')
+    df = pd.read_csv(normal_csv, encoding='euc-kr', index_col=0)
     target_cell =  df[df.eq(0.5 - a).any(1)]
     
     if target_cell.empty:
@@ -973,7 +971,8 @@ def Z1_Ts(a,x,m,s) :
 # 모표준편차를 아는 경우이므로, z검정을 사용, 모집단 1개, 양측검정 [Z1_Twosided 축약 : Z1_Ts]
 
 def Z1_Tscr(a,x,m,s) :
-    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    normal_csv = pkg_resources.resource_filename('Metamorphic', 'data/표준정규분포표.csv')
+    df = pd.read_csv(normal_csv, encoding='euc-kr', index_col=0)
     Z = round((Mean(x) - m)/(s/math.sqrt(len(x))),17)
     print("1.검정통계량 : %g" %Z)
     
@@ -1040,7 +1039,8 @@ def Z1_Up(a,x,m,s) :
 # 모표준편차를 아는 경우이므로, z검정을 사용, 모집단 1개, 위꼬리검정 [Z1_Upsided 축약 : Z1_Up]
 
 def Z1_Upcr(a,x,m,s) :            
-    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    normal_csv = pkg_resources.resource_filename('Metamorphic', 'data/표준정규분포표.csv')
+    df = pd.read_csv(normal_csv, encoding='euc-kr', index_col=0)
     Z = round((Mean(x) - m)/(s/math.sqrt(len(x))),17)
     print("1.검정통계량 : %g" %Z)
 
@@ -1110,8 +1110,9 @@ def Z1_Un(a,x,m,s) :
 # 유의수준 'a' 로 자료 'x'를 귀납가설 (기준이 되는) 모평균이 'm'보다 작은지 확인, 모표준편차 's'를 아는 경우
 # 모표준편차를 아는 경우이므로, z검정을 사용, 모집단 1개, 아래꼬리검정 [Z1_Undersided 축약 : Z1_Un]
 
-def Z1_Uncr(a,x,m,s) :        
-    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
+def Z1_Uncr(a,x,m,s) :      
+    normal_csv = pkg_resources.resource_filename('Metamorphic', 'data/표준정규분포표.csv')  
+    df = pd.read_csv(normal_csv, encoding='euc-kr', index_col=0)
     Z = round((Mean(x) - m)/(s/math.sqrt(len(x))),17)
     print("1.검정통계량 : %g" %Z)
     
@@ -1179,7 +1180,8 @@ def Z2_Ts(a, x, y, xs, ys) :
 # 모표준편차를 아는 경우이므로, z검정을 사용, 모집단 2개, 양측검정 [Z2_Twosided 축약 : Z2_Ts]
 
 def Z2_Tscr(a, x, y, xs, ys) :       
-    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    normal_csv = pkg_resources.resource_filename('Metamorphic', 'data/표준정규분포표.csv')
+    df = pd.read_csv(normal_csv, encoding='euc-kr', index_col=0)
     Z = round((Mean(x) - Mean(y)) / (math.sqrt(((xs**2)/len(x)) + ((ys**2)/len(y)))),17)
     print("1.검정통계량 : %g" %Z)  
     
@@ -1248,8 +1250,8 @@ def Z2_Up(a,x,y,xs,ys) :
 def Z2_Upcr(a,x,y,xs,ys) :                
     Z = round((Mean(x) - Mean(y)) / (math.sqrt(((xs**2)/len(x)) + ((ys**2)/len(y)))),17)
     print("1.검정통계량 : %g" %Z)
-    
-    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    normal_csv = pkg_resources.resource_filename('Metamorphic', 'data/표준정규분포표.csv')
+    df = pd.read_csv(normal_csv, encoding='euc-kr', index_col=0)
     z = sp.symbols('z') 
     f = 1/math.sqrt(2*math.pi)*sp.exp(-(z**2)/2)
     cr = one_tailed_pred_interval_p(a)
@@ -1319,8 +1321,8 @@ def Z2_Uncr(a,x,y,xs,ys) :
         
     Z = round((Mean(x) - Mean(y))/(math.sqrt(((xs**2)/len(x)) + ((ys**2)/len(y)))),17)
     print("1.검정통계량 : %g" %Z)
-    
-    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    normal_csv = pkg_resources.resource_filename('Metamorphic', 'data/표준정규분포표.csv')
+    df = pd.read_csv(normal_csv, encoding='euc-kr', index_col=0)
     z = sp.symbols('z') 
     f = 1/math.sqrt(2*math.pi)*sp.exp(-(z**2)/2)
     cr = one_tailed_pred_interval_p(a)
@@ -1362,8 +1364,8 @@ def Z2_Uncr(a,x,y,xs,ys) :
 # T1_Twosided_criticalregion 축약 : T1_Tscr
 
 def T1_Tscr(a,x,m) :
-    
-    df = pd.read_csv('data/t분포표.csv', encoding='euc-kr', index_col=0) 
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df = pd.read_csv(T_csv, encoding='euc-kr', index_col=0) 
 
     T1 = round(Mean(x) - m) / (Std(x)/math.sqrt(len(x)))
     print("1.검정통계량: %g" %T1)              
@@ -1422,8 +1424,8 @@ def T1_Tsp(a,x,m) :
 # T1_Twosided 축약 : T1_Ts
 
 def T1_Ts(a,x,m) :
-    
-    df = pd.read_csv('data/t분포표.csv', encoding='euc-kr', index_col=0) 
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df = pd.read_csv(T_csv, encoding='euc-kr', index_col=0) 
 
     t = round((Mean(x) - m) / (Std(x)/math.sqrt(len(x))),17)     
     print("1.검정통계량 : %g" %t)
@@ -1459,8 +1461,8 @@ def T1_Ts(a,x,m) :
 # T1_Upsided_criticalregion 축약 : T1_Upcr
 
 def T1_Upcr(a,x,m) :             
-
-    df = pd.read_csv('data/t분포표.csv',encoding='euc-kr',index_col=0)
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df = pd.read_csv(T_csv,encoding='euc-kr',index_col=0)
 
     T1 = (Mean(x) - m) / (Std(x)/math.sqrt(len(x)))
     print("1.검정통계량 : %g" %T1)                 
@@ -1523,8 +1525,8 @@ def T1_Upp(a,x,m) :
 # T1_Upsided 축약 : T1_Up
 
 def T1_Up(a,x,m) :             
-
-    df = pd.read_csv('data/t분포표.csv',encoding='euc-kr',index_col=0)
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df = pd.read_csv(T_csv,encoding='euc-kr',index_col=0)
 
     t = round((Mean(x) - m) / (Std(x)/math.sqrt(len(x))),17)     
     print("1.검정통계량 : %g" %t)
@@ -1563,8 +1565,8 @@ def T1_Up(a,x,m) :
 # T1_Undersided_criticalregion 축약 : T1_Uncr
 
 def T1_Uncr(a,x,m) :          
-    
-    df = pd.read_csv('data/t분포표.csv',encoding='euc-kr',index_col=0)        
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df = pd.read_csv(T_csv,encoding='euc-kr',index_col=0)        
     
     T1 = (Mean(x) - m) / (Std(x)/math.sqrt(len(x)))
     print("1.검정통계량 : %g" %T1)              
@@ -1626,8 +1628,8 @@ def T1_Unp(a,x,m) :
 # T1_Undersided 축약 : T1_Un
 
 def T1_Un(a,x,m) :             
-
-    df = pd.read_csv('data/t분포표.csv',encoding='euc-kr',index_col=0)
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df = pd.read_csv(T_csv,encoding='euc-kr',index_col=0)
 
     t = round((Mean(x) - m) / (Std(x)/math.sqrt(len(x))),17)     
     print("1.검정통계량 : %g" %t)
@@ -1670,8 +1672,8 @@ def T1_Un(a,x,m) :
 # T2_Twosided_criticalregion_Equivariance 축약 : T2_TscrEqv
 
 def T2_TscrEqv(a,x,y) :       
-
-    df1 = pd.read_csv('data/t분포표.csv',encoding='euc-kr',index_col=0)
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df1 = pd.read_csv(T_csv,encoding='euc-kr',index_col=0)
    
     df = len(x) + len(y) - 2      
     psv = ((len(x) - 1)*Std(x)**2 + (len(y) - 1)*Std(y)**2)/df    
@@ -1734,8 +1736,8 @@ def T2_TspEqv(a,x,y) :
 # T2_Twosided_Equivariance 축약 : T2_TsEqv
 
 def T2_TsEqv(a,x,y) :
-     
-    df1 = pd.read_csv('data/t분포표.csv',encoding='euc-kr',index_col=0)
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df1 = pd.read_csv(T_csv,encoding='euc-kr',index_col=0)
      
     df = len(x) + len(y) - 2                  
     psv = ((len(x) - 1)*Std(x)**2 + (len(y) - 1)*Std(y)**2)/df            
@@ -1772,8 +1774,8 @@ def T2_TsEqv(a,x,y) :
 # T2_Upsided_Equivariance 축약 : T2_UpEqv
 
 def T2_UpcrEqv(a,x,y) :
-    
-    df1 = pd.read_csv('data/t분포표.csv',encoding='euc-kr',index_col=0)
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df1 = pd.read_csv(T_csv,encoding='euc-kr',index_col=0)
     
     df = len(x) + len(y) - 2                  
     psv = ((len(x) - 1)*Std(x)**2 + (len(y) - 1)*Std(y)**2)/df            
@@ -1839,8 +1841,8 @@ def T2_UppEqv(a,x,y) :
 # T2_Upsided_Equivariance 축약 : T2_UpEqv
 
 def T2_UpEqv(a,x,y) :
-    
-    df1 = pd.read_csv('data/t분포표.csv',encoding='euc-kr',index_col=0)
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df1 = pd.read_csv(T_csv,encoding='euc-kr',index_col=0)
     
     df = len(x) + len(y) - 2                  
     psv = ((len(x) - 1)*Std(x)**2 + (len(y) - 1)*Std(y)**2)/df            
@@ -1880,8 +1882,8 @@ def T2_UpEqv(a,x,y) :
 # T2_Undersided_criticalregion_Equivariance 축약 : T2_UncrEqv
 
 def T2_UncrEqv(a,x,y) :
-    
-    df1 = pd.read_csv('data/t분포표.csv',encoding='euc-kr',index_col=0)
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df1 = pd.read_csv(T_csv,encoding='euc-kr',index_col=0)
     
     df = len(x) + len(y) - 2                  
     psv = ((len(x) - 1)*Std(x)**2 + (len(y) - 1)*Std(y)**2)/df            
@@ -1947,8 +1949,8 @@ def T2_UnpEqv(a,x,y) :
 # T2_Undersided_Equivariance 축약 : T2_UnEqv
 
 def T2_UnEqv(a,x,y) :
-        
-    df1 = pd.read_csv('data/t분포표.csv',encoding='euc-kr',index_col=0)
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df1 = pd.read_csv(T_csv,encoding='euc-kr',index_col=0)
     
     df = len(x) + len(y) - 2                 
     psv = ((len(x)-1)*Var(x) + (len(y)-1)*Var(y))/df            
@@ -1990,8 +1992,8 @@ def T2_UnEqv(a,x,y) :
 # T2_Twosided_criticalregion 축약 : T2_Tscr
 
 def T2_Tscr(a,x,y) :
-    
-    df1 = pd.read_csv('data/t분포표.csv',encoding='euc-kr',index_col=0)
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df1 = pd.read_csv(T_csv,encoding='euc-kr',index_col=0)
     
     df = round((Std(x)**2/len(x) + Std(y)**2/len(y))**2/((Std(x)**2/len(x))**2/(len(x) - 1) + (Std(y)**2/len(y))**2/(len(y) - 1)))
     T2 = (Mean(x) - Mean(y))/math.sqrt(Std(x)**2/len(x) + Std(y)**2/len(y))
@@ -2049,8 +2051,8 @@ def T2_Tsp(a,x,y) :
 # T2_Twosided 축약 : T2_Ts
 
 def T2_Ts(a,x,y) :
-     
-    df1 = pd.read_csv('data/t분포표.csv',encoding='euc-kr',index_col=0)
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df1 = pd.read_csv(T_csv,encoding='euc-kr',index_col=0)
     df = round((Std(x)**2/len(x) + Std(y)**2/len(y))**2/((Std(x)**2/len(x))**2/(len(x) - 1) + (Std(y)**2/len(y))**2/(len(y) - 1)))      
     t = round((Mean(x) - Mean(y))/math.sqrt(Std(x)**2/len(x) + Std(y)**2/len(y)),17)     
     print("1.검정통계량 : %g" %t)
@@ -2084,8 +2086,8 @@ def T2_Ts(a,x,y) :
 # T2_Upsided_criticalregion 축약 : T2_Upcr
 
 def T2_Upcr(a,x,y) :
-    
-    df1 = pd.read_csv('data/t분포표.csv',encoding='euc-kr',index_col=0)
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df1 = pd.read_csv(T_csv,encoding='euc-kr',index_col=0)
     df = round((Std(x)**2/len(x) + Std(y)**2/len(y))**2/((Std(x)**2/len(x))**2/(len(x) - 1) + (Std(y)**2/len(y))**2/(len(y) - 1)))    
     T2 = (Mean(x) - Mean(y))/math.sqrt(Std(x)**2/len(x) + Std(y)**2/len(y))
     print("1.검정통계량 : %g" %T2)
@@ -2146,8 +2148,8 @@ def T2_Upp(a,x,y) :
 # T2_Upsided 축약 : T2_Up
 
 def T2_Up(a,x,y) :
-    
-    df1 = pd.read_csv('data/t분포표.csv',encoding='euc-kr',index_col=0)
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df1 = pd.read_csv(T_csv,encoding='euc-kr',index_col=0)
      
     df = round((Std(x)**2/len(x) + Std(y)**2/len(y))**2/((Std(x)**2/len(x))**2/(len(x) - 1) + (Std(y)**2/len(y))**2/(len(y) - 1))) 
     t = round((Mean(x) - Mean(y))/math.sqrt(Std(x)**2/len(x) + Std(y)**2/len(y)),17)     
@@ -2185,8 +2187,8 @@ def T2_Up(a,x,y) :
 # T2_Undersided_criticalregion 축약 : T2_Uncr
 
 def T2_Uncr(a,x,y) :
-    
-    df1 = pd.read_csv('data/t분포표.csv',encoding='euc-kr',index_col=0)
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df1 = pd.read_csv(T_csv,encoding='euc-kr',index_col=0)
     df = round((Std(x)**2/len(x) + Std(y)**2/len(y))**2/((Std(x)**2/len(x))**2/(len(x) - 1) + (Std(y)**2/len(y))**2/(len(y) - 1))) 
     t = round((Mean(x) - Mean(y))/math.sqrt(Std(x)**2/len(x) + Std(y)**2/len(y)),17) 
     print("1.검정통계량 : %g" %t)
@@ -2247,8 +2249,8 @@ def T2_Unp(a,x,y) :
 # T2_Undersided 축약 : T2_Un
 
 def T2_Un(a,x,y) :
-    
-    df1 = pd.read_csv('data/t분포표.csv',encoding='euc-kr',index_col=0)
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df1 = pd.read_csv(T_csv,encoding='euc-kr',index_col=0)
     
     df = round((Std(x)**2/len(x) + Std(y)**2/len(y))**2 / ((Std(x)**2/len(x))**2 / (len(x) - 1) + (Std(y)**2/len(y))**2 / (len(y) - 1)))      
     t = round((Mean(x) - Mean(y))/math.sqrt(Std(x)**2/len(x) + Std(y)**2/len(y)),17)     
@@ -2288,8 +2290,8 @@ def T2_Un(a,x,y) :
 # Paired_Twosided_criticalregion 축약 : Paired_Tscr
 
 def Paired_Tscr(a,x1,x2) :  
-    
-    df1 = pd.read_csv('data/t분포표.csv',encoding='euc-kr',index_col=0)
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df1 = pd.read_csv(T_csv,encoding='euc-kr',index_col=0)
     
     d = list(map(lambda x1, x2 : x1 - x2 , x1, x2))
     T = Mean(d) / (Std(d)/math.sqrt(len(d)))
@@ -2349,8 +2351,8 @@ def Paired_Tsp(a,x1,x2) :
 # Paired_Twosided 축약 : Paired_Ts
 
 def Paired_Ts(a,x1,x2) :  
-    
-    df1 = pd.read_csv('data/t분포표.csv',encoding='euc-kr',index_col=0)
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df1 = pd.read_csv(T_csv,encoding='euc-kr',index_col=0)
     
     d = list(map(lambda x1, x2 : x1 - x2 , x1, x2))
     df = len(d) - 1
@@ -2386,8 +2388,8 @@ def Paired_Ts(a,x1,x2) :
 # Paired_Leftsided_criticalregion 축약 : Paired_Lcr
 
 def Paired_Lcr(a,x1,x2) : 
-    
-    df1 = pd.read_csv('data/t분포표.csv',encoding='euc-kr',index_col=0)
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df1 = pd.read_csv(T_csv,encoding='euc-kr',index_col=0)
     
     d = list(map(lambda x1, x2 : x1 - x2 , x1, x2))
     T = Mean(d) / (Std(d)/math.sqrt(len(d)))
@@ -2450,8 +2452,8 @@ def Paired_Lp(a,x1,x2) :
 # Paired_Leftsided 축약 : Paired_L
 
 def Paired_L(a,x1,x2) :  
-    
-    df1 = pd.read_csv('data/t분포표.csv',encoding='euc-kr',index_col=0)
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df1 = pd.read_csv(T_csv,encoding='euc-kr',index_col=0)
     
     d = list(map(lambda x1, x2 : x1 - x2 , x1, x2))
     df = len(d) - 1
@@ -2490,8 +2492,8 @@ def Paired_L(a,x1,x2) :
 # Paired_Rightsided_criticalregion 축약 : Paired_Rcr
 
 def Paired_Rcr(a,x1,x2) : 
-
-    df1 = pd.read_csv('data/t분포표.csv',encoding='euc-kr',index_col=0)
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df1 = pd.read_csv(T_csv,encoding='euc-kr',index_col=0)
     
     d = list(map(lambda x1, x2 : x1 - x2 , x1, x2))
     T = Mean(d) / (Std(d)/math.sqrt(len(d)))
@@ -2554,8 +2556,8 @@ def Paired_Rp(a,x1,x2) :
 # Paired_Rightsided 축약 : Paired_R
 
 def Paired_R(a,x1,x2) :  
-    
-    df1 = pd.read_csv('data/t분포표.csv',encoding='euc-kr',index_col=0)
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df1 = pd.read_csv(T_csv,encoding='euc-kr',index_col=0)
     
     d = list(map(lambda x1, x2 : x1 - x2 , x1, x2))
     df = len(d) - 1
@@ -2637,7 +2639,8 @@ def P1_Ts(a,n,x,p0):
 # 모집단 1개, 표본비율 'x/n'와 가설비율(모비율) 'p0' 사이에 차이가 있는지 없는지 확인 (양측검정)
 # 'a': 유의수준, 'n': 전체 대상 수, 'x': 해당 대상 수, 'p0': 가설비율
 def P1_Tscr(a,n,x,p0):
-    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    normal_csv = pkg_resources.resource_filename('Metamorphic', 'data/표준정규분포표.csv')
+    df = pd.read_csv(normal_csv, encoding='euc-kr', index_col=0)
     
     p = x/n
     if n * p0 >=5 and n * (1-p0) >=5:
@@ -2712,7 +2715,8 @@ def P1_Up(a,n,x,p0):
 # 모집단 1개, 표본비율 'x/n'이 가설비율(모비율) 'p0'보다 큰지 확인 (위 꼬리 단측검정)
 # 'a': 유의수준, 'n': 전체 대상 수, 'x': 해당 대상 수, 'p0': 가설비율
 def P1_Upcr(a,n,x,p0):
-    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    normal_csv = pkg_resources.resource_filename('Metamorphic', 'data/표준정규분포표.csv')
+    df = pd.read_csv(normal_csv, encoding='euc-kr', index_col=0)
     p = x/n
     if n * p0 >=5 and n * (1-p0) >=5:
         Z = round((p - p0) / math.sqrt(p0*(1 - p0)/n),17)
@@ -2789,7 +2793,8 @@ def P1_Un(a,n,x,p0):
 # 모집단 1개, 표본비율 'x/n'이 가설비율(모비율) 'p0'보다 작은지 확인 (아래 꼬리 단측검정)
 # 'a': 유의수준, 'n': 전체 대상 수, 'x': 해당 대상 수, 'p0': 가설비율
 def P1_Uncr(a,n,x,p0):
-    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    normal_csv = pkg_resources.resource_filename('Metamorphic', 'data/표준정규분포표.csv')
+    df = pd.read_csv(normal_csv, encoding='euc-kr', index_col=0)
     p = x/n
     if n * p0 >=5 and n * (1-p0) >=5:
         Z = round((p - p0) / math.sqrt(p0*(1 - p0)/n),17)
@@ -2865,7 +2870,8 @@ def P2_Ts(a,nx,x,ny,y):
 # 모집단 2개, 두 집단 모비율이 같은지 확인 (양측검정)
 # 'a': 유의수준, 'nx': 첫번째 전체 대상 수, 'x': 해당 대상 수, 'ny': 두번째 전체 대상 수, 'y': 해당 대상 수, 
 def P2_Tscr(a,nx,x,ny,y):
-    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    normal_csv = pkg_resources.resource_filename('Metamorphic', 'data/표준정규분포표.csv')
+    df = pd.read_csv(normal_csv, encoding='euc-kr', index_col=0)
     p1 = x / nx
     p2 = y / ny
     p = (x + y) / (nx + ny) #공통 모비율의 추정값 
@@ -2935,7 +2941,8 @@ def P2_Up(a,nx,x,ny,y):
 # 모집단 2개, 첫번째 집단 모비율이 두번째 집단 모비율보다 큰지 확인 (위 꼬리 단측검정)
 # 'a': 유의수준, 'nx': 첫번째 전체 대상 수, 'x': 해당 대상 수, 'ny': 두번째 전체 대상 수, 'y': 해당 대상 수, 
 def P2_Upcr(a,nx,x,ny,y):
-    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    normal_csv = pkg_resources.resource_filename('Metamorphic', 'data/표준정규분포표.csv')
+    df = pd.read_csv(normal_csv, encoding='euc-kr', index_col=0)
     p1 = x / nx
     p2 = y / ny
     p = (x + y) / (nx + ny) #공통 모비율의 추정값 
@@ -3008,7 +3015,8 @@ def P2_Un(a,nx,x,ny,y):
 # 모집단 2개, 첫번째 집단 모비율이 두번째 집단 모비율보다 작은지 확인 (아래 꼬리 단측검정)
 # 'a': 유의수준, 'nx': 첫번째 전체 대상 수, 'x': 해당 대상 수, 'ny': 두번째 전체 대상 수, 'y': 해당 대상 수, 
 def P2_Uncr(a,nx,x,ny,y):
-    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    normal_csv = pkg_resources.resource_filename('Metamorphic', 'data/표준정규분포표.csv')
+    df = pd.read_csv(normal_csv, encoding='euc-kr', index_col=0)
     p1 = x / nx
     p2 = y / ny
     p = (x + y) / (nx + ny) #공통 모비율의 추정값 
@@ -3056,8 +3064,8 @@ def P2_Uncr(a,nx,x,ny,y):
 # Chi_Variance_Twosided_criticalregion 축약 : ChiVar_Tscr
 
 def ChiVar_Tscr(a,x,v) :            
-
-    df = pd.read_csv('data/chi.csv',encoding='euc-kr',index_col=0) 
+    chi_csv = pkg_resources.resource_filename('Metamorphic', 'data/chi.csv')
+    df = pd.read_csv(chi_csv,encoding='euc-kr',index_col=0) 
     
     chi = (len(x) - 1)*Std(x)**2/v    
     print("1.검정통계량 : %g" %chi)
@@ -3119,8 +3127,8 @@ def ChiVar_Tsp(a,x,v) :
 # Chi_Variance_Twosided 축약 : ChiVar_Ts
 
 def ChiVar_Ts(a,x,v) :     
-    
-    df = pd.read_csv('data/chi.csv',encoding='euc-kr',index_col=0) 
+    chi_csv = pkg_resources.resource_filename('Metamorphic', 'data/chi.csv')
+    df = pd.read_csv(chi_csv,encoding='euc-kr',index_col=0) 
     
     k = len(x) - 1
     chi = round(k*Std(x)**2/v,17)    
@@ -3158,8 +3166,8 @@ def ChiVar_Ts(a,x,v) :
 # Chi_Variance_Rightsided_criticalregion 축약 : ChiVar_Rcr
 
 def ChiVar_Rcr(a,x,v) :
-    
-    df = pd.read_csv('data/chi.csv',encoding='euc-kr',index_col=0) 
+    chi_csv = pkg_resources.resource_filename('Metamorphic', 'data/chi.csv')
+    df = pd.read_csv(chi_csv,encoding='euc-kr',index_col=0) 
       
     chi = (len(x) - 1)*Std(x)**2/v    
     print("1.검정통계량 : %g" %chi)
@@ -3219,8 +3227,8 @@ def ChiVar_Rp(a,x,v) :
 # Chi_Variance_Rightsided 축약 : ChiVar_R
 
 def ChiVar_R(a,x,v) :
-    
-    df = pd.read_csv('data/chi.csv',encoding='euc-kr',index_col=0) 
+    chi_csv = pkg_resources.resource_filename('Metamorphic', 'data/chi.csv')
+    df = pd.read_csv(chi_csv,encoding='euc-kr',index_col=0) 
       
     k = len(x) - 1
     chi = round(k*Std(x)**2/v,17)    
@@ -3256,8 +3264,8 @@ def ChiVar_R(a,x,v) :
 # Chi_Variance_Leftsided_criticalregion 축약 : ChiVar_Lcr
 
 def ChiVar_Lcr(a,x,v) :
-    
-    df = pd.read_csv('data/chi.csv',encoding='euc-kr',index_col=0) 
+    chi_csv = pkg_resources.resource_filename('Metamorphic', 'data/chi.csv')
+    df = pd.read_csv(chi_csv,encoding='euc-kr',index_col=0) 
      
     chi = (len(x) - 1)*Std(x)**2/v    
     print("1.검정통계량 : %g" %chi)
@@ -3317,8 +3325,8 @@ def ChiVar_Lp(a,x,v) :
 # Chi_Variance_Leftsided 축약 : ChiVar_L
 
 def ChiVar_L(a,x,v) :
-    
-    df = pd.read_csv('data/chi.csv',encoding='euc-kr',index_col=0) 
+    chi_csv = pkg_resources.resource_filename('Metamorphic', 'data/chi.csv')
+    df = pd.read_csv(chi_csv,encoding='euc-kr',index_col=0) 
      
     k = len(x) - 1
     chi = round(k*Std(x)**2/v,17)    
@@ -3357,8 +3365,8 @@ def ChiVar_L(a,x,v) :
 # F_Variance2_Twosided_criticalregion 축약 : FVar2_Tscr
 
 def FVar2_Tscr(a,x,y) :
-        
-    df = pd.read_csv('data/F분포표(%g).csv' %(a/2), index_col=0)
+    Fa2_csv = pkg_resources.resource_filename('Metamorphic', 'data/F분포표(%g).csv' % (a/2))
+    df = pd.read_csv(Fa2_csv, index_col=0)
     
     F = Std(x)**2 / Std(y)**2
     print("1.검정통계량 : %g" %F)
@@ -3427,8 +3435,9 @@ def FVar2_Ts(a,x,y) :
     v = len(x) - 1 
     w = len(y) - 1 
     print("\n2.두 자유도 : %g, %g" %(v,w)) 
-        
-    df = pd.read_csv('data/F분포표(%g).csv' %(a/2), index_col=0)        # 임계값 관계
+    
+    Fa2_csv = pkg_resources.resource_filename('Metamorphic', 'data/F분포표(%g).csv' % (a/2))
+    df = pd.read_csv(Fa2_csv, index_col=0)        # 임계값 관계
     cr1 = 1/(df['%g' %(len(y) - 1)][int(len(x) - 1)])
     cr2 = df['%g' %(len(x) - 1)][int(len(y) - 1)]            # 1/F(len(y) - 1,len(x) - 1, a) = F(len(x) - 1,len(y) - 1, 1-a)                                                                 # 임계값 관계      
     print("\n3.임계값 : %g, %g" %(cr1, cr2))                 
@@ -3459,8 +3468,8 @@ def FVar2_Ts(a,x,y) :
 # F_Variance2_Right_criticalregion 축약 : FVar2_Rcr
 
 def FVar2_Rcr(a,x,y) :
-        
-    df = pd.read_csv('data/F분포표(%g).csv' %a, index_col=0)
+    Fa_csv = pkg_resources.resource_filename('Metamorphic', 'data/F분포표(%g).csv' % (a))
+    df = pd.read_csv(Fa_csv, index_col=0)
     
     F = Std(x)**2 / Std(y)**2
     print("1.검정통계량 : %g" %F)
@@ -3520,8 +3529,8 @@ def FVar2_Rp(a,x,y) :
 # F_Variance2_Right 축약 : FVar2_R
 
 def FVar2_R(a,x,y) :
-        
-    df = pd.read_csv('data/F분포표(%g).csv' %a, index_col=0)
+    Fa_csv = pkg_resources.resource_filename('Metamorphic', 'data/F분포표(%g).csv' % (a))
+    df = pd.read_csv(Fa_csv, index_col=0)
     
     F = round(Std(x)**2 / Std(y)**2,17)
     print("1.검정통계량 : %g" %F)
@@ -3558,8 +3567,8 @@ def FVar2_R(a,x,y) :
 # F_Variance2_Left_criticalregion 축약 : FVar2_Lcr
 
 def FVar2_Lcr(a,x,y) :
-        
-    df = pd.read_csv('data/F분포표(%g).csv' %a, index_col=0)
+    Fa_csv = pkg_resources.resource_filename('Metamorphic', 'data/F분포표(%g).csv' % (a))
+    df = pd.read_csv(Fa_csv, index_col=0)
     
     F = Std(x)**2 / Std(y)**2
     print("1.검정통계량 : %g" %F)
@@ -3619,8 +3628,8 @@ def FVar2_Lp(a,x,y) :
 # F_Variance2_Left 축약 : FVar2_L
 
 def FVar2_L(a,x,y) :
-        
-    df = pd.read_csv('data/F분포표(%g).csv' %a, index_col=0)
+    Fa_csv = pkg_resources.resource_filename('Metamorphic', 'data/F분포표(%g).csv' % (a))
+    df = pd.read_csv(Fa_csv, index_col=0)
     
     F = round(Std(x)**2 / Std(y)**2,17)
     print("1.검정통계량 : %g" %F)
@@ -3734,7 +3743,8 @@ def Po1_Ts(x, y):
     print("\n[카이제곱통계량의 계산표]")
     print(coll2)
     print("\n[카이제곱 적합도 검정의 자유도:]",len(coll2.index)-3)
-    df = pd.read_csv('data/chi.csv',encoding='euc-kr',index_col=0)
+    chi_csv = pkg_resources.resource_filename('Metamorphic', 'data/chi.csv')
+    df = pd.read_csv(chi_csv,encoding='euc-kr',index_col=0)
  
     print("\n1.검정통계량 : %g" %chi)
     print("\n2.자유도 :", dfl)
@@ -3775,8 +3785,8 @@ def Po1_Ts2(x, y):
     chi = chi_A['차이제곱/기대개수'].sum()
     print("\n[제곱값/기대 개수 계산]")
     print(chi_A)
-    
-    df = pd.read_csv('data/chi.csv',encoding='euc-kr',index_col=0)
+    chi_csv = pkg_resources.resource_filename('Metamorphic', 'data/chi.csv')
+    df = pd.read_csv(chi_csv,encoding='euc-kr',index_col=0)
  
     print("\n1.검정통계량 : %g" %chi)
     print("\n2.자유도 :", int(len(x) - 1))
@@ -3867,7 +3877,8 @@ def Z1_fit_Ts(x):
     print(A)
 
     print("\n[카이제곱 적합도 검정의 자유도:]", len(interval_list) - 3)
-    df = pd.read_csv('data/chi.csv', encoding='euc-kr', index_col=0)
+    chi_csv = pkg_resources.resource_filename('Metamorphic', 'data/chi.csv')
+    df = pd.read_csv(chi_csv, encoding='euc-kr', index_col=0)
 
     print("1.검정통계량 : %g" % chi)
     print("\n2.자유도 :", len(interval_list) - 3)
@@ -3903,7 +3914,8 @@ def Z1_fit_Ts(x):
 
 # 속도 수정
 def classify_age(x):
-    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    normal_csv = pkg_resources.resource_filename('Metamorphic', 'data/표준정규분포표.csv')
+    df = pd.read_csv(normal_csv, encoding='euc-kr', index_col=0)
     
     # 연령대를 계산하는 함수
     calc_age_group = lambda age: (age // 10) * 10
@@ -4046,7 +4058,8 @@ classify_age(x)
 
 # 속도 수정(중)
 def classify_age2(x):
-    df = pd.read_csv('data/표준정규분포표.csv', encoding='euc-kr', index_col=0)
+    normal_csv = pkg_resources.resource_filename('Metamorphic', 'data/표준정규분포표.csv')
+    df = pd.read_csv(normal_csv, encoding='euc-kr', index_col=0)
     
     # 연령대를 계산하는 함수
     calc_age_group = lambda age: (age // 10) * 10
@@ -4223,7 +4236,8 @@ def chi_ind_Ts(x):
 
 
     chi = E['합계']['합계']
-    df = pd.read_csv('data/chi.csv', encoding='euc-kr', index_col=0)
+    chi_csv = pkg_resources.resource_filename('Metamorphic', 'data/chi.csv')
+    df = pd.read_csv(chi_csv, encoding='euc-kr', index_col=0)
 
     print("\n1.검정통계량 : %g" % chi)
     dof = (len(B.columns) - 1) * (len(B.index) - 1)
@@ -4284,7 +4298,8 @@ def bi_equal_Ht(x):
     print(E)
     
     print("\n[등확률검정의 자유도:]", 1)
-    df = pd.read_csv('data/chi.csv', encoding='euc-kr', index_col=0)
+    chi_csv = pkg_resources.resource_filename('Metamorphic', 'data/chi.csv')
+    df = pd.read_csv(chi_csv, encoding='euc-kr', index_col=0)
     
     chi = E.loc['합계', '합계']
     print("\n1.검정통계량 : %g" % chi)
@@ -4428,8 +4443,8 @@ def FAOVcr(a,*A) :
     v = len(A) - 1 
     w = sum(map(len,A)) - len(A) 
     print("\n2.두 자유도 : %g, %g" %(v,w))
-    
-    df = pd.read_csv('data/F분포표(%g).csv' %a, index_col=0)
+    Fa_csv = pkg_resources.resource_filename('Metamorphic', 'data/F분포표(%g).csv' % (a))
+    df = pd.read_csv(Fa_csv, index_col=0)
     
     cr = df['%g' %(v)][int(w)]           
     print("\n3.임계값 : %g" %cr)                                    
@@ -4456,8 +4471,8 @@ def FAOV(a,*A) :
     v = len(A) - 1 
     w = sum(map(len,A)) - len(A) 
     print("\n2.두 자유도 : %g, %g" %(v,w))
-    
-    df = pd.read_csv('data/F분포표(%g).csv' %a, index_col=0)
+    Fa_csv = pkg_resources.resource_filename('Metamorphic', 'data/F분포표(%g).csv' % (a))
+    df = pd.read_csv(Fa_csv, index_col=0)
     cr = df['%g' %(v)][int(w)]           
     print("\n3.임계값 : %g" %cr)                                    
     print("\n4.기각역 : (%g, oo)" %cr)
@@ -4538,8 +4553,8 @@ def Ow_AOVcr(a,*A) :
     w = sum(map(len,A)) - len(A)
     print("\n3.두 자유도 : %g, %g" %(v,w))
     print('\n4.F 통계량 : %g' %F)
-    
-    df = pd.read_csv('data/F분포표(%g).csv' %a, index_col=0)
+    Fa_csv = pkg_resources.resource_filename('Metamorphic', 'data/F분포표(%g).csv' % (a))
+    df = pd.read_csv(Fa_csv, index_col=0)
     cr = df['%g' %(v)][int(w)]           
     print("\n5.임계값 : %g" %cr)                                    
     print("\n6.기각역 : (%g, oo)" %cr)
@@ -4566,8 +4581,8 @@ def Ow_AOV(a,*A) :
     v = len(A) - 1
     w = sum(map(len,A)) - len(A)
     print("\n2.두 자유도 : %g, %g" %(v,w))
-    
-    df = pd.read_csv('data/F분포표(%g).csv' %a, index_col=0)
+    Fa_csv = pkg_resources.resource_filename('Metamorphic', 'data/F분포표(%g).csv' % (a))
+    df = pd.read_csv(Fa_csv, index_col=0)
     
     cr = df['%g' %(v)][int(w)] 
     print('\n3.F 통계량 : %g' %F)
@@ -4598,7 +4613,8 @@ def Ow_AOV(a,*A) :
 # 유의수준은 0.01과 0.05만 가능
 def q(*A) :
     a = float(input('유의수준은 0.05 또는 0.01 만 가능합니다. \n유의수준 : '))
-    df = pd.read_csv('data/Studentized Range q Table(%g).csv' %a, encoding='euc-kr',index_col=0)
+    qTable_csv = pkg_resources.resource_filename('Metamorphic', 'data/Studentized Range q Table(%g).csv' % (a))
+    df = pd.read_csv(qTable_csv, encoding='euc-kr',index_col=0)
     return df[str(len(A))][int(sum(map(len, A)) - len(A))]
 
 
@@ -4626,8 +4642,8 @@ def Tukey(a, *x):
     m = list(map(Mean, x))
     n = list(map(len, x))
     print('1.유의수준 : {0}({1}%), 신뢰수준 : {2}({3}%)'.format(float(a), int(a * 100), float(1 - a), int((1 - a) * 100)))
-
-    df = pd.read_csv('data/Studentized Range q Table(%g).csv' % a, encoding='euc-kr', index_col=0)
+    qTable_csv = pkg_resources.resource_filename('Metamorphic', 'data/Studentized Range q Table(%g).csv' % (a))
+    df = pd.read_csv(qTable_csv, encoding='euc-kr', index_col=0)
     q = df[str(len(x))][int(sum(n) - len(x))]
     print('\n2.모집단 개수 : {0}, 자유도 : {1}, q값 : {2}'.format(len(x), sum(n) - len(x), q))
     print('\n3.구간에 대한 평균 비교 결과 :\n')
@@ -4866,8 +4882,8 @@ def Tw_AOV(a, A = [ ], B = [ ]) :
           '\n\n  [귀무가설3] 요인2의 처리 집단별 평균차이는 없다.',
           '\n  [대립가설3] 요인2의 처리 집단별 평균차이는 있다.')
     print('\n2.이원분산분석표 :\n\n', AOVtbl2(A,B))
-    
-    df = pd.read_csv('data/F분포표(%g).csv' % a, index_col=0)  
+    Fa_csv = pkg_resources.resource_filename('Metamorphic', 'data/F분포표(%g).csv' % (a))
+    df = pd.read_csv(Fa_csv, index_col=0)  
     
     dfint = (len(A) - 1)*(len(B) - 1)
     if isinstance(B[0], pd.DataFrame):
@@ -5092,8 +5108,8 @@ def Fsttrd_testcr(a, A = [ ], B = [ ]) :
     Frd = round(Fsttrd(A, B),17)
     print('1.확률화블록설계 처리 F통계량 : %g' %Frd)
     print("\n2.처리자유도 : %g, 오차자유도 : %g" %(v,w))
-    
-    df = pd.read_csv('data/F분포표(%g).csv' %a, index_col=0)
+    Fa_csv = pkg_resources.resource_filename('Metamorphic', 'data/F분포표(%g).csv' % (a))
+    df = pd.read_csv(Fa_csv, index_col=0)
     cr = df['%g' %(v)][int(w)]           
     print("\n3.임계값 : %g" %cr)                                    
     print("\n4.기각역 : (%g, oo)" %cr)
@@ -5118,8 +5134,8 @@ def Fsttrd_test(a, A = [ ], B = [ ]) :
     Frd = round(Fsttrd(A, B),17)
     print('1.확률화블록설계 처리 F통계량 : %g' %Frd)
     print("\n2.처리자유도 : %g, 오차자유도 : %g" %(v,w))
-    
-    df = pd.read_csv('data/F분포표(%g).csv' %a, index_col=0)
+    Fa_csv = pkg_resources.resource_filename('Metamorphic', 'data/F분포표(%g).csv' % (a))
+    df = pd.read_csv(Fa_csv, index_col=0)
     cr = df['%g' %(v)][int(w)]           
     print("\n3.임계값 : %g" %cr)                                    
     print("\n4.기각역 : (%g, oo)" %cr)
@@ -5184,8 +5200,8 @@ def Fsttb_testcr(a, A = [ ], B = [ ]) :
     
     print('1.확률화블록설계 블록 F통계량 : %g' %Fb)
     print("\n2.블록자유도 : %g, 오차자유도 : %g" %(v,w))
-    
-    df = pd.read_csv('data/F분포표(%g).csv' %a, index_col=0)
+    Fa_csv = pkg_resources.resource_filename('Metamorphic', 'data/F분포표(%g).csv' % (a))
+    df = pd.read_csv(Fa_csv, index_col=0)
     cr = df['%g' %(v)][int(w)]           
     print("\n3.임계값 : %g" %cr)                                    
     print("\n4.기각역 : (%g, oo)" %cr)
@@ -5211,8 +5227,8 @@ def Fsttb_test(a, A = [ ], B = [ ]) :
     
     print('1.확률화블록설계 블록 F통계량 : %g' %Fb)
     print("\n2.블록자유도 : %g, 오차자유도 : %g" %(v,w))
-    
-    df = pd.read_csv('data/F분포표(%g).csv' %a, index_col=0)
+    Fa_csv = pkg_resources.resource_filename('Metamorphic', 'data/F분포표(%g).csv' % (a))
+    df = pd.read_csv(Fa_csv, index_col=0)
     cr = df['%g' %(v)][int(w)]           
     print("\n3.임계값 : %g" %cr)                                    
     print("\n4.기각역 : (%g, oo)" %cr)
@@ -5248,8 +5264,8 @@ def B_AOV(a, A = [ ], B = [ ]) :
     Frd = round(Fsttrd(A, B),17)
     print('\n2.확률화블록설계 처리 F통계량 : %g' %Frd)
     print("\n3.처리자유도 : %g, 오차자유도 : %g" %(v,w))
-    
-    df = pd.read_csv('data/F분포표(%g).csv' %a, index_col=0)
+    Fa_csv = pkg_resources.resource_filename('Metamorphic', 'data/F분포표(%g).csv' % (a))
+    df = pd.read_csv(Fa_csv, index_col=0)
     cr = df['%g' %(v)][int(w)]           
     print("\n4.임계값 : %g" %cr)                                    
     print("\n5.기각역 : (%g, oo)" %cr)
@@ -5594,8 +5610,8 @@ def simple_linear_AOVtbl(x, y) :
 
 # 입력값 'a': 유의수준,'x': 설명변수 리스트, 'y': 반응변수 리스트
 def Beta_T_Tscr(a, x, y) :
-    
-    df = pd.read_csv('data/t분포표.csv', encoding='euc-kr', index_col=0) 
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df = pd.read_csv(T_csv, encoding='euc-kr', index_col=0) 
     
     _, b = est_sl_Reg_equation(x, y)
     S = math.sqrt(Y_MSE(x, y))
@@ -5677,8 +5693,8 @@ def Beta_T_Tsp(a, x, y) :
 
 # 입력값 'a': 유의수준,'x': 설명변수 리스트, 'y': 반응변수 리스트
 def Beta_F_Rcr(a, x, y) :
-        
-    df = pd.read_csv('data/F분포표(%g).csv' %(a), index_col=0)
+    Fa_csv = pkg_resources.resource_filename('Metamorphic', 'data/F분포표(%g).csv' % (a))
+    df = pd.read_csv(Fa_csv, index_col=0)
     
     F = Y_MSR(x, y) / Y_MSE(x, y)
     print("1.검정통계량 : %g" %F)
@@ -5709,8 +5725,8 @@ def Beta_F_Rcr(a, x, y) :
 
 # 입력값 'a': 유의수준,'x': 설명변수 리스트, 'y': 반응변수 리스트
 def Beta_F_Rp(a, x, y) :
-        
-    df = pd.read_csv('data/F분포표(%g).csv' %(a), index_col=0)
+    Fa_csv = pkg_resources.resource_filename('Metamorphic', 'data/F분포표(%g).csv' % (a))
+    df = pd.read_csv(Fa_csv, index_col=0)
     
     F = Y_MSR(x, y) / Y_MSE(x, y)
     print("1.검정통계량 : %g" %F)
@@ -5785,7 +5801,8 @@ def CodeR2(x, y):
 
 # 입력값 'alpha': 유의수준,'x': 설명변수 리스트, 'y': 반응변수 리스트, 'x0': 지정값
 def E_con_interval(alpha, x, y, x0):
-    df = pd.read_csv('data/t분포표.csv', encoding='euc-kr', index_col=0) 
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df = pd.read_csv(T_csv, encoding='euc-kr', index_col=0) 
     a, b = est_sl_Reg_equation(x, y)
     y0 = predict(a, b, x0)
     s = math.sqrt(Y_MSE(x, y))
@@ -5807,7 +5824,8 @@ def E_con_interval(alpha, x, y, x0):
 
 # 입력값 'alpha': 유의수준,'x': 설명변수 리스트, 'y': 반응변수 리스트, 'x0': 지정값
 def E_pre_interval(alpha, x, y, x0):
-    df = pd.read_csv('data/t분포표.csv', encoding='euc-kr', index_col=0) 
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df = pd.read_csv(T_csv, encoding='euc-kr', index_col=0) 
     a, b = est_sl_Reg_equation(x, y)
     y0 = predict(a, b, x0)
     s = math.sqrt(Y_MSE(x, y))
@@ -6083,8 +6101,8 @@ def multiple_linear_AOVtbl(x_list, y) :
 
 # 입력값 'a': 유의수준,'x': 설명변수 리스트, 'y': 반응변수
 def Beta_i_F_Rcr(a, x_list, y) :
-        
-    df = pd.read_csv('data/F분포표(%g).csv' %(a), index_col=0)
+    Fa_csv = pkg_resources.resource_filename('Metamorphic', 'data/F분포표(%g).csv' % (a))
+    df = pd.read_csv(Fa_csv, index_col=0)
     
     F = Y_i_MSR(x_list, y) / Y_i_MSE(x_list, y)
     print("1.검정통계량 : %g" %F)
@@ -6115,8 +6133,8 @@ def Beta_i_F_Rcr(a, x_list, y) :
 
 # 입력값 'a': 유의수준,'x': 설명변수 리스트, 'y': 반응변수
 def Beta_i_F_Rp(a, x_list, y) :
-        
-    df = pd.read_csv('data/F분포표(%g).csv' %(a), index_col=0)
+    Fa_csv = pkg_resources.resource_filename('Metamorphic', 'data/F분포표(%g).csv' % (a))
+    df = pd.read_csv(Fa_csv, index_col=0)
     
     F = Y_i_MSR(x_list, y) / Y_i_MSE(x_list, y)
     print("1.검정통계량 : %g" %F)
@@ -6158,8 +6176,8 @@ def Beta_i_F_Rp(a, x_list, y) :
 # 속도 수정(create_row)
 # 입력값 'a': 유의수준,'x': 설명변수 리스트, 'y': 반응변수
 def Beta_j_T_Tscr(a, j, x_list, y) :
-    
-    df = pd.read_csv('data/t분포표.csv', encoding='euc-kr', index_col=0) 
+    T_csv = pkg_resources.resource_filename('Metamorphic', 'data/t분포표.csv')
+    df = pd.read_csv(T_csv, encoding='euc-kr', index_col=0) 
     
     def standard_error_j(j, x_list, y):
         X = [create_row(i, x_list) for i in range(len(y))]  # X 행렬 생성
