@@ -10,7 +10,7 @@ extensions = [
 # setup 함수 정의
 setup(
     name="MetaMorphic",
-    version="0.0.18",
+    version="0.0.21",
     author='fourchains_R&D',
     author_email='fourchainsrd@gmail.com',
     url='https://github.com/leechaeeyoung/Fc', 
@@ -25,4 +25,5 @@ setup(
         "MetaMorphic": ["*.py", "*.pyx"],  # .py와 .pyx 파일 제외
     },
     python_requires='>=3.6',
+    install_requires=["numpy", "pandas"],
 )

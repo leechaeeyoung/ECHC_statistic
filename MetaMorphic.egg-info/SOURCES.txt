@@ -1,6 +1,7 @@
 LICENSE
 MANIFEST.in
 README.md
+pyproject.toml
 setup.cfg
 setup.py
 MetaMorphic/MorphAlyt.c
@@ -8,6 +9,7 @@ MetaMorphic/MorphAlyt.cp312-win_amd64.pyd
 MetaMorphic.egg-info/PKG-INFO
 MetaMorphic.egg-info/SOURCES.txt
 MetaMorphic.egg-info/dependency_links.txt
+MetaMorphic.egg-info/requires.txt
 MetaMorphic.egg-info/top_level.txt
 MetaMorphic/data/F분포표(0.01).csv
 MetaMorphic/data/F분포표(0.1).csv
