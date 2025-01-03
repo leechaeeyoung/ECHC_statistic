@@ -1,22 +1,51 @@
 from setuptools import setup, Extension
 from Cython.Build import cythonize
 
+#'''
 ext_modules = [
     Extension(
-        "Metamorphic.MorphAlyt",
-        sources=["Metamorphic/MorphAlyt.pyx"])
+        "Metamorphic.MorphAlyt.MorphAlyt",
+        sources=["Metamorphic/MorphAlyt/MorphAlyt.pyx"]  
+    ),
+    Extension(
+        "Metamorphic.MorphSign.MorphSign",
+        sources=["Metamorphic/MorphSign/MorphSign.pyx"]
+    ),
+    #Extension(
+    #    "Metamorphic.MorphSign.MorphEnc",
+    #    sources=["Metamorphic/MorphSign/ECHC.pyx"]
+    #)
 ]
+
+'''
+ext_modules = [
+    Extension(
+        "Metamorphic.MorphAlyt.MorphAlyt",
+        sources=["Metamorphic/MorphAlyt/MorphAlyt.c"]  # .pyx 대신 .c 파일 사용
+    ),
+    Extension(
+        "Metamorphic.MorphSign.MorphSign",
+        sources=["Metamorphic/MorphSign/MorphSign.c"]
+    ),
+    Extension(
+        "Metamorphic.MorphSign.MorphEnc",
+        sources=["Metamorphic/MorphSign/ECHC.pyx"]
+    )
+]
+'''
 
 setup(
     name="Metamorphic",
-    version="0.1.3",
+    version="0.2.8",
     description="Elliptic curve operations using SageMath",
     long_description_content_type="text/markdown",
     author='fourchains_R&D',
     author_email='fourchainsrd@gmail.com',
-    packages=["Metamorphic"],
-    ext_modules=cythonize(ext_modules),  # Cython 컴파일 활성화
-    #ext_modules=cythonize(ext_modules, compiler_directives={"language_level": "3"}),
+     packages=["Metamorphic", "Metamorphic.MorphAlyt", "Metamorphic.MorphSign"],
+    ext_modules=cythonize(
+        ext_modules,
+        compiler_directives={"language_level": "3"}  
+    ),
     classifiers=[
         "Programming Language :: Python :: 3",
         "Programming Language :: Cython",
@@ -25,7 +54,7 @@ setup(
     ],
     include_package_data=True,
     package_data={
-        "Metamorphic": ["data/*.csv"],  # data 폴더 내의 모든 .csv 파일을 포함
+        "Metamorphic": ["data/*.csv", "MorphAlyt/*.c", "MorphSign/*.c"], 
     },
     #package_data={
     #    "MetaMorphic": ["*.pxd", "*.c", "*.h", "*.pyd"],
@@ -41,7 +70,6 @@ setup(
         "sympy",
         "matplotlib",
         "seaborn",
-        #"pkg_resources",
     ],
 )
 
