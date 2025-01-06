@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: Metamorphic
-Version: 0.2.7
+Version: 0.3.3
 Summary: Elliptic curve operations using SageMath
 Author: fourchains_R&D
 Author-email: fourchainsrd@gmail.com

@@ -1,7 +1,7 @@
 from setuptools import setup, Extension
 from Cython.Build import cythonize
 
-#'''
+'''
 ext_modules = [
     Extension(
         "Metamorphic.MorphAlyt.MorphAlyt",
@@ -11,10 +11,10 @@ ext_modules = [
         "Metamorphic.MorphSign.MorphSign",
         sources=["Metamorphic/MorphSign/MorphSign.pyx"]
     ),
-    #Extension(
-    #    "Metamorphic.MorphSign.MorphEnc",
-    #    sources=["Metamorphic/MorphSign/ECHC.pyx"]
-    #)
+    Extension(
+        "Metamorphic.MorphEnc.MorphEnc",
+        sources=["Metamorphic/MorphEnc/MorphEnc.pyx"]
+    )
 ]
 
 '''
@@ -28,20 +28,20 @@ ext_modules = [
         sources=["Metamorphic/MorphSign/MorphSign.c"]
     ),
     Extension(
-        "Metamorphic.MorphSign.MorphEnc",
-        sources=["Metamorphic/MorphSign/ECHC.pyx"]
+        "Metamorphic.MorphEnc.MorphEnc",
+        sources=["Metamorphic/MorphEnc/MorphEnc.c"]
     )
 ]
-'''
+#'''
 
 setup(
     name="Metamorphic",
-    version="0.2.8",
+    version="0.3.3",
     description="Elliptic curve operations using SageMath",
     long_description_content_type="text/markdown",
     author='fourchains_R&D',
     author_email='fourchainsrd@gmail.com',
-     packages=["Metamorphic", "Metamorphic.MorphAlyt", "Metamorphic.MorphSign"],
+     packages=["Metamorphic", "Metamorphic.MorphAlyt", "Metamorphic.MorphSign", "Metamorphic.MorphEnc"],
     ext_modules=cythonize(
         ext_modules,
         compiler_directives={"language_level": "3"}  
@@ -54,7 +54,7 @@ setup(
     ],
     include_package_data=True,
     package_data={
-        "Metamorphic": ["data/*.csv", "MorphAlyt/*.c", "MorphSign/*.c"], 
+        "Metamorphic": ["data/*.csv", "MorphAlyt/*.c", "MorphSign/*.c", "MorphEnc/*.c"], 
     },
     #package_data={
     #    "MetaMorphic": ["*.pxd", "*.c", "*.h", "*.pyd"],

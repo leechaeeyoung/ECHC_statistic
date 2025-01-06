@@ -9,9 +9,12 @@ Metamorphic.egg-info/dependency_links.txt
 Metamorphic.egg-info/requires.txt
 Metamorphic.egg-info/top_level.txt
 Metamorphic/MorphAlyt/MorphAlyt.c
+Metamorphic/MorphEnc/MorphEnc.c
 Metamorphic/MorphSign/MorphSign.c
 Metamorphic/MorphAlyt/MorphAlyt.c
 Metamorphic/MorphAlyt/__init__.py
+Metamorphic/MorphEnc/MorphEnc.c
+Metamorphic/MorphEnc/__init__.py
 Metamorphic/MorphSign/MorphSign.c
 Metamorphic/MorphSign/__init__.py
 Metamorphic/data/F분포표(0.01).csv
