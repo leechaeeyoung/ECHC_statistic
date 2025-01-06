@@ -14,6 +14,10 @@ ext_modules = [
     Extension(
         "Metamorphic.MorphEnc.MorphEnc",
         sources=["Metamorphic/MorphEnc/MorphEnc.pyx"]
+    ),
+    Extension(
+        "Metamorphic.Tensoralize.Tensoralize",
+        sources=["Metamorphic/Tensoralize/Tensoralize.pyx"]
     )
 ]
 
@@ -30,18 +34,22 @@ ext_modules = [
     Extension(
         "Metamorphic.MorphEnc.MorphEnc",
         sources=["Metamorphic/MorphEnc/MorphEnc.c"]
+    ),
+    Extension(
+        "Metamorphic.Tensoralize.Tensoralize",
+        sources=["Metamorphic/Tensoralize/Tensoralize.c"]
     )
 ]
 #'''
 
 setup(
     name="Metamorphic",
-    version="0.3.3",
+    version="0.3.5",
     description="Elliptic curve operations using SageMath",
     long_description_content_type="text/markdown",
     author='fourchains_R&D',
     author_email='fourchainsrd@gmail.com',
-     packages=["Metamorphic", "Metamorphic.MorphAlyt", "Metamorphic.MorphSign", "Metamorphic.MorphEnc"],
+     packages=["Metamorphic", "Metamorphic.MorphAlyt", "Metamorphic.MorphSign", "Metamorphic.MorphEnc", "Metamorphic.Tensoralize"],
     ext_modules=cythonize(
         ext_modules,
         compiler_directives={"language_level": "3"}  
@@ -54,7 +62,7 @@ setup(
     ],
     include_package_data=True,
     package_data={
-        "Metamorphic": ["data/*.csv", "MorphAlyt/*.c", "MorphSign/*.c", "MorphEnc/*.c"], 
+        "Metamorphic": ["data/*.csv", "MorphAlyt/*.c", "MorphSign/*.c", "MorphEnc/*.c", "Tensoralize/*.c"], 
     },
     #package_data={
     #    "MetaMorphic": ["*.pxd", "*.c", "*.h", "*.pyd"],

@@ -11,12 +11,15 @@ Metamorphic.egg-info/top_level.txt
 Metamorphic/MorphAlyt/MorphAlyt.c
 Metamorphic/MorphEnc/MorphEnc.c
 Metamorphic/MorphSign/MorphSign.c
+Metamorphic/Tensoralize/Tensoralize.c
 Metamorphic/MorphAlyt/MorphAlyt.c
 Metamorphic/MorphAlyt/__init__.py
 Metamorphic/MorphEnc/MorphEnc.c
 Metamorphic/MorphEnc/__init__.py
 Metamorphic/MorphSign/MorphSign.c
 Metamorphic/MorphSign/__init__.py
+Metamorphic/Tensoralize/Tensoralize.c
+Metamorphic/Tensoralize/__init__.py
 Metamorphic/data/F분포표(0.01).csv
 Metamorphic/data/F분포표(0.1).csv
 Metamorphic/data/Studentized Range q Table(0.01).csv
